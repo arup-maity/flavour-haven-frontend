@@ -1,10 +1,15 @@
 'use client'
+import { axiosInstance } from '@/config/axios'
+import { handleApiError } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
+import { toast } from 'sonner'
 import { z } from "zod"
 
 const LoginPage = () => {
+   const router = useRouter()
    //
    const [showPassword, setShowPassword] = useState(false)
    //
@@ -15,7 +20,18 @@ const LoginPage = () => {
    })
    const { register, handleSubmit, formState: { errors }, } = useForm({ defaultValues, mode: 'onChange', resolver: zodResolver(schema) })
 
-   const onSubmit = (data: any) => console.log(data)
+   const onSubmit = async (data: any) => {
+      try {
+         const res = await axiosInstance.post(`/auth/admin-login`, data)
+         console.log(res)
+         if (res.data.success) {
+            toast.success(res.data.message)
+            router.push('/admin')
+         }
+      } catch (error) {
+         handleApiError(error)
+      }
+   }
 
    return (
       <div className="w-full min-h-screen flex items-center">

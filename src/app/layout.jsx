@@ -1,5 +1,7 @@
 import { Roboto, Miniver } from "next/font/google";
+import { Toaster } from 'sonner';
 import "./globals.css";
+import QueryProvider from "@/components/provider/QueryProvider";
 
 const roboto = Roboto({
    weight: "400",
@@ -21,7 +23,10 @@ export default function RootLayout({ children }) {
    return (
       <html lang="en">
          <body className={`${roboto.className}  ${MiniverFont.variable}`}>
-            {children}
+            <QueryProvider>
+               {children}
+            </QueryProvider>
+            <Toaster richColors />
          </body>
       </html>
    );
