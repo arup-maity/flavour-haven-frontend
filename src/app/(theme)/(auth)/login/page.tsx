@@ -1,10 +1,54 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { axiosInstance } from "@/config/axios";
+import { toast } from "sonner";
+import { handleApiError } from "@/utils";
+import { TfiEmail } from "react-icons/tfi";
+import { RiLockPasswordLine } from "react-icons/ri";
+
+type LoginFormType = {
+  email: string;
+  password: string;
+};
 
 const LoginPage = () => {
+  const router = useRouter();
+  //
+  const defaultValues = { email: "", password: "" };
+  const schema = z.object({
+    email: z
+      .string()
+      .email("Please enter a valid email")
+      .min(3, "Please enter the email"),
+    password: z.string().min(8, { message: "Please enter the password" })
+  });
+  const { register, handleSubmit, formState: { errors } } = useForm<
+    LoginFormType
+  >({
+    defaultValues,
+    mode: "onChange",
+    resolver: zodResolver(schema)
+  });
+  const onSubmit: SubmitHandler<LoginFormType> = async data => {
+    try {
+      const res = await axiosInstance.post(`/auth/user-login`, data);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        router.push("/");
+      }
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
   return (
-    <div className="w-screen h-[90vh] bg-[#F4F4F4] overflow-hidden">
+    <div className="w-screen bg-[#F4F4F4] overflow-hidden">
       <div className="h-full w-full flex flex-nowrap items-center justify-between p-3 md:p-7">
         <div className="w-8/12 max-lg:hidden flex justify-center">
           <Image
@@ -25,15 +69,16 @@ const LoginPage = () => {
                 Our Resaurant
               </h5>
             </div>
-            <form className="space-y-4 mb-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-5">
               <fieldset>
                 <label
                   htmlFor="email"
                   className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500"
                 >
-                  {/* <TfiEmail size={17} className="text-gray-500 ms-2" /> */}
+                  <TfiEmail size={16} className="text-gray-500 ms-2" />
                   <input
-                    type="email"
+                    type="text"
+                    {...register("email")}
                     className="peer w-full text-[15px] border-none rounded-md bg-transparent placeholder-transparent p-2 focus:outline-none"
                     placeholder="email"
                     autoComplete="off"
@@ -42,15 +87,23 @@ const LoginPage = () => {
                     Email
                   </span>
                 </label>
+                {errors.email &&
+                  <p className="text-red-500 text-xs">
+                    {errors.email.message}
+                  </p>}
               </fieldset>
               <fieldset>
                 <label
                   htmlFor="email"
                   className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500"
                 >
-                  {/* <TfiEmail size={17} className="text-gray-500 ms-2" /> */}
+                  <RiLockPasswordLine
+                    size={20}
+                    className="text-gray-500 ms-2"
+                  />
                   <input
-                    type="email"
+                    type="text"
+                    {...register("password")}
                     className="peer w-full h-10 text-[15px] border-none rounded-md bg-transparent placeholder-transparent p-2 focus:outline-none"
                     placeholder="email"
                     autoComplete="off"
@@ -59,6 +112,10 @@ const LoginPage = () => {
                     Password
                   </span>
                 </label>
+                {errors.password &&
+                  <p className="text-red-500 text-xs">
+                    {errors.password.message}
+                  </p>}
               </fieldset>
               <fieldset className="flex justify-between items-center">
                 <div className="">

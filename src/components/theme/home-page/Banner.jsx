@@ -40,7 +40,7 @@ const Banner = ({ data }) => {
                                           />
                                        </g>
                                        <defs>
-                                          <filter id="filter0_d_643_70938" x="0" y="0" width="333.494" height="156" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                          <filter id="filter0_d_643_70938" x="0" y="0" width="333.494" height="156" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                                              <feFlood floodOpacity="0" result="BackgroundImageFix" />
                                              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                                              <feOffset dx="4" dy="15" />
@@ -62,7 +62,7 @@ const Banner = ({ data }) => {
                                           />
                                        </g>
                                        <defs>
-                                          <filter id="filter0_d_643_70941" x="0.505859" y="0" width="283.494" height="106" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                          <filter id="filter0_d_643_70941" x="0.505859" y="0" width="283.494" height="106" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                                              <feFlood floodOpacity="0" result="BackgroundImageFix" />
                                              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                                              <feOffset dx="4" dy="15" />
