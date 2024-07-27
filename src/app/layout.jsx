@@ -2,6 +2,8 @@ import { Roboto, Miniver } from "next/font/google";
 import { Toaster } from 'sonner';
 import "./globals.css";
 import QueryProvider from "@/components/provider/QueryProvider";
+import AuthSessionProvider from "@/authentication/AuthSession";
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 const roboto = Roboto({
    weight: "400",
@@ -23,9 +25,11 @@ export default function RootLayout({ children }) {
    return (
       <html lang="en">
          <body className={`${roboto.className}  ${MiniverFont.variable}`}>
-            <QueryProvider>
-               {children}
-            </QueryProvider>
+            <AuthSessionProvider>
+               <QueryProvider>
+                  {children}
+               </QueryProvider>
+            </AuthSessionProvider>
             <Toaster richColors />
          </body>
       </html>
