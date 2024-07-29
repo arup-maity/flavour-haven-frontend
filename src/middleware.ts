@@ -24,7 +24,11 @@ export async function middleware(request: NextRequest) {
       }
    }
 
+
    if (!auth.login && request.nextUrl.pathname.startsWith('/admin/login')) {
+      return
+   }
+   if (!auth.login && request.nextUrl.pathname.startsWith('/login')) {
       return
    }
 
@@ -32,16 +36,23 @@ export async function middleware(request: NextRequest) {
       return
    }
 
+   if (auth.login && auth.role !== "user" && request.nextUrl.pathname.startsWith('/login')) {
+      return
+   }
+
    if (auth.login && auth.role === "admin" && request.nextUrl.pathname.startsWith('/admin/login')) {
       return Response.redirect(new URL('/admin', request.url));
+   }
+   if (auth.login && auth.role === "user" && request.nextUrl.pathname.startsWith('/login')) {
+      return Response.redirect(new URL('/', request.url));
+   }
+   if (auth.login && auth.role === "user" && request.nextUrl.pathname.startsWith('/register')) {
+      return Response.redirect(new URL('/', request.url));
    }
 
    if (auth.login && auth.role !== "admin" && request.nextUrl.pathname.startsWith('/admin')) {
       return Response.redirect(new URL('/admin/login', request.url));
    }
-   // if (!auth.login && request.nextUrl.pathname.startsWith('/account')) {
-   //    return Response.redirect(new URL('/', request.url));
-   // }
 
    if (!auth.login && request.nextUrl.pathname.startsWith('/admin')) {
       return Response.redirect(new URL('/admin/login', request.url));
@@ -49,5 +60,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-   matcher: ['/admin/:path*']
+   matcher: ['/admin/:path*', '/:path*']
 }
