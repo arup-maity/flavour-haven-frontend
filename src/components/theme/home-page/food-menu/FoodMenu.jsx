@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { axiosInstance } from "@/config/axios";
 
 let tabs = [
    { id: "Breakfast", label: "Breakfast" },
@@ -308,6 +309,13 @@ const FoodMenu = () => {
       setMenuList(filterList)
    }
 
+   async function getAllMenu() {
+      try {
+         // const res = await axiosInstance.get(`/`)
+      } catch (error) {
+         console.log(error)
+      }
+   }
 
    return (
       <div className="w-full py-11">

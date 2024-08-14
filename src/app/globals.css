@@ -44,6 +44,18 @@ body {
    --sidebar-width: 250px;
 }
 
+.sidebar-collapsed .webx-admin-panel {
+   --sidebar-width: 80px
+}
+
+.sidebar-collapsed .webx-content-wapper {
+   padding-inline-start: 80px;
+}
+
+.sidebar-collapsed.open .webx-admin-panel {
+   --sidebar-width: 250px;
+}
+
 .webx-admin-panel .webx-admin-sidebar {
    block-size: 100%;
    inline-size: var(--sidebar-width);

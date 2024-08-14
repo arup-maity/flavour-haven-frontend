@@ -1,35 +1,48 @@
-'use client'
-import React from 'react'
+"use client";
+import { useTheme } from "@/ui-components/sidebar";
+import React from "react";
 import { IoIosMenu } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
-// import { DropDown } from '@/ui-components';
-import { AiOutlineLogout, AiOutlineUser } from 'react-icons/ai';
-import Link from 'next/link';
-// import { sessionContext } from '@/authentication/auth';
-import Image from 'next/image';
 
 const Header = () => {
-   // const { session } = React.useContext<any>(sessionContext);
-   return (
-      <div className='h-[60px] bg-white border-b'>
-         <div className="h-full flex items-center justify-between">
-            <div className="flex items-center space-x-5">
-               <button type='button'>
-                  <span className='menu-open-icon'><IoIosMenu size={30} /></span>
-                  <span className='menu-close-icon'><IoCloseOutline size={30} /></span>
-               </button>
-               <form>
-                  <div className="flex items-center border border-gray-300 rounded p-[1px]">
-                     <input type="text" name="" id="" className='w-[300px] border-0 h-8 text-base font-montserrat focus:outline-none rounded px-2' placeholder='Search ...' />
-                     <button type="submit" className='h-8 text-sm border border-gray-300 rounded px-2'>Submit</button>
-                  </div>
-               </form>
-               <div>
-               </div>
+  const { setTheme, setCollapse } = useTheme();
+  // const { session } = React.useContext<any>(sessionContext);
+  return (
+    <div className="h-[60px] bg-white border-b">
+      <div className="h-full flex items-center justify-between">
+        <div className="flex items-center space-x-5">
+          <button type="button" onClick={() => setCollapse("collapsed")}>
+            <span className="menu-open-icon">
+              <IoIosMenu size={30} />
+            </span>
+          </button>
+          <button type="button" onClick={() => setCollapse("open")}>
+            <span className="menu-close-icon">
+              <IoCloseOutline size={30} />
+            </span>
+          </button>
+          <form>
+            <div className="flex items-center border border-gray-300 rounded p-[1px]">
+              <input
+                type="text"
+                name=""
+                id=""
+                className="w-[300px] border-0 h-8 text-base font-montserrat focus:outline-none rounded px-2"
+                placeholder="Search ..."
+              />
+              <button
+                type="submit"
+                className="h-8 text-sm border border-gray-300 rounded px-2"
+              >
+                Submit
+              </button>
             </div>
-            <div className="flex items-center space-x-5">
-               <div className="relative">
-                  {/* <DropDown>
+          </form>
+          <div></div>
+        </div>
+        <div className="flex items-center space-x-5">
+          <div className="relative">
+            {/* <DropDown>
                      <DropDown.Header id='header-user' className='border-0'>
                         <div className="text-sm font-medium font-montserrat">
                            <div className="flex items-center gap-2">
@@ -51,11 +64,11 @@ const Header = () => {
                         <li className='flex items-center gap-2'><AiOutlineLogout size={20} /><span className='text-base font-medium'>Log out</span></li>
                      </DropDown.Menu>
                   </DropDown> */}
-               </div>
-            </div>
-         </div>
+          </div>
+        </div>
       </div>
-   )
-}
+    </div>
+  );
+};
 
-export default Header
+export default Header;

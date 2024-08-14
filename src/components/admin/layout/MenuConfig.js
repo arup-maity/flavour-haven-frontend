@@ -34,14 +34,14 @@ const AdminMenu = [
       icon: <LuUsers2 size={20} />,
       permissions: ["administrator", "admin"],
       children: [
-         {
-            id: 'add-category',
-            title: 'Add Category',
-            icon: <IoTicketOutline size='8' />,
-            permission: ['administrator', 'admin'],
-            Link: '/admin/dish-category/add-category',
-            navLink: '/admin/dish-category/add-category'
-         },
+         // {
+         //    id: 'add-category',
+         //    title: 'Add Category',
+         //    icon: <IoTicketOutline size='8' />,
+         //    permission: ['administrator', 'admin'],
+         //    Link: '/admin/dish-category/add-category',
+         //    navLink: '/admin/dish-category/add-category'
+         // },
          {
             id: 'category-list',
             title: 'Category List',
