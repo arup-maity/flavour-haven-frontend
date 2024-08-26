@@ -38,9 +38,44 @@ body {
 }
 
 /* ====================== */
+.main-admin-sidebar {
+   block-size: 100%;
+   inline-size: 260px;
+}
+
+.sidebar-collapsed .main-admin-sidebar {
+   transform: translateX(-100%);
+}
+
+@media screen and (max-width: 800px) {
+   body.sidebar-collapsed .main-admin-sidebar {
+      transform: translateX(0);
+   }
+
+   .main-admin-sidebar {
+      transform: translateX(-100%);
+   }
+
+   .main-admin-content-wapper {
+      padding-inline-start: 0 !important;
+   }
+}
+
+.main-admin-content-wapper {
+   min-height: 100vh;
+   padding-inline-start: 260px;
+}
+
+.sidebar-collapsed .main-admin-content-wapper {
+   padding-inline-start: 0px;
+}
+
+.mobile-menu {
+   block-size: 100%;
+}
 
 /* costom */
-.webx-admin-panel {
+/* .webx-admin-panel {
    --sidebar-width: 250px;
 }
 
@@ -63,7 +98,7 @@ body {
 
 .webx-admin-panel .webx-content-wapper {
    min-block-size: 100vh;
-   /* padding-inline-start: var(--sidebar-width); */
+   padding-inline-start: var(--sidebar-width);
 }
 
 .webx-admin-panel .webx-admin-header {
@@ -83,7 +118,7 @@ body {
 
 .webx-admin-panel.overlay-menu {
    --sidebar-width: 0px;
-}
+} */
 
 /* .webx-admin-panel .webx-admin-sidebar {
    z-index: 1004;
@@ -102,7 +137,7 @@ body {
    will-change: padding-inline-start;
 } */
 
-.webx-admin-panel .webx-admin-header {
+/* .webx-admin-panel .webx-admin-header {
    position: sticky;
    inline-size: 100%;
 }
@@ -111,6 +146,6 @@ body {
    inline-size: 100%;
    block-size: 45px;
    padding-inline: 1rem;
-}
+} */
 
 /* ===================================== */

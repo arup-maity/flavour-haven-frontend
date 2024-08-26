@@ -86,13 +86,11 @@ const ManageUser = () => {
          <form onSubmit={handleSubmit(onSubmit)} className='lg:w-6/12 space-y-4'>
             <fieldset>
                <label htmlFor="firstName" className='block text-sm text-slate-600 mb-1'>FirstName</label>
-               <input {...register("firstName")} className='w-full h-10 text-base bg-transparent border border-slate-400 rounded py-1 px-3' autoComplete='off' />
-               {errors.firstName && <div className="text-xs text-red-500 mt-1">{errors.firstName.message}</div>}
+               <input {...register("firstName")} className='w-full h-10 text-base bg-transparent border border-slate-400 rounded py-1 px-3' autoComplete='off' readOnly />
             </fieldset>
             <fieldset>
                <label htmlFor="lastName" className='block text-sm text-slate-600 mb-1'>LastName</label>
-               <input {...register("lastName")} className='w-full h-10 text-base bg-transparent border border-slate-400 rounded py-1 px-3' autoComplete='off' />
-               {errors.lastName && <div className="text-xs text-red-500 mt-1">{errors.lastName.message}</div>}
+               <input {...register("lastName")} className='w-full h-10 text-base bg-transparent border border-slate-400 rounded py-1 px-3' autoComplete='off' readOnly />
             </fieldset>
             <fieldset>
                <label htmlFor="email" className='block text-sm text-slate-600 mb-1'>Email</label>

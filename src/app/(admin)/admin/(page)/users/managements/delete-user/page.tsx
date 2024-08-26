@@ -6,6 +6,7 @@ import { axiosInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { toast } from 'sonner'
 import { Ability } from '@/authentication/AccessControl'
+import { BsArrowLeft } from 'react-icons/bs'
 
 const DeleteUser = () => {
    // auth session
@@ -15,9 +16,10 @@ const DeleteUser = () => {
    const search = useSearchParams()
    const id: string = search.get('id') || ''
    //
-   const [userDetails, setUserDetails] = useState<any>([])
+   const [userDetails, setUserDetails] = useState<{ [key: string]: string }>({})
    const [notFound, setNotFound] = useState(false)
    const [loading, setLoading] = useState<boolean>(false)
+   const [pageLoading, setPageLoading] = useState<boolean>(false)
 
    useLayoutEffect(() => {
       getUser()
@@ -25,6 +27,7 @@ const DeleteUser = () => {
 
    async function getUser() {
       try {
+         setPageLoading(true)
          const res = await axiosInstance.get(`/user/read-admin-user/${id}`)
          console.log(res)
          if (res.data.success) {
@@ -33,6 +36,8 @@ const DeleteUser = () => {
       } catch (error) {
          setNotFound(true)
          handleApiError(error)
+      } finally {
+         setPageLoading(false)
       }
    }
    async function deleteUser() {
@@ -42,7 +47,7 @@ const DeleteUser = () => {
          console.log(res)
          if (res.data.success) {
             toast.success(res.data.message)
-            router.back()
+            router.push('/admin/users/managements')
          }
       } catch (error) {
          handleApiError(error)
@@ -50,11 +55,13 @@ const DeleteUser = () => {
          setLoading(false)
       }
    }
-   if (sessionLoading && !Ability('delete', 'user', session?.user)) {
-      return <div>Loading...</div>
-   }
+   if (sessionLoading && !Ability('delete', 'user', session?.user)) return <div>Loading...</div>
    return (
-      <div>
+      <div className='bg-white rounded p-4'>
+         <div role='button' className="inline-flex flex-nowrap items-center gap-2 text-slate-400 hover:bg-gray-100 rounded-3xl px-2 py-0.5 mb-4" onClick={() => router.back()}>
+            <BsArrowLeft size={20} />
+            <span className='text-lg text-[#6a6a6a]'>Delete User</span>
+         </div>
          <ul className='mb-10'>
             <li><strong>Name : </strong> {userDetails?.firstName + ' ' + userDetails?.lastName}</li>
             <li><strong>Email : </strong> {userDetails?.email}</li>

@@ -1,10 +1,23 @@
-'use client'
+import AddCart from "@/components/theme/single-food/AddCart";
+import { axiosInstance } from "@/config/axios";
 import Image from "next/image";
-import { useState } from "react";
 import { IoStarHalf } from "react-icons/io5";
+import { PiCurrencyInr } from "react-icons/pi";
 
-const SingleFoodPage = () => {
-   const [count, setCount] = useState(1)
+
+async function getDishDetails(slug: string) {
+   try {
+      const res = await axiosInstance.get(`/dishes/dish-detail/${slug}`);
+      if (res.data.success) {
+         return res.data.dish
+      }
+   } catch (error) {
+      // console.log(error)
+   }
+}
+
+const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
+   const dish = await getDishDetails(params.slug)
    const foodList = [
       {
          image: "img-9.png",
@@ -147,6 +160,7 @@ const SingleFoodPage = () => {
          time: "25-30 mins"
       }
    ];
+
    return (
       <div className="">
          <div className="bg-[url('/banner.png')] h-52 w-full">
@@ -164,7 +178,7 @@ const SingleFoodPage = () => {
             </div>
          </div>
          <div className="container-webx">
-            <div className="flex flex-wrap -mx-4">
+            <div className="flex flex-wrap -mx-4 mb-10">
                <div className="w-5/12 relative h-full p-4">
                   <div className=" w-full h-full flex flex-nowrap gap-4">
                      <ul className="w-[100px] h-[500px] overflow-hidden space-y-4">
@@ -175,6 +189,7 @@ const SingleFoodPage = () => {
                                  width={150}
                                  height={15}
                                  className="w-full h-full object-cover"
+                                 alt=""
                               />
                            </div>
                         </li>
@@ -185,6 +200,7 @@ const SingleFoodPage = () => {
                                  width={150}
                                  height={15}
                                  className="w-full h-full object-cover"
+                                 alt=""
                               />
                            </div>
                         </li>
@@ -195,6 +211,7 @@ const SingleFoodPage = () => {
                                  width={150}
                                  height={15}
                                  className="w-full h-full object-cover"
+                                 alt=""
                               />
                            </div>
                         </li>
@@ -205,159 +222,51 @@ const SingleFoodPage = () => {
                                  width={150}
                                  height={15}
                                  className="w-full h-full object-cover"
-                              />
-                           </div>
-                        </li>
-                        <li>
-                           <div className="w-full aspect-square rounded-md overflow-hidden">
-                              <Image
-                                 src={`/img-12.png`}
-                                 width={150}
-                                 height={15}
-                                 className="w-full h-full object-cover"
-                              />
-                           </div>
-                        </li>
-                        <li>
-                           <div className="w-full aspect-square rounded-md overflow-hidden">
-                              <Image
-                                 src={`/img-12.png`}
-                                 width={150}
-                                 height={15}
-                                 className="w-full h-full object-cover"
-                              />
-                           </div>
-                        </li>
-                        <li>
-                           <div className="w-full aspect-square rounded-md overflow-hidden">
-                              <Image
-                                 src={`/img-12.png`}
-                                 width={150}
-                                 height={15}
-                                 className="w-full h-full object-cover"
-                              />
-                           </div>
-                        </li>
-                        <li>
-                           <div className="w-full aspect-square rounded-md overflow-hidden">
-                              <Image
-                                 src={`/img-12.png`}
-                                 width={150}
-                                 height={15}
-                                 className="w-full h-full object-cover"
+                                 alt=""
                               />
                            </div>
                         </li>
                      </ul>
                      <div className="w-full aspect-[500/500]">
                         <Image
-                           src={`/img-12.png`}
+                           src={dish?.thumbnail ? process.env.NEXT_PUBLIC_BUCKET_URL + dish?.thumbnail : ''}
                            width={500}
                            height={500}
                            className="w-full h-full object-cover"
+                           alt=""
                         />
                      </div>
                   </div>
                </div>
                <div className="w-7/12 relative h-full space-y-4 p-4">
                   <div className="space-y-4">
-                     <h4 className="text-4xl font-semibold">Chicken Fry Recipe</h4>
-                     <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Harum
-                        quasi mollitia delectus illo amet molestiae praesentium, cumque
-                        natus, est modi voluptas, maxime placeat in? Tenetur.
-                     </p>
-                     <h6 className="space-x-2">
-                        <span className="text-2xl font-semibold">$99</span>
-                     </h6>
+                     <h1 className="text-3xl font-normal">{dish?.title}</h1>
+                     <p className="text-base opacity-60">{dish?.shortDescription}</p>
+                     <div className="flex items-center gap-1">
+                        <PiCurrencyInr size={22} />
+                        <span className="text-2xl font-semibold leading-none">{dish?.price}</span>
+                     </div>
                      <ul className="flex flex-nowrap space-x-1 items-center">
                         <li><IoStarHalf color="#FF9F0D" /></li>
                         <li>4.5</li>
                         <li className="ps-2">22 Reviews</li>
                      </ul>
-                     <ul className="flex flex-nowrap space-x-5">
-                        <li>
-                           <div className="border h-9 bg-[#FF9F0D] text-white inline-block rounded">
-                              <button className="w-8 h-8 text-2xl">-</button>
-                              <span className="w-8 h-8 inline-flex items-center justify-center">
-                                 1
-                              </span>
-                              <button className="w-8 h-8">+</button>
-                           </div>
-                        </li>
-                        <li className="inline-block">
-                           <button className="bg-[#FF9F0D] h-9 text-white px-5 rounded">
-                              Add to Cart
-                           </button>
-                        </li>
-                     </ul>
-                     <div className="">
-                        <h4>Extras</h4>
-                        {/* <div className="flex flex-col space-y-2">
-                           <div className="flex items-center justify-between">
-                              <div className="flex flex-nowrap items-center space-x-4">
-                                 <div className="w-5 h-5 border border-green-700 flex justify-center items-center rounded">
-                                    <span className="inline-block w-1  h-1 bg-green-500" />
-                                 </div>
-                                 <p>Chicken Tikka Sub</p>
-                                 <p>Pure Vag</p>
-                              </div>
-                              <div className="">
-                                 <button className="border rounded py-1 px-4 text-sm">
-                                    ADD
-                                 </button>
-                              </div>
-                           </div>
-                           <div className="flex items-center justify-between">
-                              <div className="flex flex-nowrap items-center space-x-4">
-                                 <div className="w-5 h-5 border border-red-700 flex justify-center items-center rounded">
-                                    <span className="inline-block w-1  h-1 bg-red-500" />
-                                 </div>
-                                 <div className="flex space-x-4">
-                                    <p>Chicken Tikka Sub</p>
-                                    <p>Pure Vag</p>
-                                 </div>
-                              </div>
-                              <div className="">
-                                 <button className="border rounded py-1 px-4 text-sm">
-                                    ADD
-                                 </button>
-                              </div>
-                           </div>
-                           <div className="flex items-center justify-between">
-                              <div className="flex flex-nowrap items-center space-x-4">
-                                 <div className="w-5 h-5 border border-blue-600 flex justify-center items-center rounded">
-                                    <span className="inline-block w-1  h-1 bg-blue-600" />
-                                 </div>
-                                 <div className="flex space-x-4">
-                                    <p>Chicken Tikka Sub</p>
-                                    <p>Pure Vag</p>
-                                 </div>
-                              </div>
-                              <div className="">
-                                 <button className="border rounded py-1 px-4 text-sm">
-                                    ADD
-                                 </button>
-                              </div>
-                           </div>
-                        </div> */}
-                        <div className="w-6/12 space-y-2">
-                           <div className="flex items-center justify-between">
-                              <div className="text-xl">Drinks</div>
-                              <div className="text-base text-[#FF9F0D] border border-[#FF9F0D] rounded py-0.5 px-4">Add</div>
-                           </div>
-                           <div className="flex items-center justify-between">
-                              <div className="text-xl">Dessert</div>
-                              <div className="text-base text-[#FF9F0D] border border-[#FF9F0D] rounded py-0.5 px-4">Add</div>
-                           </div>
-                        </div>
-                     </div>
+                     <AddCart foodDetails={dish} />
                   </div>
+               </div>
+            </div>
+            <div className="">
+               <ul className="flex items-center gap-4 mb-4">
+                  <li className="text-base bg-[#FF9F0D] text-white rounded py-1 px-4">Description</li>
+                  <li className="text-base rounded py-1 px-4">Reviews (25)</li>
+               </ul>
+               <div className="">
+                  {dish?.description}
                </div>
             </div>
             <hr className="my-4" />
             <div className="mt-6">
-               <div className="">More dishes from this restaurant</div>
+               <div className="text-2xl font-medium">More dishes</div>
                <div className="w-full flex flex-wrap -mx-3">
                   {foodList &&
                      foodList?.slice(0, 6).map((card, index) => {

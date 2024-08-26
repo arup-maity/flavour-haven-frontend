@@ -56,6 +56,19 @@ const DishesList = () => {
          className: "w-auto min-w-[300px]"
       },
       {
+         title: "Category",
+         dataIndex: "",
+         className: "w-auto min-w-[300px]",
+         render: (record: any) => {
+            const list = record?.categories?.map((category: { [key: string]: any }) => category?.taxonomy?.name)
+            return <ul className="flex flex-wrap items-center">
+               {list?.map((category: string, index: number) => (
+                  <li key={index}>{index !== 0 && ', '}{category}</li>
+               ))}
+            </ul>
+         }
+      },
+      {
          title: "Price",
          dataIndex: "",
          className: "w-[150px]",

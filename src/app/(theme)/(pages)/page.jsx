@@ -39,7 +39,7 @@ export default function Home() {
    return (
       <>
          {/* banner */}
-         <div className="bg-[#FFFAF0]">
+         <div className="">
             <div className="container-webx w-full">
                <Banner data={bannerList} />
             </div>
@@ -72,7 +72,7 @@ export default function Home() {
             <div className="w-full relative">
                <h4 className=" text-2xl text-[#333333] font-bold mb-3">Restaurants with online food delivary</h4>
             </div>
-            <div className="w-full border-b-[1px] border-gray-300">
+            <div className="w-full">
                <OnlineDelivery />
             </div>
          </div>

@@ -1,182 +1,112 @@
-import React, { Fragment } from "react";
+'use client'
+import React, { useLayoutEffect, useState } from "react";
 import Image from "next/image";
-
-const foodList = [
-   {
-      image: "img-9.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-10.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-11.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-12.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-13.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-9.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-10.png",
-      title: "Roll Xpress",
-      description: "Pizzas, Italian, Pastas, Desserts",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-11.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-12.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-13.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-9.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-10.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-11.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-12.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-13.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-9.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-10.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-11.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-12.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   },
-   {
-      image: "img-13.png",
-      title: "Roll Xpress",
-      description: "",
-      rating: 4.2,
-      time: "25-30 mins"
-   }
-];
+import { axiosInstance } from "@/config/axios";
+import Link from "next/link";
+import { IoStarHalfOutline } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
+import { IoOptionsOutline } from "react-icons/io5";
 
 const OnlineDelivery = () => {
+   const [dishList, setDishList] = useState<{ [key: string]: any }[]>([])
+   const [sort, setSort] = useState<string>('Sort By')
+   const [filter, setFilter] = useState<{ [key: string]: any }>({})
+   const [openSort, setOpenSort] = useState<boolean>(false)
+   const appliedFilters = Object.entries(filter)
+      .filter(([key, value]) => value !== false && value !== '')
+      .length;
+
+   useLayoutEffect(() => {
+      getFilterDishes()
+   }, [])
+
+   async function getFilterDishes() {
+      try {
+         const res = await axiosInstance.get(`/dishes/filtered-dishes`)
+         console.log('dish list => ', res)
+         if (res.data.success) {
+            setDishList(res.data.dishes)
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
    return (
       <div className="w-full">
          <ul className="flex space-x-4">
-            <li className="border border-gray-300 rounded-3xl py-1 px-5">Filter</li>
-            <li className="border border-gray-300 rounded-3xl py-1 px-5">Sort By</li>
-            <li className="border border-gray-300 rounded-3xl py-1 px-5">Fast Delivary</li>
-            <li className="border border-gray-300 rounded-3xl py-1 px-5">Pure Vag</li>
-         </ul>
-         <div className="w-full flex flex-wrap -mx-3">
-            {foodList &&
-               foodList?.slice(0, 12).map((card, index) => {
-                  return (
-                     <div key={index} className="w-4/12 p-3 relative h-full">
-                        <div className="block relative h-full rounded-lg overflow-hidden">
-                           <div className="relative w-full aspect-[250/150]">
-                              <Image src={`/${card?.image}`} width={250} height={100} alt="" className="w-full h-full object-cover" />
-                           </div>
-                           <div className="absolute bottom-0 right-0 left-0 h-20 grid content-end bg-gradient-to-b  from-[#1b1e2411] to-[#0c0c0cf0] z-10 p-3">
-                              <p className="text-[22px] font-bold text-white uppercase">60% off upto $120</p>
-                           </div>
-                        </div>
+            <li className="flex items-center gap-2 text-base text-gray-400 border border-gray-300 rounded-3xl py-1 px-4">
+               {
+                  appliedFilters === 0 ? <IoOptionsOutline /> :
+                     <span className="w-5 h-6 flex items-center justify-center bg-[#FF9F0D] text-base text-white rounded">{appliedFilters}</span>
+               }
+               <span>Filter</span>
+            </li>
+            <li>
+               <div className="relative">
+                  <div className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sort ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setOpenSort(prev => !prev)}>{sort}</div>
+                  {
+                     openSort &&
+                     <div className="absolute w-48 right-0 z-10 mt-1 origin-top-right rounded-md overflow-hidden bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="">
-                           <h3 className="text-lg font-medium line-clamp-1">{card?.title}</h3>
-                           <ul className="flex space-x-2">
-                              <li className="text-base font-medium">{card?.rating}</li>
-                              <li className="text-base font-medium">{card?.time}</li>
-                           </ul>
-                           <p className="text-sm text-gray-400 line-clamp-1">{card?.description}</p>
+                           <div role="button" className="block px-4 py-1 hover:bg-gray-100 text-sm text-gray-700" onClick={() => { setFilter(prev => ({ ...prev, sort: '' })); setSort('Sort By') }}>Sort By</div>
+                           <div role="button" className="block px-4 py-1 hover:bg-gray-100 text-sm text-gray-700" onClick={() => { setFilter(prev => ({ ...prev, sort: 'lth' })); setSort('Low to High') }}>Low to High</div>
+                           <div role="button" className="block px-4 py-1 hover:bg-gray-100 text-sm text-gray-700" onClick={() => { setFilter(prev => ({ ...prev, sort: 'gth' })); setSort('High to Low') }}>High to Low</div>
                         </div>
                      </div>
-                  );
-               })}
+                  }
+
+               </div>
+            </li>
+            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.delivery ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, delivery: !prev.delivery }))}>
+               <span>Fast Delivery</span>
+               {filter?.delivery && <IoCloseOutline />}
+            </li>
+            <li role="button" className={`border text-base font-normal flex items-center gap-2 ${filter?.veg ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, veg: !prev.veg }))}>
+               <span>Pure Vag</span>
+               {filter?.veg && <IoCloseOutline />}
+            </li>
+         </ul>
+         <div className="w-full flex flex-wrap -mx-3">
+            {dishList.length > 0 ?
+               dishList?.slice(0, 9).map((card, index) =>
+                  <Link key={index} href={`/${card?.slug}`} className="w-full md-w-6/12 lg:w-4/12 p-3 relative h-full">
+                     <div className="block relative h-full rounded-lg overflow-hidden">
+                        <div className="relative w-full aspect-[250/150]">
+                           <Image src={`${card?.thumbnail ? process.env.NEXT_PUBLIC_BUCKET_URL + card?.thumbnail : ''}`} width={250} height={150} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="absolute bottom-0 right-0 left-0 h-20 grid content-end bg-gradient-to-b  from-[#1b1e2411] to-[#0c0c0cf0] z-10 p-3">
+                           <p className="text-[22px] font-bold text-white uppercase">60% off upto $120</p>
+                        </div>
+                     </div>
+                     <div className="">
+                        <h3 className="text-lg font-medium line-clamp-1">{card?.title}</h3>
+                        <ul className="flex items-center gap-1">
+                           <li className="flex items-center gap-1 text-base"><IoStarHalfOutline color="#FF9F0D" /><span>4.2</span></li>
+                           <li>&bull;</li>
+                           <li className="text-base">20-30mins</li>
+                        </ul>
+                        <p className="text-sm text-gray-400 line-clamp-1">{card?.shortDescription}</p>
+                     </div>
+                  </Link>
+               ) :
+               Array(9).fill(1).map((item, index) =>
+                  <div key={index} className="w-full md-w-6/12 lg:w-4/12 p-3 relative h-full">
+                     <div className="block relative h-full animate-pulse rounded-lg overflow-hidden mb-2">
+                        <div className="flex items-center justify-center w-full aspect-[250/150] bg-gray-300 rounded dark:bg-gray-700">
+                           <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                           </svg>
+                        </div>
+                     </div>
+                     <div className="">
+                        <div className="h-4 w-10/12 bg-gray-200 rounded-full dark:bg-gray-700 mb-1.5"></div>
+                        <div className="h-4 w-4/12 bg-gray-200 rounded-full dark:bg-gray-700 mb-1.5"></div>
+                        <div className="h-4 w-6/12 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                     </div>
+                  </div>
+               )
+            }
          </div>
       </div>
    );

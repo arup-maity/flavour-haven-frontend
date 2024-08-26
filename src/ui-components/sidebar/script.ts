@@ -13,7 +13,7 @@ export const script = (
    const systemThemes = ['light', 'dark']
    const isClass = attribute === 'class'
    const classes = isClass && value ? themes.map((t: any) => value[t] || t) : themes
-
+   // theme color
    function updateDOM(theme: string) {
       if (isClass) {
          body.classList.remove(...classes)
@@ -33,19 +33,22 @@ export const script = (
    function getSystemTheme() {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
    }
-
+   // sidebar
    function updateCollapsed() {
-      const windowWidth = window.innerWidth
-      const menuCollapsed = localStorage.getItem('collapsed') || "open"
+      // const windowWidth = window.innerWidth
+      const menuCollapsed = localStorage.getItem('collapsed') === 'true'
 
       body.classList.remove('sidebar-collapsed')
-      body.classList.remove('overlay-sidebar')
 
-      if (menuCollapsed === 'collapsed' && windowWidth >= 1024) {
+      // if (menuCollapsed === 'collapsed' && windowWidth >= 1024) {
+      //    body.classList.add('sidebar-collapsed')
+      // }
+      // if (menuCollapsed === 'collapsed' && windowWidth < 1024) {
+      //    body.classList.add('overlay-sidebar')
+      // }
+
+      if (menuCollapsed) {
          body.classList.add('sidebar-collapsed')
-      }
-      if (menuCollapsed === 'collapsed' && windowWidth < 1024) {
-         body.classList.add('overlay-sidebar')
       }
    }
    updateCollapsed()

@@ -10,7 +10,7 @@ const config: Config = {
       extend: {
          fontFamily: {
             miniver: ['var(--miniver-font)'],
-         }
+         },
       },
    },
    plugins: [],
