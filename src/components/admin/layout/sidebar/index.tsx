@@ -47,7 +47,7 @@ const AdminSidebar = () => {
          </div>
          {
             collapse &&
-            <div className="block lg:hidden fixed top-0 left-0 w-screen h-screen bg-[#000] transition-opacity duration-300 ease-linear z-[8888] opacity-40" onClick={setCollapse}></div>
+            <div className="block lg:hidden fixed top-0 left-0 w-screen h-screen bg-[#000] transition-opacity duration-300 ease-linear z-[8888] opacity-40" ></div>
          }
       </>
    )

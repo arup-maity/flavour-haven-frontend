@@ -26,7 +26,7 @@ export const useCart = create(persist<cartType>(
       removeCartItem: (id: number) => {
          const { count, items } = get().cartItems;
 
-         const index = items.findIndex(item => item.id === id);
+         const index = items.findIndex((item: { [key: string]: any }) => item.id === id);
 
          // If the item is found, remove it from the array
          if (index !== -1) {
@@ -38,7 +38,7 @@ export const useCart = create(persist<cartType>(
       updateCartItem: (id: number, quantityChange: number) => {
          const { count, items } = get().cartItems;
 
-         const itemIndex = items.findIndex(item => item.id === id);
+         const itemIndex = items.findIndex((item: { [key: string]: any }) => item.id === id);
 
          if (itemIndex !== -1) {
             const item = items[itemIndex];

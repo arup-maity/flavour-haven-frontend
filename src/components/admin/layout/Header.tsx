@@ -11,7 +11,7 @@ const Header = () => {
       <div className="h-[60px] bg-white shadow rounded p-4">
          <div className="h-full flex items-center justify-between">
             <div className="flex items-center space-x-5">
-               <button type="button" className="sidebar-close-button" onClick={() => setCollapse()}>
+               <button type="button" className="sidebar-close-button">
                   <span className="menu-open-icon">
                      <IoIosMenu size={30} />
                   </span>

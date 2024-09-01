@@ -5,6 +5,7 @@ import QueryProvider from "@/components/provider/QueryProvider";
 import AuthSessionProvider from "@/authentication/AuthSession";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { ThemeProvider } from "@/ui-components/sidebar";
+import { SessionProvider } from "@/context/Session";
 
 const roboto = Roboto({
    weight: "400",
@@ -26,13 +27,15 @@ export default function RootLayout({ children }) {
    return (
       <html lang="en">
          <body className={`${roboto.className}  ${MiniverFont.variable}`}>
-            <ThemeProvider>
-               <AuthSessionProvider>
-                  <QueryProvider>
-                     {children}
-                  </QueryProvider>
-               </AuthSessionProvider>
-            </ThemeProvider>
+            <SessionProvider>
+               <ThemeProvider>
+                  <AuthSessionProvider>
+                     <QueryProvider>
+                        {children}
+                     </QueryProvider>
+                  </AuthSessionProvider>
+               </ThemeProvider>
+            </SessionProvider>
             <Toaster richColors />
          </body>
       </html>

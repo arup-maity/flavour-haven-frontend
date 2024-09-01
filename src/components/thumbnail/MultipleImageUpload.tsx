@@ -10,7 +10,7 @@ interface PropType {
 const MultipleImageUpload: React.FC<PropType> = ({ onImage, aspect = 16 / 9 }) => {
 
    const [blob, setBlob] = useState<string>('')
-   const [inputImg, setInputImg] = useState('')
+   const [inputImg, setInputImg] = useState<any>('')
    const [modalOpen, modalClose] = useState(false)
 
    const handleCrop = () => {
@@ -18,9 +18,9 @@ const MultipleImageUpload: React.FC<PropType> = ({ onImage, aspect = 16 / 9 }) =
       modalClose(prev => !prev)
    }
 
-   const onInputChange = (e) => {
+   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       // convert image file to base64 string
-      const file = e.target.files[0]
+      const file: File | null = e.target.files ? e.target.files[0] : null;
       const reader = new FileReader()
 
       reader.addEventListener('load', () => {

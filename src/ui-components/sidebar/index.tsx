@@ -49,7 +49,7 @@ const Theme = ({
    );
    const attrs = !value ? themes : Object.values(value);
    // sidebar
-   const [collapse, setCollapseState] = React.useState<boolean>(() => getSidebar());
+   const [collapse, setCollapseState] = React.useState<any>(() => getSidebar());
    // window resize
    const [windowWidth, setWindowWidth] = React.useState(1440);
 
@@ -142,14 +142,11 @@ const Theme = ({
    // sidebar
    const setCollapse = React.useCallback(
       () => {
-         setCollapseState(prev => !prev);
+         setCollapseState((prev: any) => !prev);
 
          // Save to storage
-         try {
-            localStorage.setItem("collapsed", !collapse);
-         } catch (e) {
-            // Unsupported
-         }
+         const value = !collapse
+         localStorage.setItem("collapsed", value.toString());
          const body = document.body;
 
          body.classList.remove("sidebar-collapsed");

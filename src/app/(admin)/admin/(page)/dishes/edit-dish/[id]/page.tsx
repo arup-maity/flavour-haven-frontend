@@ -278,11 +278,11 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
                                        instanceId="blog-category"
                                        isMulti
                                        options={categoryList}
-                                       value={categoryList?.filter((obj) =>
+                                       value={categoryList?.filter((obj: { [key: string]: any }) =>
                                           value.includes(obj.value)
                                        )}
                                        onChange={(e) =>
-                                          onChange(Array.isArray(e) ? e.map((x) => x.value) : [])
+                                          onChange(Array.isArray(e) ? e.map((x: { [key: string]: any }) => x.value) : [])
                                        }
                                     />
                                  )}

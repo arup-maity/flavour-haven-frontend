@@ -1,4 +1,4 @@
-import FoodCard from "@/components/card/FoodCard";
+import FoodCard from "@/components/common/card/FoodCard";
 
 const CategoryPage = () => {
   const foodList = [

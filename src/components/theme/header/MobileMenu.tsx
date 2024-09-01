@@ -1,8 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-const MobileMenu = ({ mobileMenu, setMobileMenu }: { mobileMenu: boolean, setMobileMenu: (value: boolean) => void }) => {
+interface MobileMenuProps {
+   mobileMenu: boolean;
+   setMobileMenu: (value: boolean) => void;
+ }
+ 
+ const MobileMenu: React.FC<MobileMenuProps> = ({ mobileMenu, setMobileMenu }) => {
    return (
       <>
          <div className={`mobile-menu fixed bg-white w-[300px] z-[999] top-0 bottom-0 ${mobileMenu ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-500 ease-in-out`}>
@@ -55,7 +59,7 @@ const MobileMenu = ({ mobileMenu, setMobileMenu }: { mobileMenu: boolean, setMob
          </div>
          {
             mobileMenu &&
-            <div className="block lg:hidden fixed top-0 left-0 w-screen h-screen bg-[#000] transition-opacity duration-300 ease-linear z-[888] opacity-40" onClick={() => setMobileMenu(prev => !prev)}></div>
+            <div className="block lg:hidden fixed top-0 left-0 w-screen h-screen bg-[#000] transition-opacity duration-300 ease-linear z-[888] opacity-40" onClick={() => setMobileMenu(!mobileMenu)}></div >
          }
       </>
    )

@@ -162,8 +162,8 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
    ];
 
    return (
-      <div className="">
-         <div className="bg-[url('/banner.png')] h-52 w-full">
+      <div className="pt-20">
+         {/* <div className="bg-[url('/banner.png')] h-52 w-full">
             <div className="container-webx text-center w-full flex h-full items-center justify-center">
                <div className="">
                   <h4 className="text-white text-4xl font-semibold">
@@ -176,12 +176,12 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                   </ul>
                </div>
             </div>
-         </div>
-         <div className="container-webx">
+         </div> */}
+         <div className="theme-container">
             <div className="flex flex-wrap -mx-4 mb-10">
-               <div className="w-5/12 relative h-full p-4">
-                  <div className=" w-full h-full flex flex-nowrap gap-4">
-                     <ul className="w-[100px] h-[500px] overflow-hidden space-y-4">
+               <div className="w-full lg:w-5/12 relative h-full p-4">
+                  <div className=" w-full h-full flex flex-col md:flex-row gap-4">
+                     <ul className="hidden md:block w-[100px] h-[500px] overflow-hidden space-y-4">
                         <li>
                            <div className="w-full aspect-square rounded-md overflow-hidden">
                               <Image
@@ -236,9 +236,55 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                            alt=""
                         />
                      </div>
+                     <ul className="flex flex-row md:hidden overflow-hidden space-x-4">
+                        <li>
+                           <div className="w-full aspect-square rounded-md overflow-hidden">
+                              <Image
+                                 src={`/img-12.png`}
+                                 width={150}
+                                 height={15}
+                                 className="w-full h-full object-cover"
+                                 alt=""
+                              />
+                           </div>
+                        </li>
+                        <li>
+                           <div className="w-full aspect-square rounded-md overflow-hidden">
+                              <Image
+                                 src={`/img-12.png`}
+                                 width={150}
+                                 height={15}
+                                 className="w-full h-full object-cover"
+                                 alt=""
+                              />
+                           </div>
+                        </li>
+                        <li>
+                           <div className="w-full aspect-square rounded-md overflow-hidden">
+                              <Image
+                                 src={`/img-12.png`}
+                                 width={150}
+                                 height={15}
+                                 className="w-full h-full object-cover"
+                                 alt=""
+                              />
+                           </div>
+                        </li>
+                        <li>
+                           <div className="w-full aspect-square rounded-md overflow-hidden">
+                              <Image
+                                 src={`/img-12.png`}
+                                 width={150}
+                                 height={15}
+                                 className="w-full h-full object-cover"
+                                 alt=""
+                              />
+                           </div>
+                        </li>
+                     </ul>
                   </div>
                </div>
-               <div className="w-7/12 relative h-full space-y-4 p-4">
+               <div className="w-full lg:w-7/12 relative h-full space-y-4 p-4">
                   <div className="space-y-4">
                      <h1 className="text-3xl font-normal">{dish?.title}</h1>
                      <p className="text-base opacity-60">{dish?.shortDescription}</p>
@@ -271,7 +317,7 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                   {foodList &&
                      foodList?.slice(0, 6).map((card, index) => {
                         return (
-                           <div key={index} className="w-4/12 p-3 relative h-full">
+                           <div key={index} className="w-full md:w-6/12 lg:w-4/12 p-3 relative h-full">
                               <div className="block relative h-full rounded-lg overflow-hidden">
                                  <div className="relative w-full aspect-[250/150]">
                                     <Image src={`/${card?.image}`} width={250} height={100} alt="" className="w-full h-full object-cover" />

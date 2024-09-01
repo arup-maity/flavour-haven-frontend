@@ -23,7 +23,7 @@ const OnlineDelivery = () => {
    async function getFilterDishes() {
       try {
          const res = await axiosInstance.get(`/dishes/filtered-dishes`)
-         console.log('dish list => ', res)
+         // console.log('dish list => ', res)
          if (res.data.success) {
             setDishList(res.data.dishes)
          }
@@ -34,7 +34,7 @@ const OnlineDelivery = () => {
 
    return (
       <div className="w-full">
-         <ul className="flex space-x-4">
+         <ul className="flex flex-wrap gap-2 lg:gap-4">
             <li className="flex items-center gap-2 text-base text-gray-400 border border-gray-300 rounded-3xl py-1 px-4">
                {
                   appliedFilters === 0 ? <IoOptionsOutline /> :
@@ -67,20 +67,18 @@ const OnlineDelivery = () => {
                {filter?.veg && <IoCloseOutline />}
             </li>
          </ul>
-         <div className="w-full flex flex-wrap -mx-3">
+         <div className="flex flex-wrap -mx-3">
             {dishList.length > 0 ?
                dishList?.slice(0, 9).map((card, index) =>
-                  <Link key={index} href={`/${card?.slug}`} className="w-full md-w-6/12 lg:w-4/12 p-3 relative h-full">
-                     <div className="block relative h-full rounded-lg overflow-hidden">
-                        <div className="relative w-full aspect-[250/150]">
-                           <Image src={`${card?.thumbnail ? process.env.NEXT_PUBLIC_BUCKET_URL + card?.thumbnail : ''}`} width={250} height={150} alt="" className="w-full h-full object-cover" />
-                        </div>
+                  <Link key={index} href={`/${card?.slug}`} className="w-full md:w-6/12 lg:w-4/12 p-3">
+                     <div className="relative w-full aspect-[250/150] rounded-lg overflow-hidden">
+                        <Image src={`${card?.thumbnail ? process.env.NEXT_PUBLIC_BUCKET_URL + card?.thumbnail : ''}`} width={250} height={150} alt="" className="w-full h-full object-cover" />
                         <div className="absolute bottom-0 right-0 left-0 h-20 grid content-end bg-gradient-to-b  from-[#1b1e2411] to-[#0c0c0cf0] z-10 p-3">
                            <p className="text-[22px] font-bold text-white uppercase">60% off upto $120</p>
                         </div>
                      </div>
                      <div className="">
-                        <h3 className="text-lg font-medium line-clamp-1">{card?.title}</h3>
+                        <h3 className="text-lg text-[#0c0c0c] font-medium line-clamp-1">{card?.title}</h3>
                         <ul className="flex items-center gap-1">
                            <li className="flex items-center gap-1 text-base"><IoStarHalfOutline color="#FF9F0D" /><span>4.2</span></li>
                            <li>&bull;</li>
@@ -107,6 +105,11 @@ const OnlineDelivery = () => {
                   </div>
                )
             }
+         </div>
+         <div className="w-full text-center mt-5">
+            <Link href="/food-list" className="text-base text-[#0c0c0c] border border-[#195A00] py-2 px-4">
+               View All Foods
+            </Link>
          </div>
       </div>
    );

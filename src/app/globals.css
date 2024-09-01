@@ -149,3 +149,13 @@ body {
 } */
 
 /* ===================================== */
+.homepage-header {
+   position: absolute;
+}
+
+.sticky-header.homepage-header {
+   position: fixed !important;
+   top: 0;
+   background-color: white !important;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

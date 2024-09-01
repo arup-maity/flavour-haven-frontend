@@ -73,10 +73,12 @@ const Offcanvas: FC<OffcanvasProps> = (props) => {
 
    function callbackStatus() {
       if (isOpen === false) {
+         document.body.style.position = "static"
          document.body.style.overflow = "auto";
          onClose();
       } else if (isOpen) {
-         document.body.style.overflow = "hidden";
+         document.body.style.position = "fixed"
+         document.body.style.overflowY = "scroll";
          onOpen();
       } else {
          console.error("Unexpected isOpen value:", isOpen);
@@ -87,27 +89,25 @@ const Offcanvas: FC<OffcanvasProps> = (props) => {
 
    return (
       <Container>
-         <div>
-            <div
-               className={twMerge(
-                  clsx(
-                     `fixed max-w-full flex flex-col bottom-0 z-[1050] transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800`,
-                     {
-                        "w-96 top-0 right-0 border-s border-gray-50 translate-x-full": direction === "left",
-                        "translate-x-0": direction === "left" && state === true,
-                        "w-96 top-0 left-0 border-e border-gray-50 -translate-x-full": direction === "right",
-                        "-translate-x-0": direction === "right" && state === true,
-                        "top-0 left-0 right-0 border-b border-gray-50 -translate-y-full h-[30vh] max-h-full": direction === "top",
-                        "-translate-y-0": direction === "top" && state === true,
-                        "left-0 right-0 border-t border-gray-50 translate-y-full h-[30vh] max-h-full": direction === "bottom",
-                        "translate-y-0": direction === "bottom" && state === true
-                     }
-                  ),
-                  className
-               )}
-            >
-               {children}
-            </div>
+         <div
+            className={twMerge(
+               clsx(
+                  `fixed max-w-screen flex flex-col bottom-0 z-[1050] transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800`,
+                  {
+                     "w-96 top-0 right-0 border-s border-gray-50 translate-x-full": direction === "left",
+                     "translate-x-0": direction === "left" && state === true,
+                     "w-96 top-0 left-0 border-e border-gray-50 -translate-x-full": direction === "right",
+                     "-translate-x-0": direction === "right" && state === true,
+                     "top-0 left-0 right-0 border-b border-gray-50 -translate-y-full h-[30vh] max-h-full": direction === "top",
+                     "-translate-y-0": direction === "top" && state === true,
+                     "left-0 right-0 border-t border-gray-50 translate-y-full h-[30vh] max-h-full": direction === "bottom",
+                     "translate-y-0": direction === "bottom" && state === true
+                  }
+               ),
+               className
+            )}
+         >
+            {children}
          </div>
          <div
             id="backdrop"

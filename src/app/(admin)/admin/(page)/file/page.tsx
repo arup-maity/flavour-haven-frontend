@@ -4,20 +4,23 @@ import Image from 'next/image'
 import React from 'react'
 
 const Media = () => {
-   async function handleFile(e) {
+   async function handleFile(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
       try {
-         const file = e.target.files[0]
-         const formData = new FormData()
-         formData.append('file', file)
-         formData.append('bucket', 'restaurant')
-         const res = await axiosInstance.post(`/file/upload-image`, formData, {
-            headers: {
-               'Content-Type': 'multipart/form-data',
-            },
-         })
-         console.log('Upload', res)
+         const file: File | null = e.target.files ? e.target.files[0] : null;
+         if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('bucket', 'restaurant');
+
+            const res = await axiosInstance.post('/file/upload-image', formData, {
+               headers: {
+                  'Content-Type': 'multipart/form-data',
+               },
+            });
+            console.log('Upload', res);
+         }
       } catch (error) {
-         console.log('error', error)
+         console.log('error', error);
       }
    }
 

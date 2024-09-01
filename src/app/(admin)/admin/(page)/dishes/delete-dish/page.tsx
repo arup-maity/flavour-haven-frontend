@@ -6,7 +6,7 @@ import React, { useLayoutEffect, useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
 import { toast } from 'sonner'
 
-const DeleteDish = ({ searchParams }: { searchParams: object }) => {
+const DeleteDish = ({ searchParams }: { searchParams: { id: string } }) => {
    const id = searchParams.id || ''
    const router = useRouter()
    const [dishDetails, setDishDetails] = useState<{ [key: string]: any }>({})

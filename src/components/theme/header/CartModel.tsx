@@ -1,26 +1,48 @@
 'use client'
 import { Offcanvas } from '@/ui-components'
-import { useCart } from '@/zustand'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { useCart } from '@/zustand'
+import { v4 as uuidv4 } from 'uuid';
 import { IoBagOutline } from 'react-icons/io5'
 import { PiCurrencyInr } from "react-icons/pi";
 import { AiOutlineMinus } from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { axiosInstance } from '@/config/axios'
+import { useRouter } from 'next/navigation'
 
 const CartModel = () => {
+   const router = useRouter()
    const { cartItems, removeCartItem, updateCartItem } = useCart(state => state)
    const [open, setOpen] = useState<boolean>(false)
 
-   const totalPrice = cartItems.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+   const totalPrice = cartItems.items.reduce((total: number, item: { [key: string]: any }) => total + (item.price * item.quantity), 0);
    const handleIncrement = (id: number) => {
       updateCartItem(id, 1)
    };
    const handleDecrement = (id: number) => {
       updateCartItem(id, -1)
    };
+   async function handleCheckout() {
+      try {
+         const checkoutId = uuidv4()
+         const checkoutItems = cartItems?.items?.map((item: { [key: string]: any }) => {
+            return {
+               checkoutId,
+               dishId: item.id,
+               quantity: item.quantity
+            }
+         })
+         const res = await axiosInstance.post(`/checkout/create-checkout`, checkoutItems)
+         if (res.data.success) {
+            router.push(`/checkout?checkoutId=${checkoutId}`)
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }
    return (
       <>
          <div role="button" className="text-base text-[#0c0c0c]">
@@ -32,7 +54,7 @@ const CartModel = () => {
                }
             </div>
          </div>
-         {/* <Offcanvas isOpen={open} toggle={() => setOpen(prev => !prev)} className='max-w-96'>
+         <Offcanvas isOpen={open} toggle={() => setOpen(prev => !prev)} className='w-96'>
             <Offcanvas.Header toggle={() => setOpen(prev => !prev)}>
                <div className="flex items-center gap-2 py-2">
                   <IoBagOutline size={21} />
@@ -72,11 +94,11 @@ const CartModel = () => {
                   <div className="mb-2">Total: {totalPrice}</div>
                   <div className="flex items-center gap-2">
                      <Link href='/cart' className="basis-1/2 text-center bg-gray-300 text-base rounded p-1.5" onClick={() => setOpen(prev => !prev)}>View Cart</Link>
-                     <Link href='/' className="basis-1/2 text-center bg-[#FF9F0D] text-base text-white rounded p-1.5" onClick={() => setOpen(prev => !prev)}>Checkout</Link>
+                     <div className="basis-1/2 text-center bg-[#FF9F0D] text-base text-white rounded p-1.5" onClick={() => { setOpen(prev => !prev); handleCheckout }}>Checkout</div>
                   </div>
                </div>
             </Offcanvas.Footer>
-         </Offcanvas> */}
+         </Offcanvas>
       </>
    )
 }

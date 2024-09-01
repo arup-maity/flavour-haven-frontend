@@ -5,12 +5,15 @@ import Link from 'next/link'
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { PiCurrencyInr } from 'react-icons/pi'
 import { GoChevronLeft } from "react-icons/go";
-import { sessionContext } from '@/authentication/AuthSession'
+import { sessionContext } from '@/context/Session'
+import { useRouter } from 'next/navigation'
 
 const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
    const checkoutId = searchParams.checkoutId || ''
-   const session = useContext(sessionContext)
-   console.log('session', session)
+   console.log('Checkout', checkoutId)
+   const { login, user } = useContext(sessionContext)
+   const router = useRouter()
+
    const [checkoutItems, setCheckoutItems] = useState([])
    const [shippingCharge, setShippingCharge] = useState(0)
    const [taxCharge, setTaxCharge] = useState(0)
@@ -19,6 +22,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
    }, [checkoutId])
    async function checkoutDetails(id: string) {
       try {
+         if (!id) return
          const res = await axiosInstance.get(`/checkout/checkout-details/${id}`)
          console.log(res)
          if (res.data.success) {
@@ -30,6 +34,29 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
    }
    const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.dishes?.price * item.quantity), 0);
    const totalAmount = subTotal + shippingCharge + taxCharge
+
+   async function handlePayment() {
+      try {
+         const { data } = await axiosInstance.post(`/checkout/create-payment`, {
+            amount: totalAmount * 100,
+            checkoutId,
+            name: user.name,
+            email: 'arupmaity@gmail.com'
+         })
+         if (data.success) {
+            router.push(`/place-order?checkoutId=${checkoutId}&paymentId=${data.secret}`)
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }
+   if (!checkoutId) {
+      return (
+         <div className="">
+            notFound
+         </div>
+      )
+   }
    return (
       <div className='theme-container !py-10'>
          <div className="flex flex-wrap -m-4">
@@ -84,7 +111,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
             <div className="w-4/12 p-4">
                <div className="border border-slate-300 rounded p-3">
                   {
-                     checkoutItems?.map((item) => {
+                     checkoutItems?.map((item: { [key: string]: any }) => {
                         return (
                            <div key={item.id} className="">
                               <div className="flex flex-nowrap gap-2">
@@ -139,7 +166,10 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
                      </li>
                   </ul>
                   <div className="flex items-center gap-2">
-                     <button className="w-full text-white text-base bg-[#FF9F0D] hover:opacity-80 rounded px-4 py-1.5">
+                     {/* <Link href={`/place-order?checkoutId=${checkoutId}`} className="w-full text-white text-base bg-[#FF9F0D] hover:opacity-80 rounded px-4 py-1.5">
+                        Place an order
+                     </Link> */}
+                     <button className="w-full text-white text-base bg-[#FF9F0D] hover:opacity-80 rounded px-4 py-1.5" onClick={handlePayment}>
                         Place an order
                      </button>
                   </div>

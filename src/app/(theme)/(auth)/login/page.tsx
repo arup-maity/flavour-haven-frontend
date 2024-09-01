@@ -32,7 +32,7 @@ const LoginPage = () => {
       LoginFormType
    >({
       defaultValues,
-      mode: "onChange",
+      mode: "onSubmit",
       resolver: zodResolver(schema)
    });
    const onSubmit: SubmitHandler<LoginFormType> = async data => {
@@ -49,8 +49,8 @@ const LoginPage = () => {
 
    return (
       <div className="w-screen bg-[#F4F4F4] overflow-hidden">
-         <div className="h-full w-full flex flex-nowrap items-center justify-between p-3 md:p-7">
-            <div className="w-8/12 max-lg:hidden flex justify-center">
+         <div className="min-h-screen w-full flex flex-nowrap items-center justify-between !pt-10">
+            <div className="w-full lg:w-8/12 max-lg:hidden flex justify-center">
                <Image
                   src="/login.jpg"
                   width={500}
@@ -59,7 +59,7 @@ const LoginPage = () => {
                   className="max-w-full max-h-full"
                />
             </div>
-            <div className="w-4/12 max-lg:w-full h-full flex items-center bg-white rounded-lg shadow-[0px_4px_15px_0px_#0000001C] p-4 md:p-16">
+            <div className="w-full lg:w-4/12 max-lg:w-full h-full flex items-center bg-white rounded-lg shadow-[0px_4px_15px_0px_#0000001C] p-4 md:p-16">
                <div className="w-full">
                   <div className=" mb-9">
                      <h6 className="text-[#2F2F2F] text-3xl font-medium">
