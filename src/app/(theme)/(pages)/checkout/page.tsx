@@ -7,13 +7,13 @@ import { PiCurrencyInr } from 'react-icons/pi'
 import { GoChevronLeft } from "react-icons/go";
 import { sessionContext } from '@/context/Session'
 import { useRouter } from 'next/navigation'
+import { useCart } from '@/zustand'
 
 const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
    const checkoutId = searchParams.checkoutId || ''
-   console.log('Checkout', checkoutId)
-   const { login, user } = useContext(sessionContext)
    const router = useRouter()
-
+   const { login, user } = useContext(sessionContext)
+   const { deleteCart } = useCart(state => state)
    const [checkoutItems, setCheckoutItems] = useState([])
    const [shippingCharge, setShippingCharge] = useState(0)
    const [taxCharge, setTaxCharge] = useState(0)
@@ -32,7 +32,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
          console.log(error)
       }
    }
-   const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.dishes?.price * item.quantity), 0);
+   const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
    const totalAmount = subTotal + shippingCharge + taxCharge
 
    async function handlePayment() {
@@ -44,6 +44,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
             email: 'arupmaity@gmail.com'
          })
          if (data.success) {
+            deleteCart()
             router.push(`/place-order?checkoutId=${checkoutId}&paymentId=${data.secret}`)
          }
       } catch (error) {

@@ -6,6 +6,7 @@ interface cartType {
    addCartItem: (item: { [key: string]: any }) => void;
    removeCartItem: (id: number) => void;
    updateCartItem: (id: number, quantityChange: number) => void;
+   deleteCart: () => void;
 }
 export const useCart = create(persist<cartType>(
    (set, get) => ({
@@ -51,6 +52,9 @@ export const useCart = create(persist<cartType>(
          } else {
             return items;
          }
+      },
+      deleteCart: () => {
+         set(() => ({ cartItems: { count: 0, items: [] } }));
       }
    }),
    {

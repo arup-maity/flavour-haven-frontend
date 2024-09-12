@@ -11,7 +11,7 @@ const ThemeContext = React.createContext<UseThemeProps | undefined>(undefined);
 const defaultContext: UseThemeProps = {
    setTheme: (_) => { },
    themes: [],
-   setCollapse: (_) => { },
+   setCollapse: () => { },
    collapse: "open"
 };
 

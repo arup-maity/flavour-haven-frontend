@@ -2,7 +2,7 @@
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { sessionContext } from '@/authentication/AuthSession'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { axiosInstance } from '@/config/axios'
+import { adminInstance, axiosInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { toast } from 'sonner'
 import { Ability } from '@/authentication/AccessControl'
@@ -28,7 +28,7 @@ const DeleteUser = () => {
    async function getUser() {
       try {
          setPageLoading(true)
-         const res = await axiosInstance.get(`/user/read-admin-user/${id}`)
+         const res = await adminInstance.get(`/user/read/${id}`)
          console.log(res)
          if (res.data.success) {
             setUserDetails(res.data.user)
@@ -43,7 +43,7 @@ const DeleteUser = () => {
    async function deleteUser() {
       try {
          setLoading(true)
-         const res = await axiosInstance.delete(`/user/delete-admin-user/${id}`)
+         const res = await adminInstance.delete(`/user/delete/${id}`)
          console.log(res)
          if (res.data.success) {
             toast.success(res.data.message)

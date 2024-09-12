@@ -54,14 +54,17 @@ const PlaceOrderPage = ({ searchParams }: { searchParams: { [key: string]: strin
    // }
 
    return (
-      <div className='w-full theme-container'>
-         <div className="flex flex-wrap">
-            <div className="w-full lg:w-8/12">
+      <div className='w-full min-h-[70vh] theme-container'>
+         <div className="flex flex-wrap -m-4">
+            <div className="w-full lg:w-8/12 p-4">
                <div className="">
-                  <StripePayment clientSecret={paymentId} userDetails={user} />
+                  <div className="shadow-[0_0_10px_#f1f1f1] rounded p-4">
+                     <StripePayment clientSecret={paymentId} userDetails={user} />
+                     <p>4000003560000008</p>
+                  </div>
                </div>
             </div>
-            <div className="w-full lg:w-4/12">
+            <div className="w-full lg:w-4/12 p-4">
                <div className="">
                   {
                      checkoutItems?.map((item: { [key: string]: any }) => {

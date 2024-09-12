@@ -4,7 +4,7 @@ import Link from 'next/link'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useDebounceValue } from 'usehooks-ts'
 import Table from '@/components/common/Table'
-import { axiosInstance } from '@/config/axios'
+import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { IoEyeOutline } from 'react-icons/io5'
 import { MdClose, MdOutlineModeEditOutline } from 'react-icons/md'
@@ -43,7 +43,7 @@ const Managements = () => {
    async function getUsers(params: any) {
       try {
          setLoading(true)
-         const res = await axiosInstance.get(`/user/admin-users-list`, { params })
+         const res = await adminInstance.get(`/user/managements-list`, { params })
          console.log(res)
          if (res.data.success) {
             setUsersList(res.data.users)

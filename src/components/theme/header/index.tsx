@@ -10,6 +10,7 @@ import { sessionContext } from "@/context/Session";
 
 const Header = ({ className }: { className?: string }) => {
    const { login, user } = useContext(sessionContext)
+   console.log('Login++', login, user)
    const [mobileMenu, setMobileMenu] = useState<boolean>(false)
    const [sticky, setSticky] = useState(false);
 

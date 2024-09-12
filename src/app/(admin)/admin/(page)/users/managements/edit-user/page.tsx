@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 import { toast } from 'sonner';
-import { axiosInstance } from '@/config/axios'
+import { adminInstance, axiosInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { sessionContext } from '@/authentication/AuthSession'
 import { Ability } from '@/authentication/AccessControl'
@@ -40,7 +40,7 @@ const ManageUser = () => {
    const onSubmit: SubmitHandler<Inputs> = async (data) => {
       try {
          setLoading(true)
-         const res = await axiosInstance.put(`/user/update-admin-user/${id}`, data)
+         const res = await adminInstance.put(`/user/update/${id}`, data)
          if (res.data.success) {
             toast.success(res.data.message)
             router.back()

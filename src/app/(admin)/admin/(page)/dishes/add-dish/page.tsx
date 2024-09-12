@@ -57,7 +57,7 @@ const AddCategory = () => {
       price: z.number().gt(0),
       costPrice: z.number().gt(0),
       nonVeg: z.boolean(),
-      category: z.array(z.number()).min(1, "Select at least one category"),
+      category: z.array(z.number()).optional(),
       thumbnail: z.string()
    });
    const {
@@ -78,13 +78,13 @@ const AddCategory = () => {
    }, []);
 
    const onSubmit: SubmitHandler<CategoryFormType> = async (data) => {
-      console.log(data);
       try {
          let thumbnailData: { [key: string]: any } = {}
          if (data?.thumbnail.startsWith("data:image")) {
             thumbnailData = await uploadFile(data.thumbnail)
          }
          const res = await axiosInstance.post(`/dishes/create-dish`, { ...data, thumbnail: thumbnailData?.name });
+         console.log('submit', res)
          if (res.data.success) {
             toast.success(res.data.message);
             router.back();
@@ -97,7 +97,7 @@ const AddCategory = () => {
    async function getCategories() {
       try {
          const res = await axiosInstance.get(`/taxonomy/taxonomies/category`);
-         console.log(res.data);
+         // console.log(res.data);
          if (res.data.success) {
             const category_list: any = [];
             res.data.taxonomies?.map(function (item: {

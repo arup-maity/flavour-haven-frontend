@@ -1,8 +1,10 @@
+'use client'
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SidebarMenu from "./SidebarMenu";
 import { useTheme } from "@/ui-components/sidebar";
+import ClickOutside from "@/ui-components/outside-click";
 
 
 const AdminSidebar = () => {
@@ -23,11 +25,11 @@ const AdminSidebar = () => {
                         alt=""
                         width={50}
                         height={50}
-                        className="w-full h-auto"
+                        className="w-auto h-10"
                      />
                   </Link>
                   <Image
-                     src="/logo.png"
+                     src="/text-logo.png"
                      alt=""
                      width={150}
                      height={40}

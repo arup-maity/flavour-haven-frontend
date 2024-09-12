@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 import { toast } from 'sonner';
-import { axiosInstance } from '@/config/axios'
+import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { sessionContext } from '@/authentication/AuthSession'
 import { Ability } from '@/authentication/AccessControl'
@@ -21,9 +21,7 @@ type Inputs = {
 }
 
 const AddUser = () => {
-   // auth session
    const { session, sessionLoading } = useContext(sessionContext)
-   // route
    const router = useRouter()
    //
    const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -43,7 +41,7 @@ const AddUser = () => {
    const onSubmit: SubmitHandler<Inputs> = async (data) => {
       try {
          setLoading(true)
-         const res = await axiosInstance.post(`/user/create-admin-user`, data)
+         const res = await adminInstance.post(`/user/create`, data)
          if (res.data.success) {
             toast.success(res.data.message)
             router.push('/admin/users/managements')
@@ -54,7 +52,6 @@ const AddUser = () => {
          setLoading(false)
       }
    }
-
    if (sessionLoading && !Ability('create', 'user', session?.user)) {
       return <div>Loading...</div>
    }

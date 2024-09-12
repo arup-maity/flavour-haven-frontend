@@ -4,6 +4,30 @@ import { MdFlightLand, MdFlight, MdConnectingAirports, MdOutlineLocationCity, Md
 
 const AdminMenu = [
    {
+      id: "table",
+      title: "Table Bookings",
+      icon: <LuUsers2 size={20} />,
+      permissions: ["administrator", "admin"],
+      children: [
+         {
+            id: 'booking-requests',
+            title: 'Booking Requests',
+            icon: <IoTicketOutline size='8' />,
+            permission: ['administrator', 'admin'],
+            Link: '/admin/table/booking-requests',
+            navLink: '/admin/table/booking-requests'
+         },
+         {
+            id: 'booking-list',
+            title: 'Booking List',
+            icon: <IoTicketOutline size='8' />,
+            permission: ['administrator', 'admin'],
+            Link: '/admin/table/booking-list',
+            navLink: '/admin/table/booking-list'
+         },
+      ]
+   },
+   {
       id: "dishes",
       title: "Dishes",
       icon: <LuUsers2 size={20} />,

@@ -28,6 +28,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
          const currentTime = Math.floor(Date.now() / 1000);
          if (currentTime < payload.exp) {
             setSession({ login: true, user: payload })
+         } else {
+            storeUserDetails()
          }
       } else {
          storeUserDetails()

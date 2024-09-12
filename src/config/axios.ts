@@ -5,3 +5,7 @@ export const axiosInstance = axios.create({
    baseURL: apiUrl,
    withCredentials: true
 });
+export const adminInstance = axios.create({
+   baseURL: apiUrl + '/admin',
+   withCredentials: true
+});

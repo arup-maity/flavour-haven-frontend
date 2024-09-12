@@ -55,7 +55,7 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
       price: z.number().gt(0),
       costPrice: z.number().gt(0),
       nonVeg: z.boolean(),
-      category: z.array(z.number()).min(1, "Select at least one category"),
+      category: z.array(z.number()).optional(),
       thumbnail: z.string(),
    });
    const {
@@ -76,11 +76,11 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
    }, [id]);
 
    const onSubmit: SubmitHandler<CategoryFormType> = async (data) => {
-      console.log(data);
       try {
          let thumbnailData: { [key: string]: any } = {}
          if (data?.thumbnail.startsWith("data:image")) {
             thumbnailData = await uploadFile(data.thumbnail)
+            console.log('upload thumbnail =>', thumbnailData)
          }
          const res = await axiosInstance.put(`/dishes/update-dish/${id}`, { ...data, oldCategory, thumbnail: thumbnailData?.name || oldThumbnail, oldThumbnail });
          console.log(res)
