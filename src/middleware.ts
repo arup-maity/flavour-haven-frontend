@@ -62,6 +62,10 @@ export async function middleware(request: NextRequest) {
    if (!auth.login && request.nextUrl.pathname.startsWith('/checkout')) {
       return Response.redirect(new URL('/login', request.url));
    }
+   // account page
+   if (!auth.login && request.nextUrl.pathname.startsWith('/account')) {
+      return Response.redirect(new URL('/login', request.url));
+   }
    // place order
    if (!auth.login && request.nextUrl.pathname.startsWith('/place-order')) {
       return Response.redirect(new URL('/login', request.url));

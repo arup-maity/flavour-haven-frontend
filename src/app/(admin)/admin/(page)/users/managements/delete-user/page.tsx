@@ -1,20 +1,19 @@
 'use client'
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { sessionContext } from '@/authentication/AuthSession'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { adminInstance, axiosInstance } from '@/config/axios'
+import { useRouter } from 'next/navigation'
+import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { toast } from 'sonner'
 import { Ability } from '@/authentication/AccessControl'
 import { BsArrowLeft } from 'react-icons/bs'
 
-const DeleteUser = () => {
+const DeleteUser = ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
    // auth session
    const { session, sessionLoading } = useContext(sessionContext)
    // route
    const router = useRouter()
-   const search = useSearchParams()
-   const id: string = search.get('id') || ''
+   const id = searchParams.id || ''
    //
    const [userDetails, setUserDetails] = useState<{ [key: string]: string }>({})
    const [notFound, setNotFound] = useState(false)

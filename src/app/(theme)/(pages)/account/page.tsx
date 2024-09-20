@@ -1,16 +1,16 @@
 'use client'
+import AddressDetailsPage from '@/components/theme/account/AddressDetails'
 import OrderDetailsPage from '@/components/theme/account/OrderDetails'
+import ProfileDetailsPage from '@/components/theme/account/ProfileDetails'
 import Image from 'next/image'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
-import { CiEdit } from 'react-icons/ci'
 import { IoCameraOutline, IoCloudUploadOutline } from 'react-icons/io5'
 
-const AccountPage = () => {
+const AccountPage = ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
    const router = useRouter()
    const pathname = usePathname()
-   const searchParams = useSearchParams()
-   const currentTab = searchParams.get('tab') || 'profile-details'
+   const currentTab = searchParams.tab || 'profile-details'
    const [profileDetails, setProfileDetails] = useState<{ [key: string]: any }>({})
    const createQueryString = useCallback(
       (name: string, value: string) => {
@@ -41,10 +41,6 @@ const AccountPage = () => {
                      </div>
                   </div>
                   <p className='text-2xl text-theme-black font-semibold font-montserrat mb-2'>{profileDetails?.fullName}</p>
-                  <div className="flex items-center flex-nowrap justify-center gap-4">
-                     {/* <p className='text-base text-theme-black font-montserrat text-opacity-75'>{profileDetails?.email}</p> */}
-                     <div role='button' className="text-sm flex items-center text-theme-blue flex-nowrap gap-2" onClick={() => handleTab('settings')} ><CiEdit />Profile Edit</div>
-                  </div>
                </div>
             </div>
          </div>
@@ -52,18 +48,16 @@ const AccountPage = () => {
             <div className="w-full lg:w-3/12 p-4">
                <div className="">
                   <ul className='flex lg:block max-lg:gap-4 max-lg:justify-center *:text-base lg:space-y-1'>
-                     <li className={`${currentTab === 'profile-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('profile-details')}>Account Details</li>
-                     <li className={`${currentTab === 'order-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('order-details')}>Order Details</li>
-                     <li className={`${currentTab === 'address' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('order-details')}>Address</li>
-                     <li className={`${currentTab === 'settings' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('settings')}>Settings</li>
+                     <li role='button' className={`${currentTab === 'profile-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('profile-details')}>Account Details</li>
+                     <li role='button' className={`${currentTab === 'order-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('order-details')}>Order Details</li>
+                     <li role='button' className={`${currentTab === 'address' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('address-details')}>Address</li>
                   </ul>
                </div>
             </div>
             <div className="w-full lg:w-9/12 p-4">
-               {/* {
-                  currentTab === 'profile-details' ? <ProfileDetails profileDetails={profileDetails} handleTab={handleTab} /> : currentTab === 'order-details' ? <OrderDetails /> : <Settings profileDetails={profileDetails} setUpdateProfile={() => setUpdateProfile(prev => !prev)} />
-               } */}
-               <OrderDetailsPage />
+               {
+                  currentTab === 'profile-details' ? <ProfileDetailsPage /> : currentTab === 'order-details' ? <OrderDetailsPage /> : <AddressDetailsPage />
+               }
             </div>
          </div>
       </div>

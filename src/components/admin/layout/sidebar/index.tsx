@@ -12,7 +12,7 @@ const AdminSidebar = () => {
    return (
       <>
          <div
-            className={`main-admin-sidebar fixed bg-white flex flex-col start-0 transition-all duration-400 ease-in-out z-[9999] shadow-lg `}
+            className={`main-admin-sidebar fixed bg-white flex flex-col start-0 transition-all duration-400 ease-in-out z-[999] shadow-lg `}
          >
             <div className="h-full">
                <div className="w-full h-[60px] flex flex-nowrap items-center gap-1 overflow-hidden px-2 mb-0.5">

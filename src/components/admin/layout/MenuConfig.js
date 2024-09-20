@@ -28,6 +28,30 @@ const AdminMenu = [
       ]
    },
    {
+      id: "order",
+      title: "Orders",
+      icon: <LuUsers2 size={20} />,
+      permissions: ["administrator", "admin"],
+      children: [
+         {
+            id: 'order-requests',
+            title: 'Order Requests',
+            icon: <IoTicketOutline size='8' />,
+            permission: ['administrator', 'admin'],
+            Link: '/admin/order/order-requests',
+            navLink: '/admin/order/order-requests'
+         },
+         {
+            id: 'orders-list',
+            title: 'Order List',
+            icon: <IoTicketOutline size='8' />,
+            permission: ['administrator', 'admin'],
+            Link: '/admin/order/orders-list',
+            navLink: '/admin/order/orders-list'
+         },
+      ]
+   },
+   {
       id: "dishes",
       title: "Dishes",
       icon: <LuUsers2 size={20} />,

@@ -1,6 +1,6 @@
 'use client'
 import { useCart } from '@/zustand'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { PiCurrencyInr } from "react-icons/pi";
 import { IoCloseOutline } from "react-icons/io5";
 import Image from 'next/image';
@@ -9,9 +9,11 @@ import { AiOutlineMinus } from "react-icons/ai";
 import { v4 as uuidv4 } from 'uuid';
 import { axiosInstance } from '@/config/axios';
 import { useRouter } from 'next/navigation';
+import { sessionContext } from '@/context/Session';
 
 const CartPage = () => {
    const router = useRouter()
+   const { login, user } = useContext(sessionContext)
    const { cartItems, removeCartItem, updateCartItem } = useCart(state => state)
    const [shippingCharge, setShippingCharge] = useState(0)
    const cartTotal = cartItems.items.reduce((total: number, item: { [key: string]: any }) => total + (item.price * item.quantity), 0);
@@ -19,6 +21,9 @@ const CartPage = () => {
 
    async function handleCheckout() {
       try {
+         if (!login) {
+            router.push(`/login?redirect=cart`)
+         }
          const checkoutId = uuidv4()
          const checkoutItems = cartItems?.items?.map((item: { [key: string]: any }) => {
             return {
@@ -36,6 +41,7 @@ const CartPage = () => {
          console.log(error)
       }
    }
+
    return (
       <div className='theme-container w-full min-h-[70vh] !py-4'>
          <div className="flex justify-center mb-4">
@@ -44,7 +50,6 @@ const CartPage = () => {
                <span className='text-2xl font-medium text-[#FF9F0D]'>Cart</span>
             </div>
          </div>
-
          {
             cartItems?.items.length === 0 ?
                <div className="">
@@ -144,8 +149,6 @@ const CartPage = () => {
                   </div>
                </div>
          }
-
-
       </div >
    )
 }

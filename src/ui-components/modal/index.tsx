@@ -68,11 +68,11 @@ const Modal: React.FC<PropsType> = (props) => {
          onOpen();
          // Disable body scrolling
          document.body.style.position = "fixed"
-         document.body.style.overflow = "scroll";
+         document.body.style.overflowY = "scroll";
       } else {
          onClose();
          document.body.style.position = "static"
-         document.body.style.overflow = "auto";
+         document.body.style.overflowY = "auto";
       }
    }
 
@@ -80,7 +80,7 @@ const Modal: React.FC<PropsType> = (props) => {
 
    return (
       <Container>
-         <div className={cn(`fixed w-full h-full flex justify-center items-center overflow-hidden overflow-y-auto top-0 left-0 z-[1048] opacity-0 transition-opacity duration-200 ease-in-out`,
+         <div className={cn(`fixed w-full h-full flex justify-center items-center overflow-hidden overflow-y-auto top-0 left-0 z-[2048] transition-opacity duration-200 ease-in-out`,
             {
                "opacity-100": state === true,
             },
@@ -97,7 +97,7 @@ const Modal: React.FC<PropsType> = (props) => {
             ref={backdropRef}
             onClick={(e) => { handleBackdropClick(e); console.log('click') }}
             onMouseDown={(e) => { handleBackdropMouseDown(e); console.log('mouseDown') }}
-            className={`fixed top-0 left-0 w-screen h-screen bg-[#000] transition-opacity duration-300 ease-linear z-[1040] opacity-40`}
+            className={`fixed top-0 left-0 w-screen h-screen bg-[#000] transition-opacity duration-300 ease-linear z-[2040] opacity-40`}
          ></div>
       </Container>
    );

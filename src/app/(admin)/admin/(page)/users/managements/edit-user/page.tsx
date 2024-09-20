@@ -8,7 +8,7 @@ import { adminInstance, axiosInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { sessionContext } from '@/authentication/AuthSession'
 import { Ability } from '@/authentication/AccessControl'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 type Inputs = {
@@ -18,13 +18,12 @@ type Inputs = {
    role: string
 }
 
-const ManageUser = () => {
+const ManageUser = ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
    // auth session
    const { session, sessionLoading } = useContext(sessionContext)
    // route
    const router = useRouter()
-   const search = useSearchParams()
-   const id: string = search.get('id') || ''
+   const id = searchParams.id || ''
    //
    const [notFound, setNotFound] = useState(false)
    const [loading, setLoading] = useState<boolean>(false)

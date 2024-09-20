@@ -8,17 +8,23 @@ import { GoChevronLeft } from "react-icons/go";
 import { sessionContext } from '@/context/Session'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/zustand'
+import { toast } from 'sonner'
 
 const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
    const checkoutId = searchParams.checkoutId || ''
    const router = useRouter()
-   const { login, user } = useContext(sessionContext)
+   const { user } = useContext(sessionContext)
    const { deleteCart } = useCart(state => state)
    const [checkoutItems, setCheckoutItems] = useState([])
    const [shippingCharge, setShippingCharge] = useState(0)
    const [taxCharge, setTaxCharge] = useState(0)
+   const [shippingAddresses, setShippingAddresses] = useState([])
+   const [selectedShippingAddress, setSelectedShippingAddress] = useState<{ [key: string]: any }>({})
+   const [loading, setLoading] = useState<boolean>(true)
    useLayoutEffect(() => {
       checkoutDetails(checkoutId)
+      getShippingAddresses()
+      setLoading(false)
    }, [checkoutId])
    async function checkoutDetails(id: string) {
       try {
@@ -32,20 +38,34 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
          console.log(error)
       }
    }
+   async function getShippingAddresses() {
+      try {
+         const res = await axiosInstance.get(`/user/account/address-details`)
+         console.log('address', res)
+         if (res.data.success) {
+            setShippingAddresses(res.data.addressDetails)
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }
    const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
    const totalAmount = subTotal + shippingCharge + taxCharge
 
    async function handlePayment() {
       try {
-         const { data } = await axiosInstance.post(`/checkout/create-payment`, {
-            amount: totalAmount * 100,
-            checkoutId,
-            name: user.name,
-            email: 'arupmaity@gmail.com'
-         })
-         if (data.success) {
-            deleteCart()
-            router.push(`/place-order?checkoutId=${checkoutId}&paymentId=${data.secret}`)
+         if (Object.values(selectedShippingAddress).length === 0) {
+            toast.error('Please select a shipping address')
+         } else {
+            const { data } = await axiosInstance.post(`/checkout/create-payment`, {
+               amount: totalAmount * 100,
+               checkoutId,
+               shippingAddress: selectedShippingAddress
+            })
+            if (data.success) {
+               deleteCart()
+               router.push(`/place-order?checkoutId=${checkoutId}&paymentId=${data.secret}`)
+            }
          }
       } catch (error) {
          console.log(error)
@@ -58,23 +78,44 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
          </div>
       )
    }
+   if (loading) {
+      return (
+         <div className='w-full min-h-[70vh] flex items-center justify-center'>
+            <div className="">
+               <span className="">Loading...</span>
+            </div>
+         </div>
+      )
+   }
    return (
       <div className='theme-container !py-10'>
          <div className="flex flex-wrap -m-4">
             <div className="w-8/12 p-4">
                <div className="">
                   <p className='text-lg font-medium mb-2'>Shipping Address</p>
+                  <div className="mb-5">
+                     {
+                        shippingAddresses?.map((address: { [key: string]: any }) =>
+                           <div key={address.id} className="border border-slate-300 rounded p-2">
+                              <label htmlFor="shippingAddress" className='cursor-pointer'>
+                                 <input type="radio" name="shippingAddress" id="shippingAddress" onChange={() => setSelectedShippingAddress(address)} />
+                                 <span className='ms-2'>Choose</span>
+                              </label>
+                              <p className='text-base'>{address.fullName}</p>
+                              <p className='text-sm text-gray-400'>{address.phone}</p>
+                              <p className='text-sm text-gray-400'>{address.streetAddress}</p>
+                              <div className="flex items-center gap-1">
+                                 <p className='text-sm text-gray-400'>{address.city},</p>
+                                 <p className='text-sm text-gray-400'>{address.country}</p>
+                              </div>
+                           </div>
+                        )
+                     }
+                  </div>
+
                   <div className="flex flex-wrap -m-2 mb-10">
                      <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>First Name</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Last Name</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Email</label>
+                        <label htmlFor="" className='block text-sm mb-1'>Full Name</label>
                         <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
                      </div>
                      <div className="w-full lg:w-6/12 p-2">
@@ -83,6 +124,14 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
                      </div>
                      <div className="w-full lg:w-6/12 p-2">
                         <label htmlFor="" className='block text-sm mb-1'>Country</label>
+                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
+                     </div>
+                     <div className="w-full lg:w-6/12 p-2">
+                        <label htmlFor="" className='block text-sm mb-1'>State</label>
+                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
+                     </div>
+                     <div className="w-full lg:w-6/12 p-2">
+                        <label htmlFor="" className='block text-sm mb-1'>City</label>
                         <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
                      </div>
                      <div className="w-full lg:w-6/12 p-2">
@@ -98,6 +147,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
                         <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
                      </div>
                   </div>
+
                   <div className="flex -m-2">
                      <div className="w-full lg:w-6/12 p-2">
                         <Link href='/cart' className='inline-flex items-center border border-slate-300 py-1 px-4'>

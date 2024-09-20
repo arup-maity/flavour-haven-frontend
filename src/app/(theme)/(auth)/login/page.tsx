@@ -17,9 +17,9 @@ type LoginFormType = {
    password: string;
 };
 
-const LoginPage = () => {
+const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
+   const redirect = searchParams.redirect || ''
    const router = useRouter();
-   //
    const defaultValues = { email: "", password: "" };
    const schema = z.object({
       email: z
@@ -38,7 +38,7 @@ const LoginPage = () => {
          const res = await axiosInstance.post(`/auth/user-login`, data);
          if (res.data.success) {
             toast.success(res.data.message);
-            router.push("/");
+            router.push(redirect ? `/${redirect}` : '/');
          }
       } catch (error) {
          handleApiError(error);
