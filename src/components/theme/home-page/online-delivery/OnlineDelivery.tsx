@@ -42,22 +42,15 @@ const OnlineDelivery = () => {
                }
                <span>Filter</span>
             </li>
-            <li>
-               <div className="relative">
-                  <div className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sort ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setOpenSort(prev => !prev)}>{sort}</div>
-                  {
-                     openSort &&
-                     <div className="absolute w-48 right-0 z-10 mt-1 origin-top-right rounded-md overflow-hidden bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="">
-                           <div role="button" className="block px-4 py-1 hover:bg-gray-100 text-sm text-gray-700" onClick={() => { setFilter(prev => ({ ...prev, sort: '' })); setSort('Sort By') }}>Sort By</div>
-                           <div role="button" className="block px-4 py-1 hover:bg-gray-100 text-sm text-gray-700" onClick={() => { setFilter(prev => ({ ...prev, sort: 'lth' })); setSort('Low to High') }}>Low to High</div>
-                           <div role="button" className="block px-4 py-1 hover:bg-gray-100 text-sm text-gray-700" onClick={() => { setFilter(prev => ({ ...prev, sort: 'gth' })); setSort('High to Low') }}>High to Low</div>
-                        </div>
-                     </div>
-                  }
-
-               </div>
+            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sort === 'lth' ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, sort: prev.sort === 'lth' ? '' : 'lth' }))}>
+               <span>Low to High</span>
+               {filter?.sort === 'lth' && <IoCloseOutline />}
             </li>
+            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sort === 'gth' ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, sort: prev.sort === 'gth' ? '' : 'gth' }))}>
+               <span>High to Low</span>
+               {filter?.sort === 'gth' && <IoCloseOutline />}
+            </li>
+
             <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.delivery ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, delivery: !prev.delivery }))}>
                <span>Fast Delivery</span>
                {filter?.delivery && <IoCloseOutline />}

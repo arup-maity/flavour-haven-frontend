@@ -68,14 +68,11 @@ const Managements = () => {
    }
    const columns = [
       {
-         index: 'firstName',
+         index: 'fullName',
          title: 'Name',
-         dataIndex: '',
+         dataIndex: 'fullName',
          sortable: true,
          className: 'w-[20%] min-w-[250px]',
-         render: (record: any) => (
-            <div key={record.id}>{record.firstName && record.firstName + ' ' + record.lastName}</div>
-         )
       },
       {
          index: 'email',

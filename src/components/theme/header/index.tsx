@@ -7,10 +7,11 @@ import CartModel from "./CartModel";
 import MobileMenu from "./MobileMenu";
 import { IoMenuOutline } from "react-icons/io5";
 import { sessionContext } from "@/context/Session";
+import { usePathname } from "next/navigation";
 
 const Header = ({ className }: { className?: string }) => {
+   const pathname = usePathname()
    const { login, user } = useContext(sessionContext)
-   console.log('Login++', login, user)
    const [mobileMenu, setMobileMenu] = useState<boolean>(false)
    const [sticky, setSticky] = useState(false);
 
@@ -32,7 +33,7 @@ const Header = ({ className }: { className?: string }) => {
    return (
       <>
          <div className={`theme-header theme-container bg-transparent w-full z-[999] ${sticky ? 'sticky-header' : ''} transition-[position] duration-500 ease-in-out ${className}`}>
-            <div className="flex flex-nowrap items-center justify-between py-4">
+            <div className="flex flex-nowrap items-center justify-between py-3">
                <div className="flex items-center gap-4">
                   <div className="block lg:hidden" onClick={() => setMobileMenu(prev => !prev)}>
                      <IoMenuOutline size={30} />
@@ -56,19 +57,19 @@ const Header = ({ className }: { className?: string }) => {
                   <div className="hidden lg:block ms-24">
                      <ul className="flex flex-nowrap space-x-8 *:text-[#0c0c0c]">
                         <li className="text-base font-medium">
-                           <Link href="/">Home</Link>
+                           <Link href="/" className={`${pathname === '/' && 'border-b-2 border-yellow-600 pb-0.5'}`}>Home</Link>
                         </li>
                         <li className="text-base font-medium">
-                           <Link href="/menu">Menu</Link>
+                           <Link href="/menu" className={`${pathname === '/menu' && 'border-b-2 border-yellow-600 pb-0.5'}`}>Menu</Link>
                         </li>
                         <li className="text-base font-medium">
-                           <Link href="/page/offer">Offer</Link>
+                           <Link href="/page/offer" className={`${pathname === '/page/offer' && 'border-b-2 border-yellow-600 pb-0.5'}`}>Offer</Link>
                         </li>
                         <li className="text-base font-medium">
-                           <Link href="/page/about">About</Link>
+                           <Link href="/page/about" className={`${pathname === '/page/about' && 'border-b-2 border-yellow-600 pb-0.5'}`}>About</Link>
                         </li>
                         <li className="text-base font-medium">
-                           <Link href="/page/contact">contact</Link>
+                           <Link href="/page/contact" className={`${pathname === '/page/contact' && 'border-b-2 border-yellow-600 pb-0.5'}`}>contact</Link>
                         </li>
                      </ul>
                   </div>
@@ -86,13 +87,15 @@ const Header = ({ className }: { className?: string }) => {
                   <div className="hidden md:block">
                      {login
                         ? <UserDropdown user={user} />
-                        : <Link href="/login" className="text-base text-[#0c0c0c]">
-                           <p className="text-sm font-light leading-none">
-                              Hello, Sign In /
-                           </p>
-                           <p className="text-base font-light leading-none">
-                              Create Account
-                           </p>
+                        : <Link href="/login" className="inline-flex items-center h-12 text-base text-[#0c0c0c]">
+                           <div className="">
+                              <p className="text-sm font-light leading-none">
+                                 Hello, Sign In /
+                              </p>
+                              <p className="text-base font-light leading-none">
+                                 Create Account
+                              </p>
+                           </div>
                         </Link>}
                   </div>
                   <div className="">

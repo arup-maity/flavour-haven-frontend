@@ -53,9 +53,9 @@ body {
       transform: translateX(0);
    }
 
-   .main-admin-sidebar {
+   /* .main-admin-sidebar {
       transform: translateX(-100%);
-   }
+   } */
 
    .main-admin-content-wapper {
       padding-inline-start: 0 !important;
@@ -64,7 +64,7 @@ body {
 
 .main-admin-content-wapper {
    min-height: 100vh;
-   padding-inline-start: 260px;
+   /* padding-inline-start: 260px; */
 }
 
 .sidebar-collapsed .main-admin-content-wapper {

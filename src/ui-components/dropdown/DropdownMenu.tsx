@@ -14,7 +14,7 @@ type ContextType = {
 const DropdownMenu: React.FC<PropsTypes> = ({ children, className, id, tag: Tag = 'ul' }) => {
    const { open, toggle } = React.useContext<any>(DropdownContext);
    return (
-      <Tag className={cn(`absolute z-[9999] left-0 top-full min-w-[10rem] text-left bg-clip-padding border border-slate-400 rounded py-1 m-0 ${open === id ? 'block' : 'hidden'}`, className)} onClick={() => toggle(id)}>
+      <Tag className={cn(`absolute z-[9999] left-0 top-full min-w-[10rem] text-left bg-clip-padding border border-slate-400 rounded m-0 ${open === id ? 'block' : 'hidden'}`, className)} onClick={() => toggle(id)}>
          {children}
       </Tag>
    )

@@ -26,12 +26,16 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
    function getSession() {
       const data = localStorage.getItem('userDetails') || ''
       if (data) {
-         const payload = JSON.parse(data)
+         const payload = JSON.parse(data);
          const currentTime = Math.floor(Date.now() / 1000);
-         if (currentTime < payload.exp) {
-            setSession(prev => ({ ...prev, login: true, user: payload }))
+         const oneMinuteBeforeExp = payload.exp - 60; // Subtract 60 seconds (1 minute)
+
+         if (currentTime < oneMinuteBeforeExp) {
+            // Session is still valid with at least 1 minute remaining
+            setSession(prev => ({ ...prev, login: true, user: payload }));
          } else {
-            storeUserDetails()
+            // Session is expired or less than 1 minute remaining
+            storeUserDetails();
          }
       } else {
          storeUserDetails()

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, ReactElement } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
@@ -21,11 +21,8 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 //       return hasPermission || filteredChildren.length > 0;
 //    });
 // }
-interface PropsType {
-   menuCollapsed?: boolean;
-   menuHover?: boolean;
-}
-const SidebarMenu: React.FC<PropsType> = ({ menuCollapsed, menuHover }) => {
+
+const SidebarMenu = () => {
    const [groupOpen, setGroupOpen] = useState([]);
    const [groupActive, setGroupActive] = useState([]);
    const [currentActiveGroup, setCurrentActiveGroup] = useState([]);
@@ -36,20 +33,20 @@ const SidebarMenu: React.FC<PropsType> = ({ menuCollapsed, menuHover }) => {
 
    return (
       <div className="sidebar-menu-content w-full h-[calc(100%-70px)] py-1">
-         <PerfectScrollbar component="ul" className="px-2">
-            <MenuItems
-               items={AdminMenu}
-               groupOpen={groupOpen}
-               activeItem={activeItem}
-               groupActive={groupActive}
-               setGroupOpen={setGroupOpen}
-               setActiveItem={setActiveItem}
-               setGroupActive={setGroupActive}
-               currentActiveGroup={currentActiveGroup}
-               setCurrentActiveGroup={setCurrentActiveGroup}
-               menuCollapsed={menuCollapsed}
-               menuHover={menuHover}
-            />
+         <PerfectScrollbar>
+            <ul className="px-2">
+               <MenuItems
+                  items={AdminMenu}
+                  groupOpen={groupOpen}
+                  activeItem={activeItem}
+                  groupActive={groupActive}
+                  setGroupOpen={setGroupOpen}
+                  setActiveItem={setActiveItem}
+                  setGroupActive={setGroupActive}
+                  currentActiveGroup={currentActiveGroup}
+                  setCurrentActiveGroup={setCurrentActiveGroup}
+               />
+            </ul>
          </PerfectScrollbar>
       </div>
    );
@@ -60,23 +57,21 @@ export default SidebarMenu;
 const MenuItems = (props: any) => {
    const { items, ...rest } = props;
    const FatchItems = items.map((item: any, index: number) => {
-      if (item.children) {
-         return <NavItemGroup item={item} key={index} {...rest} />;
-      }
+      if (item.children) return <NavItemGroup item={item} key={index} {...rest} />
       return <NavItem item={item} key={index} {...rest} />;
    });
    return <>{FatchItems}</>;
 };
 
 const NavItem = (props: any) => {
-   const { item, menuCollapsed, menuHover } = props;
+   const { item } = props;
    const currentURL = usePathname();
    return (
       <li className="webx-menu-item">
          <Link
             href={item.Link}
             className={clsx(
-               `flex text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 items-center gap-3 overflow-hidden rounded p-2 mb-[2px]`,
+               `flex text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 items-center gap-2 overflow-hidden rounded p-2 mb-0.5`,
                {
                   "bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-white":
                      item.navLink === currentURL
@@ -214,7 +209,7 @@ export const NavItemGroup = (props: any) => {
          <Link
             href="#"
             className={clsx(
-               `flex text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 items-center gap-3 overflow-hidden rounded p-2 px-5 mb-[2px]`,
+               `flex text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 items-center gap-3 overflow-hidden rounded p-2 px-4 mb-0.5`,
                {
                   "bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-white":
                      groupActive?.includes(item.id) ||
@@ -265,7 +260,6 @@ export const NavItemGroup = (props: any) => {
                   groupOpen={groupOpen}
                   setGroupOpen={setGroupOpen}
                   parentItem={item}
-                  menuHover={menuHover}
                   activeItem={activeItem}
                />
             </div>

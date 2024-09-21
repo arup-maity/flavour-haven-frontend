@@ -1,10 +1,30 @@
+'use cllient'
 import React from 'react'
-
 
 const AdminDashBoard = () => {
    return (
-      <div>
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae rerum in voluptate eius odit sequi voluptas dolorem mollitia nesciunt, reprehenderit autem molestiae quia quidem sed ratione ducimus excepturi ipsum tempora ipsa totam dolor fugit distinctio! Accusamus aperiam libero excepturi ducimus facere expedita rem adipisci iusto inventore pariatur asperiores corporis saepe modi recusandae facilis eum, provident ad animi ratione a, iure debitis nihil. Nesciunt quod pariatur in tempore quas dignissimos voluptas ipsa! Quaerat perferendis voluptatem nam, quia illum ea deleniti, ipsam nihil expedita dolorum cum rem ut repellat necessitatibus. Quo, dignissimos possimus expedita ex beatae ipsa eum iste recusandae. Officia?
+      <div className="">
+         <h1>Admin Dashboard</h1>
+         <div className="flex flex-wrap -m-2">
+            <div className="w-full md:w-6/12 lg:w-4/12 p-2">
+               <div className="bg-white rounded p-2">
+                  <div className="">Total Dishes</div>
+                  <div className="">120</div>
+               </div>
+            </div>
+            <div className="w-full md:w-6/12 lg:w-4/12 p-2">
+               <div className="bg-white rounded p-2">
+                  <div className="">Total Categories</div>
+                  <div className="">120</div>
+               </div>
+            </div>
+            <div className="w-full md:w-6/12 lg:w-4/12 p-2">
+               <div className="bg-white rounded p-2">
+                  <div className="">Total Tables</div>
+                  <div className="">120</div>
+               </div>
+            </div>
+         </div>
       </div>
    )
 }

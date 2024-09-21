@@ -4,6 +4,14 @@ import { MdFlightLand, MdFlight, MdConnectingAirports, MdOutlineLocationCity, Md
 
 const AdminMenu = [
    {
+      id: "admin",
+      title: "Dashboard",
+      icon: <LuUsers2 size={20} />,
+      permissions: ["administrator", "admin"],
+      Link: '/admin',
+      navLink: '/admin'
+   },
+   {
       id: "table",
       title: "Table Bookings",
       icon: <LuUsers2 size={20} />,

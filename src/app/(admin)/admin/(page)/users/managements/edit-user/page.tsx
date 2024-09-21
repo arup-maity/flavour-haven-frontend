@@ -57,7 +57,7 @@ const ManageUser = ({ searchParams }: { searchParams: { [key: string]: string | 
 
    async function getUser() {
       try {
-         const res = await axiosInstance.get(`/user/read-admin-user/${id}`)
+         const res = await axiosInstance.get(`/user/read/${id}`)
          console.log(res)
          if (res.data.success) {
             for (const key in defaultValues) {
