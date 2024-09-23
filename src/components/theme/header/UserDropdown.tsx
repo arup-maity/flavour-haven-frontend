@@ -5,9 +5,16 @@ import Link from "next/link";
 import React from "react";
 import { AiOutlineLogout, AiOutlineUser } from "react-icons/ai";
 import { CiDeliveryTruck } from "react-icons/ci";
+import Cookies from "js-cookie"
+import { useRouter } from "next/navigation";
 
 const UserDropdown = ({ user }: { user: any }) => {
-
+   const router = useRouter()
+   const handleLogout = () => {
+      Cookies.remove('token')
+      localStorage.setItem('userDetails', '')
+      router.push('/')
+   }
    return (
       <div className="relative h-12">
          <DropDown>
@@ -30,9 +37,11 @@ const UserDropdown = ({ user }: { user: any }) => {
                      <span className="text-base">Order</span>
                   </Link>
                </DropDown.Item>
-               <DropDown.Item className="flex items-center gap-2">
-                  <AiOutlineLogout size={18} />
-                  <span className="text-base">Logout</span>
+               <DropDown.Item>
+                  <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
+                     <AiOutlineLogout size={18} />
+                     <span className="text-base">Logout</span>
+                  </div>
                </DropDown.Item>
             </DropDown.Menu>
          </DropDown>

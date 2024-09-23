@@ -1,4 +1,4 @@
-import Banner from "@/components/theme/home-page/Banner";
+import Banner from "@/components/theme/home-page/banner/Banner";
 import FoodCategories from "@/components/theme/home-page/food-categories/FoodCategories";
 import FoodMenu from "@/components/theme/home-page/food-menu/FoodMenu";
 import MiniAbout from "@/components/theme/home-page/MiniAbout";
@@ -9,7 +9,9 @@ export default function Home() {
    return (
       <>
          {/* banner */}
-         <Banner />
+         <div className="w-full pb-10">
+            <Banner />
+         </div>
          {/* mini about */}
          <div className="w-full theme-container !pb-[80px]">
             <MiniAbout />

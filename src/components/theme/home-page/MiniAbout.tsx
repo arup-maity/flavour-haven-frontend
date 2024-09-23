@@ -8,12 +8,12 @@ const MiniAbout = () => {
    const [showVideo, setShowVideo] = useState(false)
    return (
       <div className='flex flex-wrap items-center -m-6'>
-         <div className="w-full lg:w-6/12 p-6">
+         <div className="w-full lg:w-6/12 max-lg:order-2 p-6">
             <div className="w-full aspect-[670/735]">
                <Image src='/group-img-1.png' width={670} height={735} alt='' className='w-full h-auto' />
             </div>
          </div>
-         <div className="w-full lg:w-6/12 p-6">
+         <div className="w-full lg:w-6/12 max-lg:order-1 p-6">
             <div className="">
                <div className="relative text-xl text-[#195A00] font-miniver font-normal after:absolute after:top-[18px] after:left-20 after:z-20 after:w-11 after:h-[1px] after:bg-[#195A00] mb-2">About us</div>
                <div className="text-2xl md:text-4xl text-[#0c0c0c] font-bold mb-6">Food is an important <br /> part Of a balanced Diet</div>
