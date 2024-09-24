@@ -2,6 +2,7 @@
 import { axiosInstance } from '@/config/axios'
 import React, { useLayoutEffect, useState } from 'react'
 import AddressForm from './AddressForm'
+import { CiEdit } from "react-icons/ci";
 
 const AddressDetailsPage = () => {
    const [addressDetails, setAddressDetails] = useState<{ [key: string]: any }[]>([])
@@ -36,19 +37,19 @@ const AddressDetailsPage = () => {
                      <div className="flex flex-wrap -m-2">
                         {
                            addressDetails?.map((address: { [key: string]: any }, index: number) => (
-                              <div key={address.id} className='w-full lg:w-6/12 border border-slate-200 p-2'>
-                                 <div className="mb-2">
-                                    <p>Address {index + 1}</p>
-                                    <button type="button" onClick={() => { setSelectedAddress(address); setFormOpen(prev => !prev) }}>Edit</button>
+                              <div key={address.id} className='relative w-full lg:w-6/12 border border-slate-200 rounded p-2'>
+                                 <p className='underline'>Address {index + 1}</p>
+                                 <div className="absolute top-2 right-2 z-10">
+                                    <button type="button" onClick={() => { setSelectedAddress(address); setFormOpen(prev => !prev) }}><CiEdit size={20} /></button>
                                  </div>
-                                 <div className="border border-slate-200 rounded p-2">
-                                    <p>{address.streetAddress}</p>
-                                    <div className="flex items-center gap-2">
-                                       <p>{address.city}</p>
-                                       <p>{address.country}</p>
-                                       <p>{address.zipCode}</p>
-                                    </div>
+                                 <p>{address.fullName}</p>
+                                 <p>{address.streetAddress}</p>
+                                 <div className="flex items-center gap-2">
+                                    <p>{address.city}</p>
+                                    <p>{address.country}</p>
+                                    <p>{address.zipCode}</p>
                                  </div>
+
                               </div>
                            ))
                         }

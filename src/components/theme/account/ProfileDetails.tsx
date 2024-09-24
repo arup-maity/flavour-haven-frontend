@@ -32,11 +32,11 @@ const ProfileDetailsPage = () => {
          </div>
          {
             formOpen ?
-               <ProfileForm profileDetails={profileDetails} setFormOpen={() =>setFormOpen(prev => !prev)} /> :
+               <ProfileForm profileDetails={profileDetails} setFormOpen={() => setFormOpen(prev => !prev)} /> :
                <div className="">
                   <div className="">
                      <p className='text-sm text-gray-400'>FullName</p>
-                     <p>{profileDetails?.fullName}</p>
+                     <p>{profileDetails?.firstName}  {profileDetails?.lastName}</p>
                   </div>
                   <div className="">
                      <p className='text-sm text-gray-400'>Email</p>

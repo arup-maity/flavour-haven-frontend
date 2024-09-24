@@ -9,7 +9,19 @@ import { sessionContext } from '@/context/Session'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/zustand'
 import { toast } from 'sonner'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, SubmitHandler } from "react-hook-form"
+import { z } from "zod";
 
+type Inputs = {
+   fullName: string;
+   phone: string;
+   streetAddress: string;
+   city: string;
+   state: string;
+   zipCode: string;
+   country: string;
+}
 const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
    const checkoutId = searchParams.checkoutId || ''
    const router = useRouter()
@@ -71,6 +83,34 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
          console.log(error)
       }
    }
+   // Address Added
+   const defaultValues = { fullName: '', phone: '', streetAddress: '', city: '', state: '', zipCode: '', country: '' }
+   const schemaValidation = z.object({
+      fullName: z.string().min(2),
+      phone: z.string().min(10),
+      streetAddress: z.string().min(2),
+      city: z.string().min(2),
+      state: z.string().min(2),
+      zipCode: z.string().min(2),
+      country: z.string().min(2),
+   });
+   const { register, handleSubmit, setValue, formState: { errors }, } = useForm<Inputs>({
+      defaultValues,
+      mode: "onSubmit",
+      resolver: zodResolver(schemaValidation)
+   })
+   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+      try {
+         const response = await axiosInstance.post(`/user/account/add-address`, data)
+         console.log(data)
+         if (response.data.success) {
+         }
+
+      } catch (error) {
+         console.error('Error fetching order list:', error)
+      }
+   }
+   // 
    if (!checkoutId) {
       return (
          <div className="">
@@ -112,42 +152,56 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
                         )
                      }
                   </div>
+                  <form onSubmit={handleSubmit(onSubmit)} className=''>
+                     <div className="flex flex-wrap -m-2 mb-10">
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>Full Name</label>
+                           <input type="text" {...register("fullName")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.fullName && <p className='text-sm text-red-500 mt-1'>{errors.fullName.message}</p>}
 
-                  <div className="flex flex-wrap -m-2 mb-10">
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Full Name</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Phone Number</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Country</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>State</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>City</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Postal Code</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Address 1</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                     <div className="w-full lg:w-6/12 p-2">
-                        <label htmlFor="" className='block text-sm mb-1'>Address 2</label>
-                        <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
-                     </div>
-                  </div>
+                        </div>
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>Phone Number</label>
+                           <input type="text" {...register("phone")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.phone && <p className='text-sm text-red-500 mt-1'>{errors.phone.message}</p>}
 
+                        </div>
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>Country</label>
+                           <input type="text" {...register("country")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.country && <p className='text-sm text-red-500 mt-1'>{errors.country.message}</p>}
+
+                        </div>
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>State</label>
+                           <input type="text" {...register("state")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.state && <p className='text-sm text-red-500 mt-1'>{errors.state.message}</p>}
+
+                        </div>
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>City</label>
+                           <input type="text" {...register("city")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.city && <p className='text-sm text-red-500 mt-1'>{errors.city.message}</p>}
+
+                        </div>
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>Postal Code</label>
+                           <input type="text" {...register("zipCode")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.zipCode && <p className='text-sm text-red-500 mt-1'>{errors.zipCode.message}</p>}
+
+                        </div>
+                        <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>Address 1</label>
+                           <input type="text" {...register("streetAddress")} className='w-full h-9 border border-slate-300 rounded p-2' />
+                           {errors.streetAddress && <p className='text-sm text-red-500 mt-1'>{errors.streetAddress.message}</p>}
+
+                        </div>
+                        {/* <div className="w-full lg:w-6/12 p-2">
+                           <label htmlFor="" className='block text-sm mb-1'>Address 2</label>
+                           <input type="text" name="" id="" className='w-full h-9 border border-slate-300 rounded p-2' />
+                        </div> */}
+                     </div>
+                  </form>
                   <div className="flex -m-2">
                      <div className="w-full lg:w-6/12 p-2">
                         <Link href='/cart' className='inline-flex items-center border border-slate-300 py-1 px-4'>

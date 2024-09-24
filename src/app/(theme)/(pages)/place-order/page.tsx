@@ -31,7 +31,7 @@ const PlaceOrderPage = ({ searchParams }: { searchParams: { [key: string]: strin
          console.log(error)
       }
    }
-   const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.dishes?.price * item.quantity), 0);
+   const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
    const totalAmount = subTotal + shippingCharge + taxCharge
 
    // useLayoutEffect(() => {

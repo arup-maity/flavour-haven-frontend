@@ -11,18 +11,10 @@ const AccountPage = ({ searchParams }: { searchParams: { [key: string]: string |
    const router = useRouter()
    const pathname = usePathname()
    const currentTab = searchParams.tab || 'profile-details'
+   // const searchParams = useSearchParams()
    const [profileDetails, setProfileDetails] = useState<{ [key: string]: any }>({})
-   const createQueryString = useCallback(
-      (name: string, value: string) => {
-         const params = new URLSearchParams(searchParams.toString())
-         params.set(name, value)
-
-         return params.toString()
-      },
-      [searchParams]
-   )
    function handleTab(id: string) {
-      router.push(pathname + '?' + createQueryString('tab', id))
+      router.push(pathname + `?tab=${id}`)
    }
    return (
       <div className='w-full theme-container'>

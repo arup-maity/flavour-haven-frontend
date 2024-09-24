@@ -5,27 +5,29 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from "zod";
 import { axiosInstance } from '@/config/axios';
 type Inputs = {
-   fullName: string
+   firstName: string
+   lastName: string
    email: string
    phoneNumber: string
 }
 
 const ProfileForm = ({ profileDetails, setFormOpen }: { profileDetails: { [key: string]: any }, setFormOpen: () => void }) => {
-   const defaultValues = { fullName: '', email: '', phoneNumber: '' }
+   const defaultValues = { firstName: '', lastName: '', email: '', phoneNumber: '' }
    const schemaValidation = z.object({
-      fullName: z.string().min(2, "Please enter Full Name"),
+      firstName: z.string().min(2, "Please enter First Name"),
+      lastName: z.string().min(2, "Please enter Last Name"),
       email: z.string().min(2, "Please enter  Email"),
       phoneNumber: z.string().min(10, "Please enter Phone Number"),
    });
    const { register, handleSubmit, setValue, formState: { errors }, } = useForm<Inputs>({
       defaultValues,
-      mode: "onChange",
+      mode: "onSubmit",
       resolver: zodResolver(schemaValidation)
    })
    const onSubmit: SubmitHandler<Inputs> = async (data) => {
       try {
          if (profileDetails?.id) {
-            const response = await axiosInstance.put(`/user/account/update-profile`, { ...data, id: profileDetails.id })
+            const response = await axiosInstance.put(`/user/account/update-profile`, data)
             if (response.data.success) {
                setFormOpen()
             }
@@ -51,9 +53,14 @@ const ProfileForm = ({ profileDetails, setFormOpen }: { profileDetails: { [key: 
          <form onSubmit={handleSubmit(onSubmit)} className=''>
             <div className="flex flex-wrap -m-2 mb-2">
                <fieldset className='w-full lg:w-6/12 p-2'>
-                  <label htmlFor="" className='block text-sm text-gray-500 mb-1'>FullName</label>
-                  <input {...register("fullName")} className='w-full h-9 border border-slate-300 rounded px-2' />
-                  {errors.fullName && <p className='text-sm text-red-500 mt-1'>{errors.fullName.message}</p>}
+                  <label htmlFor="" className='block text-sm text-gray-500 mb-1'>FirstName</label>
+                  <input {...register("firstName")} className='w-full h-9 border border-slate-300 rounded px-2' />
+                  {errors.firstName && <p className='text-sm text-red-500 mt-1'>{errors.firstName.message}</p>}
+               </fieldset>
+               <fieldset className='w-full lg:w-6/12 p-2'>
+                  <label htmlFor="" className='block text-sm text-gray-500 mb-1'>LastName</label>
+                  <input {...register("lastName")} className='w-full h-9 border border-slate-300 rounded px-2' />
+                  {errors.lastName && <p className='text-sm text-red-500 mt-1'>{errors.lastName.message}</p>}
                </fieldset>
                <fieldset className='w-full lg:w-6/12 p-2'>
                   <label htmlFor="" className='block text-sm text-gray-500 mb-1'>Email</label>
