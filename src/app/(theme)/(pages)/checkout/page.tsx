@@ -23,12 +23,17 @@ type Inputs = {
    zipCode: string;
    country: string;
 }
+
+interface CheckoutType {
+   orderItems?: { [key: string]: number | string }[]
+}
+
 const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
    const checkoutId = searchParams.checkoutId || ''
    const router = useRouter()
    const { user } = useContext(sessionContext)
    const { deleteCart } = useCart(state => state)
-   const [checkoutItems, setCheckoutItems] = useState([])
+   const [checkoutItems, setCheckoutItems] = useState<CheckoutType>({})
    const [shippingCharge, setShippingCharge] = useState(0)
    const [taxCharge, setTaxCharge] = useState(0)
    const [shippingAddresses, setShippingAddresses] = useState([])
@@ -65,7 +70,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
          console.log(error)
       }
    }
-   const subTotal = checkoutItems?.orderItems?.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
+   const subTotal = checkoutItems?.orderItems?.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0) || 0;
    const totalAmount = subTotal + shippingCharge + taxCharge
 
    async function handlePayment() {
