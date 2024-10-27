@@ -2,7 +2,7 @@
 const Table = () => {
 
    return (
-      <div className="w-full bg-[url('/table-01.jpg')] bg-cover bg-center bg-fixed">
+      <div id="table-booking" className="w-full bg-[url('/table-01.jpg')] bg-cover bg-center bg-fixed">
          <div className=" bg-black bg-opacity-70 py-32">
             <div className="container-webx">
                <div className="flex flex-wrap items-center -m-4">

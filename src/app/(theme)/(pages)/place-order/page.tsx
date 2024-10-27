@@ -25,13 +25,13 @@ const PlaceOrderPage = ({ searchParams }: { searchParams: { [key: string]: strin
          const res = await axiosInstance.get(`/checkout/checkout-details/${id}`)
          console.log(res)
          if (res.data.success) {
-            setCheckoutItems(res.data.checkoutItems)
+            setCheckoutItems(res.data.checkout)
          }
       } catch (error) {
          console.log(error)
       }
    }
-   const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
+   const subTotal = checkoutItems?.orderItems?.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
    const totalAmount = subTotal + shippingCharge + taxCharge
 
    // useLayoutEffect(() => {
@@ -67,7 +67,7 @@ const PlaceOrderPage = ({ searchParams }: { searchParams: { [key: string]: strin
             <div className="w-full lg:w-4/12 p-4">
                <div className="">
                   {
-                     checkoutItems?.map((item: { [key: string]: any }) => {
+                     checkoutItems?.orderItems?.map((item: { [key: string]: any }) => {
                         return (
                            <div key={item.id} className="">
                               <div className="flex flex-nowrap gap-2">

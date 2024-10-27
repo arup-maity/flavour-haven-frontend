@@ -1,5 +1,6 @@
 'use client'
-import { axiosInstance } from '@/config/axios'
+import { adminInstance } from '@/config/axios'
+import Spinner from '@/ui-components/spinner'
 import { handleApiError } from '@/utils'
 import { useRouter } from 'next/navigation'
 import React, { useLayoutEffect, useState } from 'react'
@@ -10,12 +11,13 @@ const DeleteDish = ({ searchParams }: { searchParams: { id: string } }) => {
    const id = searchParams.id || ''
    const router = useRouter()
    const [dishDetails, setDishDetails] = useState<{ [key: string]: any }>({})
+   const [deleteLoading, setDeleteLoading] = useState(false)
    useLayoutEffect(() => {
       getDishDetails(id)
    }, [id])
    async function getDishDetails(id: string) {
       try {
-         const res = await axiosInstance.get(`/dishes/read-dish/${id}`)
+         const res = await adminInstance.get(`/dishes/read-dish/${id}`)
          if (res.data.success) {
             setDishDetails(res.data.dish)
          }
@@ -25,13 +27,16 @@ const DeleteDish = ({ searchParams }: { searchParams: { id: string } }) => {
    }
    async function handleDelete() {
       try {
-         const res = await axiosInstance.delete(`/dishes/delete-dish/${id}`, { params: { thumbnail: dishDetails.thumbnail } })
+         setDeleteLoading(true)
+         const res = await adminInstance.delete(`/dishes/delete-dish/${id}`, { params: { thumbnail: dishDetails.thumbnail } })
          if (res.data.success) {
             toast.success('Delete successfully')
             router.back()
          }
       } catch (error) {
          handleApiError(error)
+      } finally {
+         setDeleteLoading(false) // go back to previous page after delete operation is successful (if any) or failed (if any)
       }
    }
    return (
@@ -53,7 +58,8 @@ const DeleteDish = ({ searchParams }: { searchParams: { id: string } }) => {
             </ul>
          </div>
          <div className="">
-            <button type="button" className='text-sm border border-slate-400 rounded py-1.5 px-4' onClick={handleDelete}>Delete Dish</button>
+            <button type="button" disabled={deleteLoading} className='text-sm border border-slate-400 rounded py-1.5 px-4' onClick={handleDelete}>Delete Dish</button>
+            {deleteLoading && <Spinner />}
          </div>
       </div>
    )

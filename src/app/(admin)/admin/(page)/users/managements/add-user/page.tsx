@@ -41,10 +41,11 @@ const AddUser = () => {
    const onSubmit: SubmitHandler<Inputs> = async (data) => {
       try {
          setLoading(true)
-         const res = await adminInstance.post(`/user/create`, data)
+         const res = await adminInstance.post(`/user/create-user`, data)
+         console.log(res)
          if (res.data.success) {
             toast.success(res.data.message)
-            router.push('/admin/users/managements')
+            // router.push('/admin/users/managements')
          }
       } catch (error) {
          handleApiError(error)
@@ -99,7 +100,7 @@ const AddUser = () => {
                   <option value="deliveryBoy">Delivery Boy</option>
                </select>
             </fieldset>
-            <button type="submit" disabled={loading} className='bg-transparent hover:bg-blue-500 hover:text-white border border-blue-500 rounded py-1 px-4'>
+            <button type="submit" disabled={loading} className='bg-blue-500 hover:bg-transparent text-white hover:text-black border border-blue-500 rounded py-1 px-4'>
                {loading ? 'Adding' : 'Add New User'}
             </button>
          </form>

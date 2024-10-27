@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod";
+import { IoCloseOutline } from "react-icons/io5";
 
 type Inputs = {
    fullName: string;
@@ -32,19 +33,22 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
    const [taxCharge, setTaxCharge] = useState(0)
    const [shippingAddresses, setShippingAddresses] = useState([])
    const [selectedShippingAddress, setSelectedShippingAddress] = useState<{ [key: string]: any }>({})
+   // const [totalAmount, setTotalAmount] = useState(0)
    const [loading, setLoading] = useState<boolean>(true)
+   const [paymentLoading, setPaymentLoading] = useState(false)
    useLayoutEffect(() => {
       checkoutDetails(checkoutId)
-      getShippingAddresses()
+      // getShippingAddresses()
       setLoading(false)
    }, [checkoutId])
    async function checkoutDetails(id: string) {
       try {
          if (!id) return
          const res = await axiosInstance.get(`/checkout/checkout-details/${id}`)
-         console.log(res)
+         console.log('checkout details', res)
          if (res.data.success) {
-            setCheckoutItems(res.data.checkoutItems)
+            setCheckoutItems(res.data.checkout)
+            // setTotalAmount(res.data.checkout.totalAmount)
          }
       } catch (error) {
          console.log(error)
@@ -61,26 +65,29 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
          console.log(error)
       }
    }
-   const subTotal = checkoutItems.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
+   const subTotal = checkoutItems?.orderItems?.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0);
    const totalAmount = subTotal + shippingCharge + taxCharge
 
    async function handlePayment() {
       try {
-         if (Object.values(selectedShippingAddress).length === 0) {
-            toast.error('Please select a shipping address')
-         } else {
-            const { data } = await axiosInstance.post(`/checkout/create-payment`, {
-               amount: totalAmount * 100,
-               checkoutId,
-               shippingAddress: selectedShippingAddress
-            })
-            if (data.success) {
-               deleteCart()
-               router.push(`/place-order?checkoutId=${checkoutId}&paymentId=${data.secret}`)
-            }
+         setPaymentLoading(true)
+         // if (Object.values(selectedShippingAddress).length === 0) {
+         //    toast.error('Please select a shipping address')
+         // } else {
+         const { data } = await axiosInstance.post(`/checkout/create-payment`, {
+            amount: totalAmount * 100,
+            checkoutId,
+            shippingAddress: selectedShippingAddress
+         })
+         if (data.success) {
+            deleteCart()
+            router.push(`/place-order?checkoutId=${checkoutId}&paymentId=${data.secret}`)
          }
+         // }
       } catch (error) {
          console.log(error)
+      } finally {
+         setPaymentLoading(false)
       }
    }
    // Address Added
@@ -216,7 +223,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
             <div className="w-4/12 p-4">
                <div className="border border-slate-300 rounded p-3">
                   {
-                     checkoutItems?.map((item: { [key: string]: any }) => {
+                     checkoutItems?.orderItems?.map((item: { [key: string]: any }) => {
                         return (
                            <div key={item.id} className="">
                               <div className="flex flex-nowrap gap-2">
@@ -224,8 +231,8 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
                                     <Image src={item.dishes?.thumbnail ? `${process.env.NEXT_PUBLIC_BUCKET_URL}${item.dishes.thumbnail}` : ''} width={64} height={64} alt="" className='w-16 h-16 aspect-square rounded' />
                                  </div>
                                  <div className="">
-                                    <div className='text-base leading-none line-clamp-2 break-all'>{item.dishes?.title}</div>
-                                    <div>{item.quantity} x ${item.dishes?.price}</div>
+                                    <div className='text-base leading-none line-clamp-2 break-all'>{item.dishes.title}</div>
+                                    <div className='flex items-center text-base'>{item.quantity} <IoCloseOutline />  <PiCurrencyInr />{item?.price}</div>
                                  </div>
                               </div>
                               <hr className='my-2' />
@@ -274,8 +281,10 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
                      {/* <Link href={`/place-order?checkoutId=${checkoutId}`} className="w-full text-white text-base bg-[#FF9F0D] hover:opacity-80 rounded px-4 py-1.5">
                         Place an order
                      </Link> */}
-                     <button className="w-full text-white text-base bg-[#FF9F0D] hover:opacity-80 rounded px-4 py-1.5" onClick={handlePayment}>
-                        Place an order
+                     <button disabled={paymentLoading} className="w-full text-white text-base bg-[#FF9F0D] hover:opacity-80 rounded px-4 py-1.5" onClick={handlePayment}>
+                        {
+                           paymentLoading ? 'Loading...' : 'Place an order'
+                        }
                      </button>
                   </div>
                </div>

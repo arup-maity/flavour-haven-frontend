@@ -13,7 +13,7 @@ export const getSession = async () => {
     }
   };
 
-  const url = process.env.NEXT_PUBLIC_API_URL + `/auth/check-token`;
+  const url = process.env.NEXT_PUBLIC_API_URL + `/auth/verify-token`;
   const response = await fetch(url, options);
   const json = await response.json();
 

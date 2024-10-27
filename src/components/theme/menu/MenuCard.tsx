@@ -3,23 +3,24 @@ import { axiosInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import Image from 'next/image'
 
-
 async function getMenu(slug: string) {
    try {
       const res = await axiosInstance.get(`/taxonomy/read-taxonomy-with-dishes/${slug}`)
       // console.log('res ==>', res.data.taxonomy)
       if (res.data.success) {
-         return res.data.taxonomy  // Return first item as menu category for now. Later we can adjust it to fetch all categories.
+         return res.data.taxonomy
       }
    } catch (error) {
-      // console.log(error)
+      handleApiError(error)
    }
 }
 
 const MenuCard = async ({ slug, order = 1 }: { slug: string, order?: number }) => {
    const menu = await getMenu(slug)
-   // console.log(menu)
 
+   if (menu?.dishes.length === 0) {
+      return null
+   }
    return (
       <div>
          <div className="flex flex-wrap -m-4 lg:-m-10">

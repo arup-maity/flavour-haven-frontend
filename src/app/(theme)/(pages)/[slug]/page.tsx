@@ -7,12 +7,13 @@ import { PiCurrencyInr } from "react-icons/pi";
 
 async function getDishDetails(slug: string) {
    try {
-      const res = await axiosInstance.get(`/dishes/dish-detail/${slug}`);
+      const res = await axiosInstance.get(`/dishes/dish-details/${slug}`);
       if (res.data.success) {
          return res.data.dish
       }
    } catch (error) {
       // console.log(error)
+      console.log(error)
    }
 }
 
@@ -182,7 +183,7 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                <div className="w-full lg:w-5/12 relative h-full p-4">
                   <div className=" w-full h-full flex flex-col md:flex-row gap-4">
                      <ul className="hidden md:block w-[100px] h-[500px] overflow-hidden space-y-4">
-                        <li>
+                        {/* <li>
                            <div className="w-full aspect-square rounded-md overflow-hidden">
                               <Image
                                  src={`/img-12.png`}
@@ -225,7 +226,7 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                                  alt=""
                               />
                            </div>
-                        </li>
+                        </li> */}
                      </ul>
                      <div className="w-full aspect-[500/500]">
                         <Image
@@ -311,7 +312,7 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                </div>
             </div>
             <hr className="my-4" />
-            <div className="mt-6">
+            {/* <div className="mt-6">
                <div className="text-2xl font-medium">More dishes</div>
                <div className="w-full flex flex-wrap -mx-3">
                   {foodList &&
@@ -338,7 +339,7 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                         );
                      })}
                </div>
-            </div>
+            </div> */}
          </div>
       </div>
    );

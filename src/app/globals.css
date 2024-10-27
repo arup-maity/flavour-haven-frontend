@@ -18,7 +18,6 @@
 
 body {
    width: 100% !important;
-   color: rgb(var(--foreground-rgb));
    background: white;
    overflow: hidden;
    overflow-y: scroll;
@@ -159,4 +158,10 @@ body {
    top: 0;
    background-color: white !important;
    box-shadow: 0 0 10px #0000001a;
+}
+
+@layer base {
+  :root {
+      --radius: 0.5rem;
+   }
 }

@@ -1,6 +1,6 @@
 "use client";
-import { axiosInstance } from "@/config/axios";
-import { handleApiError } from "@/utils";
+import { adminInstance } from "@/config/axios";
+import { blobToImage, handleApiError } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useLayoutEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -10,6 +10,7 @@ import Select from "react-select";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageUpload from "@/components/thumbnail/ImageUpload";
 import { uploadFile } from "@/components/admin/utils";
+import Spinner from "@/ui-components/spinner";
 
 type CategoryFormType = {
    title: string;
@@ -28,6 +29,7 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
    const [categoryList, setCategoryList] = useState([]);
    const [oldCategory, setOldCategory] = useState([]);
    const [oldThumbnail, setThumbnail] = useState('');
+   const [submitLoading, setSubmitLoading] = useState(false)
    const defaultValues = {
       title: "",
       slug: "",
@@ -77,24 +79,36 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
 
    const onSubmit: SubmitHandler<CategoryFormType> = async (data) => {
       try {
-         let thumbnailData: { [key: string]: any } = {}
+         setSubmitLoading(true)
+         let thumbnailUrl = ''
          if (data?.thumbnail.startsWith("data:image")) {
-            thumbnailData = await uploadFile(data.thumbnail)
-            console.log('upload thumbnail =>', thumbnailData)
+            const fileUrl = await blobToImage(data.thumbnail)
+            const formData = new FormData();
+            formData.append("image", fileUrl);
+            const response = await adminInstance.post(`/dishes/thumbnail-upload`, formData, {
+               headers: {
+                  'Content-Type': 'multipart/form-data',
+               },
+            })
+            if (response.data.success) {
+               thumbnailUrl = `/dishes/${response.data.file.originalname}`
+            }
          }
-         const res = await axiosInstance.put(`/dishes/update-dish/${id}`, { ...data, oldCategory, thumbnail: thumbnailData?.name || oldThumbnail, oldThumbnail });
+         const res = await adminInstance.put(`/dishes/update-dish/${id}`, { ...data, oldCategory, thumbnail: thumbnailUrl || oldThumbnail, oldThumbnail });
          console.log(res)
          if (res.data.success) {
             toast.success(res.data.message);
          }
       } catch (error) {
          handleApiError(error);
+      } finally {
+         setSubmitLoading(false)
       }
    };
 
    async function getDishdetails() {
       try {
-         const res = await axiosInstance.get(`/dishes/read-dish/${id}`);
+         const res = await adminInstance.get(`/dishes/read-dish/${id}`);
          console.log(res);
          if (res.data.success) {
             for (const key in defaultValues) {
@@ -123,11 +137,11 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
    }
    async function getCategories() {
       try {
-         const res = await axiosInstance.get(`/taxonomy/taxonomies/category`);
+         const res = await adminInstance.get(`/taxonomy/dishes-category`);
          console.log(res.data);
          if (res.data.success) {
             const category_list: any = [];
-            res.data.taxonomies?.map(function (item: {
+            res.data.categories?.map(function (item: {
                [key: string]: string | number;
             }) {
                category_list.push({ label: item.name, value: item.id });
@@ -324,14 +338,16 @@ const EditDishes = ({ params }: { params: { id: string } }) => {
                      </fieldset>
                   </div>
                </div>
-               <fieldset>
+               <div className="flex items-center gap-2">
                   <button
                      type="submit"
+                     disabled={submitLoading}
                      className="border border-slate-400 rounded py-1 px-4"
                   >
-                     Submit
+                     Save Changes
                   </button>
-               </fieldset>
+                  {submitLoading && <Spinner />}
+               </div>
             </form>
          </div>
       </div>

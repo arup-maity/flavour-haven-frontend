@@ -37,10 +37,11 @@ const FoodMenu = () => {
 
    async function getAllMenu() {
       try {
-         const res = await axiosInstance.get(`/taxonomy/taxonomy-menu`)
-         // console.log(res)
+         const categories = tabs.map((item) => item.id)
+         const res = await axiosInstance.get(`/taxonomy/tab-menu`, { params: { categories } });
+         console.log(res)
          if (res.data.success) {
-            setAllMenu(res.data.taxonomies)
+            setAllMenu(res.data.tabMenu)
          }
       } catch (error) {
          console.log(error)

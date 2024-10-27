@@ -12,7 +12,7 @@ const Banner = () => {
                <p className="w-full lg:w-10/12 text-base text-[#5C6574] mb-8">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                <div className="flex items-center gap-5">
                   <Link href='/menu' className="text-base text-white bg-[#101A24] rounded-[10px_4px] py-2.5 px-5">Menu</Link>
-                  <Link href='/table' className="text-base text-white bg-[#195A00] rounded-[10px_4px] py-2.5 px-5">Book a table</Link>
+                  <Link href='/#table-booking' className="text-base text-white bg-[#195A00] rounded-[10px_4px] py-2.5 px-5">Book a table</Link>
                </div>
             </div>
             <div className="w-full lg:w-5/12 p-5 lg:p-10">

@@ -31,6 +31,7 @@ const LoginPage = () => {
          }
       } catch (error) {
          handleApiError(error)
+         console.log(error)
       } finally {
          setLoading(false)
       }

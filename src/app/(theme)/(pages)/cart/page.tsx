@@ -15,30 +15,36 @@ const CartPage = () => {
    const router = useRouter()
    const { login, user } = useContext(sessionContext)
    const { cartItems, removeCartItem, updateCartItem } = useCart(state => state)
+   const [checkoutLoading, setCheckoutLoading] = useState(false)
    const [shippingCharge, setShippingCharge] = useState(0)
    const cartTotal = cartItems.items.reduce((total: number, item: { [key: string]: any }) => total + (item.price * item.quantity), 0);
    const totalAmount = cartTotal + shippingCharge
 
    async function handleCheckout() {
       try {
-         if (!login) {
-            router.push(`/login?redirect=cart`)
-         }
+         // if (!login) {
+         //    router.push(`/login?redirect=cart`)
+         // }
+         setCheckoutLoading(true)
          const checkoutId = uuidv4()
          const checkoutItems = cartItems?.items?.map((item: { [key: string]: any }) => {
             return {
                checkoutId,
                dishId: item.id,
+               name: item.name,
                quantity: item.quantity,
                price: item.price
             }
          })
          const res = await axiosInstance.post(`/checkout/create-checkout`, checkoutItems)
+         console.log('create checkout ==>', res)
          if (res.data.success) {
-            router.push(`/checkout?checkoutId=${checkoutId}`)
+            router.push(`/checkout?checkoutId=${res.data.orderId}`)
          }
       } catch (error) {
          console.log(error)
+      } finally {
+         setCheckoutLoading(false)
       }
    }
 
@@ -141,7 +147,11 @@ const CartPage = () => {
                                  </li>
                               </ul>
                               <div className="">
-                                 <button type="button" className='text-white bg-[#FF9F0D] hover:bg-opacity-80 w-full py-1.5 rounded' onClick={handleCheckout}>Proceed to Checkout</button>
+                                 <button type="button" disabled={checkoutLoading} className='text-white bg-[#FF9F0D] hover:bg-opacity-80 w-full py-1.5 rounded' onClick={handleCheckout}>
+                                    {
+                                       checkoutLoading ? 'Loading...' : 'Proceed to Checkout'
+                                    }
+                                 </button>
                               </div>
                            </div>
                         </div>

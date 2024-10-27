@@ -1,6 +1,6 @@
 "use client";
-import { axiosInstance } from "@/config/axios";
-import { handleApiError } from "@/utils";
+import { adminInstance } from "@/config/axios";
+import { blobToImage, handleApiError } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useLayoutEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -10,7 +10,7 @@ import Select from "react-select";
 import TextareaAutosize from "react-textarea-autosize";
 import { useRouter } from "next/navigation";
 import ImageUpload from "@/components/thumbnail/ImageUpload";
-import { uploadFile } from "@/components/admin/utils";
+import Spinner from "@/ui-components/spinner";
 
 type CategoryFormType = {
    title: string;
@@ -28,6 +28,7 @@ const AddCategory = () => {
    const router = useRouter();
    //
    const [categoryList, setCategoryList] = useState([]);
+   const [submitLoading, setSubmitLoading] = useState(false);
    const defaultValues = {
       title: "",
       slug: "",
@@ -77,30 +78,55 @@ const AddCategory = () => {
       getCategories();
    }, []);
 
+   const dishTitle = watch("title");
+
+   useLayoutEffect(() => {
+      function formatSlug(input: string) {
+         let formatted = input.replace(/[^\w\s-]/g, "");
+         formatted = formatted.replace(/\s+/g, "-");
+         formatted = formatted.toLowerCase();
+         return formatted;
+      }
+      const CategorySlug = formatSlug(dishTitle);
+      setValue("slug", CategorySlug);
+   }, [dishTitle]);
+
    const onSubmit: SubmitHandler<CategoryFormType> = async (data) => {
       try {
-         let thumbnailData: { [key: string]: any } = {}
+         setSubmitLoading(true)
+         let thumbnailUrl = ''
          if (data?.thumbnail.startsWith("data:image")) {
-            thumbnailData = await uploadFile(data.thumbnail)
+            const fileUrl = await blobToImage(data.thumbnail)
+            const formData = new FormData();
+            formData.append("image", fileUrl);
+            const response = await adminInstance.post(`/dishes/thumbnail-upload`, formData, {
+               headers: {
+                  'Content-Type': 'multipart/form-data',
+               },
+            })
+            if (response.data.success) {
+               thumbnailUrl = `/dishes/${response.data.file.originalname}`
+            }
          }
-         const res = await axiosInstance.post(`/dishes/create-dish`, { ...data, thumbnail: thumbnailData?.name });
+         const res = await adminInstance.post(`/dishes/create-dish`, { ...data, thumbnail: thumbnailUrl });
          console.log('submit', res)
          if (res.data.success) {
             toast.success(res.data.message);
-            router.back();
+            router.push('/admin/dishes/dishes-list');
          }
       } catch (error) {
          handleApiError(error);
+      } finally {
+         setSubmitLoading(false);
       }
    };
 
    async function getCategories() {
       try {
-         const res = await axiosInstance.get(`/taxonomy/taxonomies/category`);
-         // console.log(res.data);
+         const res = await adminInstance.get(`/taxonomy/dishes-category`);
          if (res.data.success) {
             const category_list: any = [];
-            res.data.taxonomies?.map(function (item: {
+            res.data.categories?.map(function (item: {
                [key: string]: string | number;
             }) {
                category_list.push({ label: item.name, value: item.id });
@@ -297,14 +323,16 @@ const AddCategory = () => {
                      </fieldset>
                   </div>
                </div>
-               <fieldset>
+               <div className="flex items-center gap-2">
                   <button
                      type="submit"
+                     disabled={submitLoading}
                      className="border border-slate-400 rounded py-1 px-4"
                   >
-                     Submit
+                     Save Dish
                   </button>
-               </fieldset>
+                  {submitLoading && <Spinner />}
+               </div>
             </form>
          </div>
       </div>

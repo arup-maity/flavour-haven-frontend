@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { handleApiError } from "@/utils";
 import { TfiEmail } from "react-icons/tfi";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 type LoginFormType = {
    email: string;
@@ -20,6 +21,8 @@ type LoginFormType = {
 const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
    const redirect = searchParams.redirect || ''
    const router = useRouter();
+   const [showPassword, setShowPassword] = useState(false);
+   const [loginLoading, setLoginLoading] = useState(false);
    const defaultValues = { email: "", password: "" };
    const schema = z.object({
       email: z
@@ -35,6 +38,7 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
    });
    const onSubmit: SubmitHandler<LoginFormType> = async data => {
       try {
+         setLoginLoading(true)
          const res = await axiosInstance.post(`/auth/user-login`, data);
          if (res.data.success) {
             toast.success(res.data.message);
@@ -42,12 +46,14 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
          }
       } catch (error) {
          handleApiError(error);
+      } finally {
+         setLoginLoading(false)
       }
    };
 
    return (
-      <div className="w-full bg-[#F4F4F4]">
-         <div className="w-full flex flex-nowrap items-center justify-between py-10">
+      <div className="w-full min-h-screen bg-[#F4F4F4]">
+         <div className="w-full h-full flex flex-nowrap items-center justify-between py-10">
             <div className="w-full lg:w-7/12 max-lg:hidden flex justify-center">
                <Image
                   src="/login.jpg"
@@ -101,7 +107,7 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                                  className="text-gray-500 ms-2"
                               />
                               <input
-                                 type="text"
+                                 type={showPassword ? 'text' : 'password'}
                                  {...register("password")}
                                  className="peer w-full h-10 text-[15px] border-none rounded-md bg-transparent placeholder-transparent p-2 focus:outline-none"
                                  placeholder="email"
@@ -110,6 +116,11 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                               <span className="pointer-events-none absolute start-8 -top-0.5 -translate-y-1/2 bg-white p-0.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm">
                                  Password
                               </span>
+                              <div className="absolute top-3 right-3 z-10 cursor-pointer" onClick={() => setShowPassword(prev => !prev)}>
+                                 {
+                                    showPassword ? <IoEyeOutline size={18} /> : <IoEyeOffOutline size={18} />
+                                 }
+                              </div>
                            </label>
                            {errors.password &&
                               <p className="text-red-500 text-xs">
@@ -136,12 +147,15 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                         </fieldset>
                         <button
                            type="submit"
+                           disabled={loginLoading}
                            className="w-full h-10 bg-[#6358DC] text-base text-white rounded-md"
                         >
-                           Login
+                           {
+                              loginLoading ? "Loading..." : "Login"
+                           }
                         </button>
                      </form>
-                     <div className="my-6 relative">
+                     {/* <div className="my-6 relative">
                         <p className="w-full flex justify-center before:absolute before:border-b-[1px] before:w-full before:top-2">
                            <span className="text-xs bg-white z-10 px-5">OR</span>
                         </p>
@@ -202,7 +216,7 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                               Login with Facebook
                            </span>
                         </button>
-                     </div>
+                     </div> */}
                      <Link
                         href="/register"
                         className="w-full text-sm text-[#000] justify-center items-center flex space-x-3"

@@ -9,20 +9,18 @@ import { IoOptionsOutline } from "react-icons/io5";
 
 const OnlineDelivery = () => {
    const [dishList, setDishList] = useState<{ [key: string]: any }[]>([])
-   const [sort, setSort] = useState<string>('Sort By')
-   const [filter, setFilter] = useState<{ [key: string]: any }>({})
-   const [openSort, setOpenSort] = useState<boolean>(false)
+   const [filter, setFilter] = useState<{ [key: string]: any }>({ sort: '', delivery: '', veg: '' })
    const appliedFilters = Object.entries(filter)
       .filter(([key, value]) => value !== false && value !== '')
       .length;
 
    useLayoutEffect(() => {
-      getFilterDishes()
-   }, [])
+      getFilterDishes(filter)
+   }, [filter])
 
-   async function getFilterDishes() {
+   async function getFilterDishes(params: { [key: string]: any }) {
       try {
-         const res = await axiosInstance.get(`/dishes/filtered-dishes`)
+         const res = await axiosInstance.get(`/dishes/delivery-dishes`, { params })
          // console.log('dish list => ', res)
          if (res.data.success) {
             setDishList(res.data.dishes)
@@ -62,7 +60,7 @@ const OnlineDelivery = () => {
          </ul>
          <div className="flex flex-wrap -mx-3">
             {dishList.length > 0 ?
-               dishList?.slice(0, 9).map((card: { [key: string]: any }, index: number) =>
+               dishList?.slice(0, 12).map((card: { [key: string]: any }, index: number) =>
                   <div key={index} className="w-full md:w-6/12 lg:w-4/12 p-3">
                      <Link href={`/${card?.slug}`}>
                         <div className="relative w-full aspect-[250/150] rounded-lg overflow-hidden">
@@ -77,6 +75,8 @@ const OnlineDelivery = () => {
                               <li className="flex items-center gap-1 text-base"><IoStarHalfOutline color="#FF9F0D" /><span>4.2</span></li>
                               <li>&bull;</li>
                               <li className="text-base">20-30mins</li>
+                              <li>&bull;</li>
+                              <li className="text-base">{card?.price}</li>
                            </ul>
                            <p className="text-sm text-gray-400 line-clamp-1">{card?.shortDescription}</p>
                         </div>

@@ -23,12 +23,12 @@ const AuthSessionProvider = ({ children }: { children: React.ReactNode }) => {
 
    async function getSession() {
       try {
-         const res = await axiosInstance.get(`/auth/check-token`)
-         if (res.data.success && res.data.login) {
-            setSession({ login: true, user: res.data.payload })
-         }
+         // const res = await axiosInstance.get(`/auth/verify-token`)
+         // if (res.data.success && res.data.login) {
+         //    setSession({ login: true, user: res.data.decoded })
+         // }
       } catch (error) {
-
+         console.log(error)
       } finally {
          setSessionLoading(false)
       }

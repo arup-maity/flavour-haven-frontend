@@ -1,6 +1,6 @@
 "use client";
-import { axiosInstance } from "@/config/axios";
-import { handleApiError } from "@/utils";
+import { adminInstance, axiosInstance } from "@/config/axios";
+import { blobToImage, handleApiError } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -10,7 +10,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import ImageUpload from "@/components/thumbnail/ImageUpload";
 import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/navigation";
-import { uploadFile } from "@/components/admin/utils";
+import Spinner from "@/ui-components/spinner";
 
 type CategoryFormType = {
    name: string;
@@ -21,6 +21,7 @@ type CategoryFormType = {
 
 const AddCategory = () => {
    const router = useRouter()
+   const [apiLoading, setApiLoading] = useState(false)
    const defaultValues = { name: "", slug: "", description: "", thumbnail: '' };
    const schema = z.object({
       name: z.string().min(2, "Category name must be at least 2 characters long"),
@@ -31,9 +32,7 @@ const AddCategory = () => {
             message:
                "Category slug must contain only lowercase letters and numbers, and must not contain any whitespace or uppercase letters."
          }),
-      description: z
-         .string()
-         .min(10, "Category description must be at least 10 characters long"),
+      description: z.string(),
       thumbnail: z.string()
    });
    const {
@@ -63,13 +62,24 @@ const AddCategory = () => {
 
    const onSubmit: SubmitHandler<CategoryFormType> = async (data) => {
       try {
-         let thumbnailData: { [key: string]: any } = {}
+         let thumbnailUrl = ''
+         setApiLoading(true);
          if (data?.thumbnail.startsWith("data:image")) {
-            thumbnailData = await uploadFile(data.thumbnail)
+            const fileUrl = await blobToImage(data.thumbnail)
+            const formData = new FormData();
+            formData.append("image", fileUrl);
+            const response = await adminInstance.post(`/taxonomy/thumbnail-upload`, formData, {
+               headers: {
+                  'Content-Type': 'multipart/form-data',
+               },
+            })
+            if (response.data.success) {
+               thumbnailUrl = `/restaurent/taxonomy/${response.data.file.originalname}`
+            }
          }
-         const res = await axiosInstance.post(`/taxonomy/create-taxonomy`, {
+         const res = await adminInstance.post(`/taxonomy/create-taxonomy`, {
             ...data,
-            thumbnail: thumbnailData?.name,
+            thumbnail: thumbnailUrl,
             type: "category"
          });
          console.log("Successfully created category", res);
@@ -79,6 +89,8 @@ const AddCategory = () => {
          }
       } catch (error) {
          handleApiError(error);
+      } finally {
+         setApiLoading(false);
       }
    };
 
@@ -105,7 +117,7 @@ const AddCategory = () => {
                         control={control}
                         rules={{ required: true }}
                         render={({ field: { value, onChange, ...rest } }) =>
-                           <ImageUpload image={process.env.NEXT_PUBLIC_BUCKET_URL + value} onImage={(file) => onChange(file)} aspect={448 / 626} className="aspect-[448/626]" />
+                           <ImageUpload image={'/placeholder/file_placeholder.png'} onImage={(file) => onChange(file)} aspect={448 / 626} className="aspect-[448/626]" />
                         }
                      />
 
@@ -120,9 +132,7 @@ const AddCategory = () => {
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
                      rows={1}
                   />
-                  {errors.name && (
-                     <div className="text-xs text-red-500">{errors.name.message}</div>
-                  )}
+                  {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
                </fieldset>
                <fieldset>
                   <label htmlFor="slug" className="block text-sm text-gray-500 mb-1">
@@ -133,9 +143,7 @@ const AddCategory = () => {
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
                      rows={1}
                   />
-                  {errors.slug && (
-                     <div className="text-xs text-red-500">{errors.slug.message}</div>
-                  )}
+                  {errors.slug && <p className="text-xs text-red-500">{errors.slug.message}</p>}
                </fieldset>
                <fieldset>
                   <label htmlFor="" className="block text-sm text-gray-500 mb-1">
@@ -147,20 +155,19 @@ const AddCategory = () => {
                      minRows={4}
                      rows={4}
                   />
-                  {errors.description && (
-                     <div className="text-xs text-red-500">
-                        {errors.description.message}
-                     </div>
-                  )}
+                  {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
                </fieldset>
-               <fieldset>
+               <div className="flex items-center gap-4">
                   <button
+                     disabled={apiLoading}
                      type="submit"
-                     className="border border-slate-400 rounded py-1 px-4"
+                     className="bg-gray-300 hover:bg-gray-300/75 border border-gray-200 rounded py-1 px-4"
                   >
-                     Submit
+
+                     Save Category
                   </button>
-               </fieldset>
+                  {apiLoading && <Spinner />}
+               </div>
             </form>
          </div>
       </div>

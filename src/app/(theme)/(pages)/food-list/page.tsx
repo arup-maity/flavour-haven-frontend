@@ -15,12 +15,12 @@ const FoodListPage = () => {
       .length;
 
    useLayoutEffect(() => {
-      getFilterDishes()
+      getFilterDishes({ limit: 100 })
    }, [])
 
-   async function getFilterDishes() {
+   async function getFilterDishes(params: { [key: string]: any }) {
       try {
-         const res = await axiosInstance.get(`/dishes/filtered-dishes`)
+         const res = await axiosInstance.get(`/dishes/all-dishes`, { params })
          // console.log('dish list => ', res)
          if (res.data.success) {
             setDishList(res.data.dishes)

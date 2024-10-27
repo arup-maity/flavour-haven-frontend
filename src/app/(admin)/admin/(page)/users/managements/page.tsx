@@ -150,6 +150,7 @@ const Managements = () => {
                {
                   totalItems !== 0 && <div className="flex items-center gap-4">
                      <select onChange={(e: any) => setItemsPerPage(e.target.value)} className='h-7 text-base border border-slate-400 focus:outline-none rounded px-1'>
+                        <option value={5}>5</option>
                         <option value={25}>25</option>
                         <option value={50}>50</option>
                         <option value={100}>100</option>

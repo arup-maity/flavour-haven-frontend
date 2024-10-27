@@ -94,7 +94,7 @@ const CartModel = () => {
                   <div className="mb-2">Total: {totalPrice}</div>
                   <div className="flex items-center gap-2">
                      <Link href='/cart' className="basis-1/2 text-center bg-gray-300 text-base rounded p-1.5" onClick={() => setOpen(prev => !prev)}>View Cart</Link>
-                     <div className="basis-1/2 text-center bg-[#FF9F0D] text-base text-white rounded p-1.5" onClick={() => { setOpen(prev => !prev); handleCheckout }}>Checkout</div>
+                     {/* <div className="basis-1/2 text-center bg-[#FF9F0D] text-base text-white rounded p-1.5" onClick={() => { setOpen(prev => !prev); handleCheckout }}>Checkout</div> */}
                   </div>
                </div>
             </Offcanvas.Footer>

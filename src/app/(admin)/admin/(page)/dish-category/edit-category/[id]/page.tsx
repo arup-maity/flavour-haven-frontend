@@ -3,15 +3,14 @@ import React, { useLayoutEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { axiosInstance } from "@/config/axios";
-import { handleApiError } from "@/utils";
+import { adminInstance } from "@/config/axios";
+import { blobToImage, handleApiError } from "@/utils";
 import { toast } from "sonner";
 import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageUpload from "@/components/thumbnail/ImageUpload";
-import { uploadFile } from "@/components/admin/utils";
-
+import Spinner from "@/ui-components/spinner";
 
 type CategoryFormType = {
    name: string;
@@ -22,9 +21,10 @@ type CategoryFormType = {
 
 const EditCategory = ({ params }: { params: { id: string } }) => {
    const router = useRouter()
-   const id = params.id;
+   const id = params.id || '';
    const [taxonomyDetails, setTaxonomyDetails] = useState<{ [key: string]: any }>([]);
    const [oldThumbnail, setThumbnail] = useState('')
+   const [apiLoading, setApiLoading] = useState(false)
    //
    const defaultValues = { name: "", slug: "", description: "", thumbnail: "" };
    const schema = z.object({
@@ -49,36 +49,49 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
       formState: { errors }
    } = useForm<CategoryFormType>({
       defaultValues,
-      mode: "onChange",
+      mode: "onSubmit",
       resolver: zodResolver(schema)
    });
 
    useLayoutEffect(() => {
-      getCategory();
+      getCategory(id);
    }, [id]);
 
    const onSubmit: SubmitHandler<CategoryFormType> = async (data) => {
       try {
-         let thumbnailData: { [key: string]: any } = {}
+         setApiLoading(true)
+         let thumbnailUrl = ''
          if (data?.thumbnail.startsWith("data:image")) {
-            thumbnailData = await uploadFile(data.thumbnail)
+            const fileUrl = await blobToImage(data.thumbnail)
+            const formData = new FormData();
+            formData.append("image", fileUrl);
+            const response = await adminInstance.post(`/taxonomy/thumbnail-upload`, formData, {
+               headers: {
+                  'Content-Type': 'multipart/form-data',
+               },
+            })
+            if (response.data.success) {
+               thumbnailUrl = `/taxonomy/${response.data.file.originalname}`
+            }
          }
-         const res = await axiosInstance.put(
+         const res = await adminInstance.put(
             `/taxonomy/update-taxonomy/${id}`,
-            { ...data, thumbnail: thumbnailData?.name || oldThumbnail, oldThumbnail }
+            { ...data, thumbnail: thumbnailUrl || oldThumbnail, oldThumbnail }
          );
          if (res.data.success) {
             toast.success(res.data.message);
-            router.back();
+            router.push('/admin/dish-category/category-list');
          }
       } catch (error) {
          handleApiError(error);
+      } finally {
+         setApiLoading(false)
       }
    };
 
-   async function getCategory() {
+   async function getCategory(id: string) {
       try {
-         const res = await axiosInstance.get(`/taxonomy/read-taxonomy/${id}`);
+         const res = await adminInstance.get(`/taxonomy/read-taxonomy/${id}`);
          if (res.data.success) {
             setTaxonomyDetails(res.data.taxonomy);
             const taxonomy = res.data.taxonomy;
@@ -108,9 +121,7 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
          <div className="w-7/12">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                <fieldset>
-                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">
-                     Thumbnail
-                  </label>
+                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">Thumbnail</label>
                   <div className="w-36">
                      <Controller
                         name="thumbnail"
@@ -120,58 +131,45 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
                            <ImageUpload image={process.env.NEXT_PUBLIC_BUCKET_URL + value} onImage={(file) => onChange(file)} aspect={448 / 626} className="aspect-[448/626]" />
                         }
                      />
-
                   </div>
                </fieldset>
                <fieldset>
-                  <label htmlFor="name" className="block text-sm text-gray-500 mb-1">
-                     Category Name
-                  </label>
+                  <label htmlFor="name" className="block text-sm text-gray-500 mb-1">Category Name</label>
                   <TextareaAutosize
                      {...register("name")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
                      minRows={1}
                   />
-                  {errors.name && (
-                     <div className="text-xs text-red-500">{errors.name.message}</div>
-                  )}
+                  {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
                </fieldset>
                <fieldset>
-                  <label htmlFor="slug" className="block text-sm text-gray-500 mb-1">
-                     Category Slug
-                  </label>
+                  <label htmlFor="slug" className="block text-sm text-gray-500 mb-1">Category Slug</label>
                   <TextareaAutosize
                      {...register("slug")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
                      minRows={1}
                   />
-                  {errors.slug && (
-                     <div className="text-xs text-red-500">{errors.slug.message}</div>
-                  )}
+                  {errors.slug && <div className="text-xs text-red-500">{errors.slug.message}</div>}
                </fieldset>
                <fieldset>
-                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">
-                     Description
-                  </label>
+                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">Description</label>
                   <TextareaAutosize
                      {...register("description")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
                      minRows={4}
                   />
-                  {errors.description && (
-                     <div className="text-xs text-red-500">
-                        {errors.description.message}
-                     </div>
-                  )}
+                  {errors.description && <div className="text-xs text-red-500">{errors.description.message}</div>}
                </fieldset>
-               <fieldset>
+               <div className="flex items-center gap-2">
                   <button
                      type="submit"
-                     className="border border-slate-400 rounded py-1 px-4"
+                     disabled={apiLoading}
+                     className="hover:bg-gray-100 border border-slate-400 rounded py-1 px-4"
                   >
-                     Submit
+                     Save Changes
                   </button>
-               </fieldset>
+                  {apiLoading && <Spinner />}
+               </div>
             </form>
          </div>
       </div>

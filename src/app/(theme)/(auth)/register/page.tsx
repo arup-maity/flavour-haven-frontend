@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -12,18 +12,22 @@ import { handleApiError } from "@/utils";
 import { axiosInstance } from "@/config/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 type RegistrationFormType = {
-   fullName: string;
+   firstName: string;
+   lastName: string;
    email: string;
    password: string;
 };
 
 const LoginPage = () => {
    const router = useRouter();
-   const defaultValues = { fullName: "", email: "", password: "" };
+   const [showPassword, setShowPassword] = useState(false)
+   const [registerLoading, setRegisterLoading] = useState(false)
+   const defaultValues = { firstName: "", lastName: "", email: "", password: "" };
    const schema = z.object({
-      fullName: z.string().min(3, "Please enter full name"),
+      firstName: z.string().min(3, "Please enter firstName"),
+      lastName: z.string().min(3, "Please enter lastName"),
       email: z
          .string()
          .email("Please enter a valid email")
@@ -36,30 +40,32 @@ const LoginPage = () => {
                "Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
          })
    });
-   const { register, handleSubmit, formState: { errors } } = useForm<
-      RegistrationFormType
-   >({
+   const { register, handleSubmit, formState: { errors } } = useForm<RegistrationFormType>({
       defaultValues,
-      mode: "onChange",
+      mode: "onSubmit",
       resolver: zodResolver(schema)
    });
    const onSubmit: SubmitHandler<RegistrationFormType> = async data => {
       try {
-         const res = await axiosInstance.post(`/user/create-user`, data);
+         setRegisterLoading(true)
+         const res = await axiosInstance.post(`/auth/user-register`, data);
          if (res.data.success) {
-            toast.success(res.data.message);
-            router.push("/");
+            toast.success('Registration successfully');
+            router.push("/login");
          }
       } catch (error) {
          handleApiError(error);
+      } finally {
+         setRegisterLoading(false)
       }
    };
 
    return (
       <div className="w-full ">
-         <div className="w-full flex flex-nowrap items-center justify-between">
+         <div className="w-full flex flex-nowrap items-center justify-between py-16">
             <div className="w-7/12 max-lg:hidden flex justify-center">
                <Image
+                  unoptimized
                   src="/login.jpg"
                   width={500}
                   height={500}
@@ -71,12 +77,8 @@ const LoginPage = () => {
                <div className="w-full h-[90vh] flex items-center lg:p-10">
                   <div className="w-full bg-white rounded-lg shadow-[0px_4px_15px_0px_#0000001C] p-10">
                      <div className=" mb-9">
-                        <h6 className="text-[#2F2F2F] text-3xl font-medium">
-                           Welcome to
-                        </h6>
-                        <h5 className="text-[40px] text-[#6358DC] font-black">
-                           Our Resaurant
-                        </h5>
+                        <h6 className="text-[#2F2F2F] text-3xl font-medium">Welcome to</h6>
+                        <h5 className="text-[40px] text-[#6358DC] font-black">Our Resaurant</h5>
                      </div>
                      <div className="w-full flex flex-col justify-center space-y-4">
                         <button className="h-14 w-full flex flex-nowrap items-center justify-center space-x-3 rounded-lg shadow-[0px_4px_15px_0px_#0000001C] mx-auto">
@@ -143,24 +145,46 @@ const LoginPage = () => {
                      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-5">
                         <fieldset>
                            <label
-                              htmlFor="fullName"
+                              htmlFor="firstName"
                               className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500"
                            >
                               <AiOutlineUser size={20} className="text-gray-500 ms-2" />
                               <input
                                  type="text"
-                                 {...register("fullName")}
+                                 {...register("firstName")}
                                  className="peer w-full text-[15px] border-none rounded-md bg-transparent placeholder-transparent p-2 focus:outline-none"
-                                 placeholder="Full Name"
+                                 placeholder="FirstName"
                                  autoComplete="off"
                               />
                               <span className="pointer-events-none absolute start-8 -top-0.5 -translate-y-1/2 bg-white p-0.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm">
-                                 Full Name
+                                 FirstName
                               </span>
                            </label>
-                           {errors.fullName &&
+                           {errors.firstName &&
                               <span className="text-xs text-red-500">
-                                 {errors.fullName.message}
+                                 {errors.firstName.message}
+                              </span>}
+                        </fieldset>
+                        <fieldset>
+                           <label
+                              htmlFor="lastName"
+                              className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500"
+                           >
+                              <AiOutlineUser size={20} className="text-gray-500 ms-2" />
+                              <input
+                                 type="text"
+                                 {...register("lastName")}
+                                 className="peer w-full text-[15px] border-none rounded-md bg-transparent placeholder-transparent p-2 focus:outline-none"
+                                 placeholder="LastName"
+                                 autoComplete="off"
+                              />
+                              <span className="pointer-events-none absolute start-8 -top-0.5 -translate-y-1/2 bg-white p-0.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm">
+                                 LastName
+                              </span>
+                           </label>
+                           {errors.lastName &&
+                              <span className="text-xs text-red-500">
+                                 {errors.lastName.message}
                               </span>}
                         </fieldset>
                         <fieldset>
@@ -195,7 +219,7 @@ const LoginPage = () => {
                                  className="text-gray-500 ms-2"
                               />
                               <input
-                                 type="text"
+                                 type={showPassword ? 'text' : 'password'}
                                  {...register("password")}
                                  className="peer w-full h-10 text-[15px] border-none rounded-md bg-transparent placeholder-transparent p-2 focus:outline-none"
                                  placeholder="email"
@@ -204,6 +228,11 @@ const LoginPage = () => {
                               <span className="pointer-events-none absolute start-8 -top-0.5 -translate-y-1/2 bg-white p-0.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm">
                                  Password
                               </span>
+                              <div className="absolute top-3 right-3 z-10 cursor-pointer" onClick={() => setShowPassword(prev => !prev)}>
+                                 {
+                                    showPassword ? <IoEyeOutline size={18} /> : <IoEyeOffOutline size={18} />
+                                 }
+                              </div>
                            </label>
                            {errors.password &&
                               <span className="text-xs text-red-500">
@@ -212,9 +241,12 @@ const LoginPage = () => {
                         </fieldset>
                         <button
                            type="submit"
+                           disabled={registerLoading}
                            className="w-full h-10 bg-[#6358DC] text-base text-white rounded-md"
                         >
-                           Register
+                           {
+                              registerLoading ? 'Loading...' : 'Sign Up'
+                           }
                         </button>
                      </form>
                      <Link

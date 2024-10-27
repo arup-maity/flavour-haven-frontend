@@ -44,11 +44,11 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
    }
 
    async function storeUserDetails() {
-      await axiosInstance(`auth/check-token`)
+      await axiosInstance(`auth/verify-token`)
          .then((res) => {
             if (res.data.success) {
-               setSession(prev => ({ ...prev, login: true, user: res.data.payload }))
-               localStorage.setItem('userDetails', JSON.stringify(res.data.payload))
+               setSession(prev => ({ ...prev, login: true, user: res.data.decoded }))
+               localStorage.setItem('userDetails', JSON.stringify(res.data.decoded))
             }
          }).catch((error) => { console.log('Token expire') })
    }

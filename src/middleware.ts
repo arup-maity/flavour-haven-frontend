@@ -8,22 +8,25 @@ export async function middleware(request: NextRequest) {
 
    var auth: Auth = { login: false, role: 'user' };
    if (token) {
-      const options = {
-         headers: {
-            'Authorization': `Bearer ${token}`
-         }
-      };
-      const url = process.env.NEXT_PUBLIC_API_URL + `/auth/check-token`
+      try {
+         const options = {
+            headers: {
+               'Authorization': `Bearer ${token}`
+            }
+         };
+         const url = process.env.NEXT_PUBLIC_API_URL + `/auth/verify-token`
 
-      const response = await fetch(url, options)
-      const json = await response.json()
-      // console.log('auth middleware => ', json)
-      if (response.status === 200) {
-         auth.login = json?.login
-         auth.role = json?.payload?.accessPurpose
+         const response = await fetch(url, options)
+         const json = await response.json()
+         // console.log('auth middleware => ', json)
+         if (response.status === 200) {
+            auth.login = json?.login
+            auth.role = json?.decoded?.accessPurpose
+         }
+      } catch (error) {
+
       }
    }
-
 
    if (!auth.login && request.nextUrl.pathname.startsWith('/admin/login')) {
       return

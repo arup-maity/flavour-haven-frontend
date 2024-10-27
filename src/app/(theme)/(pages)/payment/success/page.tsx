@@ -21,7 +21,7 @@ const PaymentSuccessPage = ({ searchParams }: { searchParams: { [key: string]: s
          const res = await axiosInstance.get(`/checkout/webhook`, { params: { orderId, instance: payment_intent } })
          console.log('Payment ==>', res)
          // if (res.data.intent?.status === 'succeeded') {
-         //    // setPaymentDetails(res.data.intent)
+         //    setPaymentDetails(res.data.intent)
          // }
       } catch (error) {
          console.log(error)
