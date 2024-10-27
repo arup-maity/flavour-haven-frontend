@@ -1,4 +1,4 @@
-import { Roboto, Miniver } from "next/font/google";
+import { Roboto, Miniver, Red_Hat_Display } from "next/font/google";
 import { Toaster } from 'sonner';
 import "./globals.css";
 import QueryProvider from "@/components/provider/QueryProvider";
@@ -18,6 +18,13 @@ const MiniverFont = Miniver({
    weight: "400",
 })
 
+const redHatDisplay = Red_Hat_Display({
+   subsets: ["latin"],
+   display: "swap",
+   weight: ["400", "500", "600", "700", "800", "900"],
+   variable: "--red-hat-display-font",
+})
+
 export const metadata = {
    title: "Flavour Haven",
    description: "Flavour haven, the most popular restaurant in the world"
@@ -26,7 +33,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
    return (
       <html lang="en">
-         <body className={`${roboto.className}  ${MiniverFont.variable}`}>
+         <body className={`${roboto.className}  ${MiniverFont.variable} ${redHatDisplay.variable}`}>
             <SessionProvider>
                <ThemeProvider>
                   <AuthSessionProvider>
