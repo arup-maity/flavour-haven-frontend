@@ -1,6 +1,5 @@
 import React from 'react'
 import { axiosInstance } from '@/config/axios'
-import { handleApiError } from '@/utils'
 import Image from 'next/image'
 
 async function getMenu(slug: string) {
@@ -8,10 +7,10 @@ async function getMenu(slug: string) {
       const res = await axiosInstance.get(`/taxonomy/read-taxonomy-with-dishes/${slug}`)
       // console.log('res ==>', res.data.taxonomy)
       if (res.data.success) {
-         return res.data.taxonomy
+         return res.data.taxonomy || {}
       }
    } catch (error) {
-      handleApiError(error)
+      return {}
    }
 }
 
