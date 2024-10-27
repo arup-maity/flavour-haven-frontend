@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import MenuCard from '@/components/theme/menu/MenuCard';
 const Menu = () => {
