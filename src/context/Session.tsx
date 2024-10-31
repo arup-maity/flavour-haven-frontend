@@ -26,19 +26,21 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
    function getSession() {
       const data = localStorage.getItem('userDetails') || ''
       if (data) {
-         const payload = JSON.parse(data);
-         const currentTime = Math.floor(Date.now() / 1000);
-         const oneMinuteBeforeExp = payload.exp - 60; // Subtract 60 seconds (1 minute)
+         try {
+            const payload = JSON.parse(data);
+            const currentTime = Math.floor(Date.now() / 1000);
+            const oneMinuteBeforeExp = payload.exp - 60; // Subtract 60 seconds (1 minute)
 
-         if (currentTime < oneMinuteBeforeExp) {
-            // Session is still valid with at least 1 minute remaining
-            setSession(prev => ({ ...prev, login: true, user: payload }));
-         } else {
-            // Session is expired or less than 1 minute remaining
-            storeUserDetails();
+            if (currentTime < oneMinuteBeforeExp) {
+               setSession(prev => ({ ...prev, login: true, user: payload }));
+            } else {
+               storeUserDetails();
+            }
+         } catch (error) {
+            console.error('Error parsing data or handling session:', error);
          }
       } else {
-         storeUserDetails()
+         console.warn('Data is null or undefined. Consider how to proceed.');
       }
       setSession(prev => ({ ...prev, loading: false }))
    }
