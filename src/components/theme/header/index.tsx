@@ -44,29 +44,29 @@ const Header = ({ className }: { className?: string }) => {
                         width="137"
                         height="40"
                         alt=""
-                        className="w-auto h-10 shrink-0"
+                        className="w-auto h-8 shrink-0"
                      />
                      <Image
                         src="/text-logo.png"
                         width="137"
                         height="40"
                         alt=""
-                        className="w-auto h-10 shrink-0"
+                        className="w-auto h-9 shrink-0"
                      />
                   </Link>
                   <div className="hidden lg:block ms-24">
                      <ul className="flex flex-nowrap space-x-8 *:text-[#0c0c0c]">
-                        <li className="text-base font-medium">
-                           <Link href="/" className={`${pathname === '/' && 'border-b-2 border-[#195A00]'}`}>Home</Link>
+                        <li className="">
+                           <Link href="/" className={`text-base ${pathname === '/' && 'font-semibold border-b-2 border-[#195A00]'}`}>Home</Link>
                         </li>
-                        <li className="text-base font-medium">
-                           <Link href="/menu" className={`${pathname === '/menu' && 'border-b-2 border-[#195A00]'}`}>Menu</Link>
+                        <li className="">
+                           <Link href="/menu" className={`text-base ${pathname === '/menu' && 'font-semibold border-b-2 border-[#195A00]'}`}>Menu</Link>
                         </li>
-                        <li className="text-base font-medium">
-                           <Link href="/page/about" className={`${pathname === '/page/about' && 'border-b-2 border-[#195A00]'}`}>About</Link>
+                        <li className="">
+                           <Link href="/page/about" className={`text-base ${pathname === '/page/about' && 'font-semibold border-b-2 border-[#195A00]'}`}>About</Link>
                         </li>
-                        <li className="text-base font-medium">
-                           <Link href="/page/contact" className={`${pathname === '/page/contact' && 'border-b-2 border-[#195A00]'}`}>contact</Link>
+                        <li className="">
+                           <Link href="/page/contact" className={`text-base ${pathname === '/page/contact' && 'font-semibold border-b-2 border-[#195A00]'}`}>contact</Link>
                         </li>
                      </ul>
                   </div>

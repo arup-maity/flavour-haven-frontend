@@ -46,9 +46,9 @@ const ProfileForm = ({ profileDetails, setFormOpen }: { profileDetails: { [key: 
    }, [profileDetails])
 
    return (
-      <div className='w-full py-5'>
+      <div className='w-full'>
          <div className="mb-4">
-            <p className='text-xl'>Add New Address</p>
+            <p className='text-xl'>Edit profile details</p>
          </div>
          <form onSubmit={handleSubmit(onSubmit)} className=''>
             <div className="flex flex-wrap -m-2 mb-2">

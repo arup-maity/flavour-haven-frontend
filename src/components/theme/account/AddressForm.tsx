@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from "zod";
@@ -15,12 +15,13 @@ type Inputs = {
 }
 
 const AddressForm = ({ selectedAddress, setFormOpen }: { selectedAddress: { [key: string]: any }, setFormOpen: () => void }) => {
+   const [submitLoading, setSubmitLoading] = useState(false)
    const defaultValues = { fullName: '', streetAddress: '', country: '', city: '', state: '', zipCode: '', phone: '' }
    const schemaValidation = z.object({
       fullName: z.string().min(2, "Please enter Full Name"),
       streetAddress: z
          .string()
-         .min(15, "Please enter Address"),
+         .min(1, "Please enter Address"),
       country: z
          .string()
          .min(2, "Please enter Country"),
@@ -40,24 +41,27 @@ const AddressForm = ({ selectedAddress, setFormOpen }: { selectedAddress: { [key
    });
    const { register, handleSubmit, setValue, formState: { errors }, } = useForm<Inputs>({
       defaultValues,
-      mode: "onChange",
+      mode: "onSubmit",
       resolver: zodResolver(schemaValidation)
    })
    const onSubmit: SubmitHandler<Inputs> = async (data) => {
       try {
+         setSubmitLoading(true)
          if (selectedAddress?.id) {
-            const response = await axiosInstance.put(`/user/account/update-address`, { ...data, id: selectedAddress.id })
+            const response = await axiosInstance.put(`/user/update-address/${selectedAddress.id}`, data)
             if (response.data.success) {
                setFormOpen()
             }
          } else {
-            const response = await axiosInstance.post(`/user/account/add-address`, data)
+            const response = await axiosInstance.post(`/user/add-address`, data)
             if (response.data.success) {
                setFormOpen()
             }
          }
       } catch (error) {
          console.error('Error fetching order list:', error)
+      } finally {
+         setSubmitLoading(false)
       }
    }
 
@@ -70,7 +74,7 @@ const AddressForm = ({ selectedAddress, setFormOpen }: { selectedAddress: { [key
    }, [selectedAddress])
 
    return (
-      <div className='w-full py-5'>
+      <div className='w-full'>
          <div className="mb-4">
             <p className='text-xl'>{selectedAddress?.id ? 'Update Address' : 'Add New Address'}</p>
          </div>
@@ -117,8 +121,12 @@ const AddressForm = ({ selectedAddress, setFormOpen }: { selectedAddress: { [key
                </fieldset>
             </div>
             <fieldset className='flex gap-4'>
-               <button type="submit" className='text-base border border-slate-300 rounded py-1 px-4'>Save Address</button>
-               <button type="submit" className='text-base bg-gray-200 border border-slate-300 rounded py-1 px-4' onClick={setFormOpen}>Cancel</button>
+               <button type="submit" disabled={submitLoading} className='text-base border border-slate-300 rounded py-1 px-4'>
+                  {
+                     submitLoading ? 'Submitting...' : 'Submit'
+                  }
+               </button>
+               <button type="button" className='text-base bg-gray-200 border border-slate-300 rounded py-1 px-4' onClick={setFormOpen}>Cancel</button>
             </fieldset>
          </form>
       </div>

@@ -17,10 +17,11 @@
 }
 
 body {
-   width: 100% !important;
-   background: white;
-   overflow: hidden;
-   overflow-y: scroll;
+   width: 100%;
+   background: #fff;
+   font-size: 16px;
+   font-weight: 400;
+   font-family: var(--red-hat-display-font);
 }
 
 @layer utilities {
@@ -161,7 +162,7 @@ body {
 }
 
 @layer base {
-  :root {
+   :root {
       --radius: 0.5rem;
    }
 }

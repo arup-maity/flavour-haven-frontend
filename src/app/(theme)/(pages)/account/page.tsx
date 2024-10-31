@@ -17,7 +17,7 @@ const AccountPage = ({ searchParams }: { searchParams: { [key: string]: string |
       router.push(pathname + `?tab=${id}`)
    }
    return (
-      <div className='w-full theme-container'>
+      <div className='w-full theme-container min-h-screen'>
          <div className="py-5">
             <div style={{ backgroundImage: 'url("/images/img-36.jpg")', }} className='relative w-full aspect-[1440/300] bg-cover bg-center'>
                <div className="absolute right-0 bottom-0 p-4">
@@ -42,7 +42,7 @@ const AccountPage = ({ searchParams }: { searchParams: { [key: string]: string |
                   <ul className='flex lg:block max-lg:gap-4 max-lg:justify-center *:text-base lg:space-y-1'>
                      <li role='button' className={`${currentTab === 'profile-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('profile-details')}>Account Details</li>
                      <li role='button' className={`${currentTab === 'order-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('order-details')}>Order Details</li>
-                     <li role='button' className={`${currentTab === 'address' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('address-details')}>Address</li>
+                     <li role='button' className={`${currentTab === 'address-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('address-details')}>Address</li>
                   </ul>
                </div>
             </div>

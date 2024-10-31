@@ -1,4 +1,5 @@
 import AddCart from "@/components/theme/single-food/AddCart";
+import FoodReview from "@/components/theme/single-food/FoodReview";
 import { axiosInstance } from "@/config/axios";
 import Image from "next/image";
 import { IoStarHalf } from "react-icons/io5";
@@ -303,12 +304,16 @@ const SingleFoodPage = async ({ params }: { params: { slug: string } }) => {
                </div>
             </div>
             <div className="">
-               <ul className="flex items-center gap-4 mb-4">
+               {/* <ul className="flex items-center gap-4 mb-4">
                   <li className="text-base bg-[#FF9F0D] text-white rounded py-1 px-4">Description</li>
                   <li className="text-base rounded py-1 px-4">Reviews (25)</li>
-               </ul>
+               </ul> */}
+               <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Description</h2>
                <div className="">
                   {dish?.description}
+               </div>
+               <div className="">
+                  <FoodReview />
                </div>
             </div>
             <hr className="my-4" />
