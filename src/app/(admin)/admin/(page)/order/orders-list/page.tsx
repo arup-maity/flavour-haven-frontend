@@ -25,7 +25,6 @@ const OrderListPage = () => {
    }
 
    const columns = [
-
       {
          index: "cuid",
          title: "Id",

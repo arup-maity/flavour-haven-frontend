@@ -10,7 +10,7 @@ const AdminSidebar = ({ collapseSidebar, setCollapseSidebar }: { collapseSidebar
    const { collapse, setCollapse } = useTheme();
    return (
       <>
-         <div className={`main-admin-sidebar fixed bg-white flex flex-col start-0 transition-all duration-400 ease-in-out z-[8888] shadow-lg ${collapseSidebar ? 'lg:-translate-x-full' : 'max-md:-translate-x-full'} `}>
+         <div className={`main-admin-sidebar fixed bg-white flex flex-col start-0 transition-all duration-400 ease-in-out z-40 shadow-lg ${collapseSidebar ? 'lg:-translate-x-full' : 'max-md:-translate-x-full'} `}>
             <div className="h-full">
                <div className="w-full h-[60px] flex flex-nowrap items-center gap-1 overflow-hidden px-2 mb-0.5">
                   <Link

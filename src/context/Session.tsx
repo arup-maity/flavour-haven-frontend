@@ -37,10 +37,10 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
                storeUserDetails();
             }
          } catch (error) {
-            console.error('Error parsing data or handling session:', error);
+            storeUserDetails();
          }
       } else {
-         console.warn('Data is null or undefined. Consider how to proceed.');
+         storeUserDetails();
       }
       setSession(prev => ({ ...prev, loading: false }))
    }

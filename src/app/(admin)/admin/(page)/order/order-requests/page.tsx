@@ -8,23 +8,22 @@ import Link from 'next/link'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { sessionContext } from '@/context/Session'
-import RestaurantUpdate from '@/components/admin/order/RestaurantUpdate'
+import OrderUpdate from '@/components/admin/order/orderUpdate'
 
 const OrderRequetsPage = () => {
    const { user } = useContext(sessionContext);
 
    const [orderList, setOrderList] = useState<{ [key: string]: any }[]>([])
    const [selectOrderId, setSelectOrderId] = useState<number | null>(null)
-   const [showOrderModal, setShowOrderModal] = useState(false)
-   const [pageRefresh, setPageRefresh] = useState(false)
+   const [openUpdate, setOpenUpdate] = useState(false)
+
    useLayoutEffect(() => {
       getOrderRequest()
-   }, [pageRefresh])
+   }, [])
 
    async function getOrderRequest() {
       try {
          const response = await adminInstance.get(`/order/order-request`)
-         console.log(response)
          if (response.data.success) {
             setOrderList(response.data.orders)
          }
@@ -33,9 +32,14 @@ const OrderRequetsPage = () => {
       }
    }
 
+   const handleCloseUpdate = () => {
+      getOrderRequest()
+      setOpenUpdate(prev => !prev)
+      setSelectOrderId(null)
+   }
+
 
    const columns = [
-
       {
          index: "cuid",
          title: "Id",
@@ -67,7 +71,7 @@ const OrderRequetsPage = () => {
                   <IoEyeOutline size={20} />
                </button>
                {Ability("update", "user", user) && (
-                  <button onClick={() => { setSelectOrderId(row.id); setShowOrderModal(prev => !prev) }}>
+                  <button onClick={() => { setSelectOrderId(row.id); setOpenUpdate(prev => !prev) }}>
                      <MdOutlineModeEditOutline size={20} />
                   </button>
                )}
@@ -79,7 +83,7 @@ const OrderRequetsPage = () => {
    return (
       <div className='bg-white rounded p-4'>
          <Table columns={columns} data={orderList} />
-         <RestaurantUpdate selectOrderId={selectOrderId} showOrderModal={showOrderModal} setShowOrderModal={() => { setShowOrderModal(prev => !prev); setPageRefresh(prev => !prev) }} />
+         <OrderUpdate open={openUpdate} close={handleCloseUpdate} selectOrderId={selectOrderId} />
       </div>
    )
 }
