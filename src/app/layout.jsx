@@ -36,11 +36,11 @@ export default function RootLayout({ children }) {
          <body className={`${MiniverFont.variable} ${redHatDisplay.variable}`}>
             <SessionProvider>
                <ThemeProvider>
-                  <AuthSessionProvider>
+                  {/* <AuthSessionProvider> */}
                      <QueryProvider>
                         {children}
                      </QueryProvider>
-                  </AuthSessionProvider>
+                  {/* </AuthSessionProvider> */}
                </ThemeProvider>
             </SessionProvider>
             <Toaster richColors />

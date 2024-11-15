@@ -6,11 +6,11 @@ import { z } from "zod"
 import { toast } from 'sonner';
 import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
-import { sessionContext } from '@/authentication/AuthSession'
 import { Ability } from '@/authentication/AccessControl'
 import { useRouter } from 'next/navigation'
 import { BsArrowLeft } from "react-icons/bs";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { sessionContext } from '@/context/Session'
 
 type Inputs = {
    firstName: string
@@ -21,7 +21,7 @@ type Inputs = {
 }
 
 const AddUser = () => {
-   const { session, sessionLoading } = useContext(sessionContext)
+   const session = useContext(sessionContext)
    const router = useRouter()
    //
    const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -45,7 +45,7 @@ const AddUser = () => {
          console.log(res)
          if (res.data.success) {
             toast.success(res.data.message)
-            // router.push('/admin/users/managements')
+            router.push('/admin/users/managements')
          }
       } catch (error) {
          handleApiError(error)
@@ -53,7 +53,7 @@ const AddUser = () => {
          setLoading(false)
       }
    }
-   if (sessionLoading && !Ability('create', 'user', session?.user)) {
+   if (session?.loading && !Ability('create', 'user', session?.user)) {
       return <div>Loading...</div>
    }
    return (

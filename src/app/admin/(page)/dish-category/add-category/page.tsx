@@ -1,5 +1,5 @@
 "use client";
-import { adminInstance, axiosInstance } from "@/config/axios";
+import { adminInstance } from "@/config/axios";
 import { blobToImage, handleApiError } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import ImageUpload from "@/components/thumbnail/ImageUpload";
 import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import Spinner from "@/ui-components/spinner";
+import { Loader2 } from "lucide-react";
 
 type CategoryFormType = {
    name: string;
@@ -35,14 +36,7 @@ const AddCategory = () => {
       description: z.string(),
       thumbnail: z.string()
    });
-   const {
-      register,
-      handleSubmit,
-      control,
-      setValue,
-      watch,
-      formState: { errors }
-   } = useForm<CategoryFormType>({
+   const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<CategoryFormType>({
       defaultValues,
       mode: "onChange",
       resolver: zodResolver(schema)
@@ -127,10 +121,9 @@ const AddCategory = () => {
                   <label htmlFor="name" className="block text-sm text-gray-500 mb-1">
                      Category Name
                   </label>
-                  <TextareaAutosize
+                  <input
                      {...register("name")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
-                     rows={1}
                   />
                   {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
                </fieldset>
@@ -138,12 +131,11 @@ const AddCategory = () => {
                   <label htmlFor="slug" className="block text-sm text-gray-500 mb-1">
                      Category Slug
                   </label>
-                  <TextareaAutosize
+                  <input
                      {...register("slug")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
-                     rows={1}
                   />
-                  {errors.slug && <p className="text-xs text-red-500">{errors.slug.message}</p>}
+                  {errors.slug && <p className="text-xs text-red-500 mt-1">{errors.slug.message}</p>}
                </fieldset>
                <fieldset>
                   <label htmlFor="" className="block text-sm text-gray-500 mb-1">
@@ -155,18 +147,17 @@ const AddCategory = () => {
                      minRows={4}
                      rows={4}
                   />
-                  {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
+                  {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description.message}</p>}
                </fieldset>
                <div className="flex items-center gap-4">
                   <button
                      disabled={apiLoading}
                      type="submit"
-                     className="bg-gray-300 hover:bg-gray-300/75 border border-gray-200 rounded py-1 px-4"
+                     className="flex items-center bg-gray-300 hover:bg-gray-300/75 border border-gray-200 rounded py-1 px-4"
                   >
-
+                     {apiLoading && <Loader2 className="animate-spin" />}
                      Save Category
                   </button>
-                  {apiLoading && <Spinner />}
                </div>
             </form>
          </div>

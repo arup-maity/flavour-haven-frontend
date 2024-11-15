@@ -3,21 +3,46 @@ import React, { useContext, useLayoutEffect, useState } from 'react'
 import Link from 'next/link'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useDebounceValue } from 'usehooks-ts'
-import Table from '@/components/common/Table'
 import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
-import { IoEyeOutline } from 'react-icons/io5'
 import { MdClose, MdOutlineModeEditOutline } from 'react-icons/md'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { IoIosSearch } from 'react-icons/io'
 import Pagination from '@/components/common/Pagination'
 import { Ability } from '@/authentication/AccessControl'
-import { sessionContext } from '@/authentication/AuthSession'
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
+import { Button } from '@/components/ui/button'
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import { DataTable } from '@/admin-components/common/DataTable'
+import { TableFilter } from '@/admin-components/common/TableFilter'
+import { X, Filter } from "lucide-react"
+import { sessionContext } from '@/context/Session'
 
+export const userRole = [
+   {
+      label: "User",
+      value: "user",
+   },
+   {
+      label: "Administrator",
+      value: "administrator",
+   },
+   {
+      label: "Admin",
+      value: "admin",
+   },
+   {
+      label: "Author",
+      value: "author",
+   },
+   {
+      label: "Editor",
+      value: "editor",
+   }
+]
 
 const Managements = () => {
-   //
-   const { session, sessionLoading } = useContext(sessionContext)
+   const session = useContext(sessionContext)
    // state
    const [usersList, setUsersList] = useState([])
    const [userCount, setUsersCount] = useState(0)
@@ -34,6 +59,11 @@ const Managements = () => {
    const [loading, setLoading] = useState<boolean>(true)
    const [deleteRows, setDeleteRows] = useState<number[]>([])
    const [filter, setFilter] = useState<{ [key: string]: any }>({})
+   const [roleFilter, setRoleFilter] = React.useState<string[]>([])
+   const isFiltered = [roleFilter].some(array => array.length > 0);
+   function handleReset() {
+      setRoleFilter([])
+   }
 
    useLayoutEffect(() => {
       setFilter({ search: debouncedValue, page: currentPage, limit: itemsPerPage, role: roleBy, ...sort })
@@ -68,54 +98,88 @@ const Managements = () => {
    }
    const columns = [
       {
-         index: 'firstName',
-         title: 'Name',
-         dataIndex: '',
+         id: 'firstName',
+         name: 'Full Name',
+         header: 'Full Name',
          sortable: true,
          className: 'w-[20%] min-w-[250px]',
-         render: (record: any) => (
-            <div key={record.id}>{record.firstName && record.firstName + ' ' + record.lastName}</div>
+         render: (row) => (
+            <div className="flex space-x-1">
+               <span>{row?.firstName}</span>
+               <span>{row?.lastName}</span>
+            </div>
          )
       },
       {
-         index: 'email',
-         title: 'Email',
-         dataIndex: 'email',
-         sortable: true,
-         className: 'w-auto min-w-[300px]',
-      },
-      {
-         index: 'role',
-         title: 'Role',
-         dataIndex: 'role',
+         id: 'email',
+         name: 'Email',
+         header: 'Email',
          sortable: true,
          className: 'w-[20%] min-w-[250px]',
+         render: (row) => (
+            <div className="">
+               {row?.email}
+            </div>
+         )
       },
       {
-         title: 'Options',
-         className: 'min-w-[150px] w-[200px]',
-         dataIndex: '',
-         render: (row: any) => (
-            <div className='flex items-center justify-center gap-4'>
-               <button >
-                  <IoEyeOutline size={20} />
-               </button>
-               {
-                  Ability('update', 'user', session?.user) &&
-                  <Link href={`/admin/users/managements/edit-user?edit=true&id=${row?.id} `}><MdOutlineModeEditOutline size={20} /></Link>
-               }
-               {
-                  Ability('detele', 'user', session?.user) &&
-                  <Link href={`/admin/users/managements/delete-user?delete=true&id=${row?.id}`}><RiDeleteBinLine size={17} /></Link>
-               }
+         id: 'role',
+         name: 'Role',
+         header: 'Role',
+         sortable: true,
+         className: 'w-auto',
+         render: (row) => (
+            <div className="">
+               {row?.role}
             </div>
+         )
+      },
+      {
+         id: '',
+         name: 'Options',
+         header: <p>Options</p>,
+         className: 'min-w-[100px] w-28',
+         render: (row: any) => (
+            <Popover>
+               <PopoverTrigger asChild>
+                  <Button variant="ghost"><HiOutlineDotsVertical /></Button>
+               </PopoverTrigger>
+               <PopoverContent className="w-40 p-2" align='end'>
+                  <ul className='space-y-2'>
+                     <li>
+                        {
+                           Ability('update', 'user', session?.user) &&
+                           <Link
+                              href={`/admin/users/managements/edit-user?edit=true&id=${row?.id} `}
+                              className='flex items-center gap-2 whitespace-nowrap'
+                           >
+                              <MdOutlineModeEditOutline size={20} />
+                              Update user
+                           </Link>
+                        }
+                     </li>
+                     <li>
+                        {
+                           Ability('detele', 'user', session?.user) &&
+                           <Link
+                              href={`/admin/users/managements/delete-user?delete=true&id=${row?.id}`}
+                              className='flex items-center gap-2 whitespace-nowrap'
+                           >
+                              <RiDeleteBinLine size={17} />
+                              Delete user
+                           </Link>
+                        }
+                     </li>
+                  </ul>
+               </PopoverContent>
+            </Popover>
          ),
       },
    ];
 
-   if (sessionLoading && !session?.login) {
-      return <div>Loading...</div>
-   }
+   // if (sessionLoading && !session?.login) {
+   //    return <div>Loading...</div>
+   // }
    return (
       <div className='w-full bg-white rounded p-4'>
          <div className="mb-10">
@@ -141,10 +205,21 @@ const Managements = () => {
                </div>
             </div>
          </div>
-         <div className="overflow-hidden">
-            <div className="text-sm text-gray-400 mb-1">Total User : {userCount}</div>
+         <div className="flex items-center mb-4">
+            <div className="flex items-center gap-1 me-4">
+               <span className='text-base'>Filter</span>
+               <Filter size={16} strokeWidth={1} />
+            </div>
+            <TableFilter title='Role' options={userRole} value={roleFilter} setFilter={setRoleFilter} />
+            {isFiltered && (
+               <Button variant="ghost" className="h-8 px-2 lg:px-3" onClick={handleReset}>
+                  Reset <X />
+               </Button>
+            )}
+         </div>
+         <div className="w-full">
             <PerfectScrollbar>
-               <Table columns={columns} data={usersList} sort={(sort: any) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
+               <DataTable columns={columns} data={usersList} sort={(sort: any) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
             </PerfectScrollbar>
             <div className="flex flex-wrap items-center justify-between gap-4 mt-2">
                {

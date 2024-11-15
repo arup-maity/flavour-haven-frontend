@@ -1,23 +1,17 @@
 'use client'
-import React, { useContext, useLayoutEffect, useState } from 'react'
-import Link from 'next/link'
+import React, { useLayoutEffect, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useDebounceValue } from 'usehooks-ts'
-import Table from '@/components/common/Table'
 import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
-import { IoEyeOutline } from 'react-icons/io5'
-import { MdClose, MdOutlineModeEditOutline } from 'react-icons/md'
-import { RiDeleteBinLine } from 'react-icons/ri'
+import { MdClose } from 'react-icons/md'
 import { IoIosSearch } from 'react-icons/io'
 import Pagination from '@/components/common/Pagination'
-import { Ability } from '@/authentication/AccessControl'
-import { sessionContext } from '@/authentication/AuthSession'
+import { DataTable } from '@/admin-components/common/DataTable'
+import Link from 'next/link'
 
 
 const Managements = () => {
-   //
-   const { session, sessionLoading } = useContext(sessionContext)
    // state
    const [usersList, setUsersList] = useState([])
    const [userCount, setUsersCount] = useState(0)
@@ -43,7 +37,7 @@ const Managements = () => {
    async function getUsers(params: any) {
       try {
          setLoading(true)
-         const res = await adminInstance.get(`/user/customers-list`, { params })
+         const res = await adminInstance.get(`/user/customer-list`, { params })
          console.log(res)
          if (res.data.success) {
             setUsersList(res.data.users)
@@ -68,36 +62,56 @@ const Managements = () => {
    }
    const columns = [
       {
-         index: 'fullName',
-         title: 'Name',
-         dataIndex: 'fullName',
+         id: 'firstName',
+         name: 'Full Name',
+         header: 'Full Name',
          sortable: true,
          className: 'w-[20%] min-w-[250px]',
-      },
-      {
-         index: 'email',
-         title: 'Email',
-         dataIndex: 'email',
-         sortable: true,
-         className: 'w-auto min-w-[300px]',
-      },
-      {
-         title: 'Options',
-         className: 'min-w-[150px] w-[200px]',
-         dataIndex: '',
-         render: (row: { [key: string]: any }) => (
-            <div className='flex items-center justify-center gap-4'>
-               <button >
-                  <IoEyeOutline size={20} />
-               </button>
+         render: (row) => (
+            <div className="flex space-x-1">
+               <span>{row?.firstName}</span>
+               <span>{row?.lastName}</span>
             </div>
-         ),
+         )
+      },
+      {
+         id: 'email',
+         name: 'Email',
+         header: 'Email',
+         sortable: true,
+         className: 'w-[20%] min-w-[250px]',
+         render: (row) => (
+            <div className="">
+               {row?.email}
+            </div>
+         )
+      },
+      {
+         id: 'role',
+         name: 'Role',
+         header: 'Role',
+         sortable: true,
+         className: 'w-auto',
+         render: (row) => (
+            <div className="">
+               {row?.role}
+            </div>
+         )
+      },
+      {
+         id: '',
+         name: 'Options',
+         header: <p>Options</p>,
+         className: 'min-w-[100px] w-28',
+         render: (row: any) => <div className="">
+            <Link href={`/admin/users/customers/${row.id}`}>Details</Link>
+         </div>,
       },
    ];
 
-   if (sessionLoading && !session?.login) {
-      return <div>Loading...</div>
-   }
+   // if (sessionLoading && !session?.login) {
+   //    return <div>Loading...</div>
+   // }
    return (
       <div className='w-full bg-white rounded p-4'>
          <div className="mb-10">
@@ -113,15 +127,15 @@ const Managements = () => {
                </div>
             </div>
          </div>
-         <div className="overflow-hidden">
-            <div className="text-sm text-gray-400 mb-1">Total User : {userCount}</div>
+         <div className="w-full">
             <PerfectScrollbar>
-               <Table columns={columns} data={usersList} sort={(sort: any) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
+               <DataTable columns={columns} data={usersList} sort={(sort: any) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
             </PerfectScrollbar>
             <div className="flex flex-wrap items-center justify-between gap-4 mt-2">
                {
                   totalItems !== 0 && <div className="flex items-center gap-4">
                      <select onChange={(e: any) => setItemsPerPage(e.target.value)} className='h-7 text-base border border-slate-400 focus:outline-none rounded px-1'>
+                        <option value={5}>5</option>
                         <option value={25}>25</option>
                         <option value={50}>50</option>
                         <option value={100}>100</option>

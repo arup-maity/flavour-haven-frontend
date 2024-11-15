@@ -1,16 +1,16 @@
 'use client'
 import React, { useContext, useLayoutEffect, useState } from 'react'
-import { sessionContext } from '@/authentication/AuthSession'
 import { useRouter } from 'next/navigation'
 import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
 import { toast } from 'sonner'
 import { Ability } from '@/authentication/AccessControl'
 import { BsArrowLeft } from 'react-icons/bs'
+import { sessionContext } from '@/context/Session'
 
 const DeleteUser = ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
    // auth session
-   const { session, sessionLoading } = useContext(sessionContext)
+   const session = useContext(sessionContext)
    // route
    const router = useRouter()
    const id = searchParams.id || ''
@@ -27,7 +27,7 @@ const DeleteUser = ({ searchParams }: { searchParams: { [key: string]: string | 
    async function getUser() {
       try {
          setPageLoading(true)
-         const res = await adminInstance.get(`/user/read/${id}`)
+         const res = await adminInstance.get(`/user/read-user/${id}`)
          console.log(res)
          if (res.data.success) {
             setUserDetails(res.data.user)
@@ -42,7 +42,7 @@ const DeleteUser = ({ searchParams }: { searchParams: { [key: string]: string | 
    async function deleteUser() {
       try {
          setLoading(true)
-         const res = await adminInstance.delete(`/user/delete/${id}`)
+         const res = await adminInstance.delete(`/user/delete-user/${id}`)
          console.log(res)
          if (res.data.success) {
             toast.success(res.data.message)
@@ -54,7 +54,12 @@ const DeleteUser = ({ searchParams }: { searchParams: { [key: string]: string | 
          setLoading(false)
       }
    }
-   if (sessionLoading && !Ability('delete', 'user', session?.user)) return <div>Loading...</div>
+   if (session?.loading && !Ability('delete', 'user', session?.user)) {
+      return <div>Loading...</div>
+   }
+   if (notFound) {
+      return <div>User not found.</div>
+   }
    return (
       <div className='bg-white rounded p-4'>
          <div role='button' className="inline-flex flex-nowrap items-center gap-2 text-slate-400 hover:bg-gray-100 rounded-3xl px-2 py-0.5 mb-4" onClick={() => router.back()}>

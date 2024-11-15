@@ -4,12 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 import { toast } from 'sonner';
-import { adminInstance, axiosInstance } from '@/config/axios'
+import { adminInstance } from '@/config/axios'
 import { handleApiError } from '@/utils'
-import { sessionContext } from '@/authentication/AuthSession'
 import { Ability } from '@/authentication/AccessControl'
 import { useRouter } from 'next/navigation'
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { sessionContext } from '@/context/Session'
 
 type Inputs = {
    firstName: string
@@ -20,7 +20,7 @@ type Inputs = {
 
 const ManageUser = ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
    // auth session
-   const { session, sessionLoading } = useContext(sessionContext)
+   const session = useContext(sessionContext)
    // route
    const router = useRouter()
    const id = searchParams.id || ''
@@ -39,7 +39,7 @@ const ManageUser = ({ searchParams }: { searchParams: { [key: string]: string | 
    const onSubmit: SubmitHandler<Inputs> = async (data) => {
       try {
          setLoading(true)
-         const res = await adminInstance.put(`/user/update/${id}`, data)
+         const res = await adminInstance.put(`/user/update-user/${id}`, data)
          if (res.data.success) {
             toast.success(res.data.message)
             router.back()
@@ -57,7 +57,7 @@ const ManageUser = ({ searchParams }: { searchParams: { [key: string]: string | 
 
    async function getUser() {
       try {
-         const res = await axiosInstance.get(`/user/read/${id}`)
+         const res = await adminInstance.get(`/user/read-user/${id}`)
          console.log(res)
          if (res.data.success) {
             for (const key in defaultValues) {
@@ -69,7 +69,7 @@ const ManageUser = ({ searchParams }: { searchParams: { [key: string]: string | 
          handleApiError(error)
       }
    }
-   if (sessionLoading && !Ability('update', 'user', session?.user)) {
+   if (session?.loading && !Ability('update', 'user', session?.user)) {
       return <div>Loading...</div>
    }
    if (notFound) {
