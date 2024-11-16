@@ -18,7 +18,7 @@ import { TableFilter } from '@/admin-components/common/TableFilter'
 import { X, Filter } from "lucide-react"
 import { sessionContext } from '@/context/Session'
 
-export const userRole = [
+const userRole = [
    {
       label: "User",
       value: "user",
@@ -219,7 +219,7 @@ const Managements = () => {
          </div>
          <div className="w-full">
             <PerfectScrollbar>
-               <DataTable columns={columns} data={usersList} sort={(sort: any) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
+               <DataTable columns={columns} data={usersList} sort={(sort) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
             </PerfectScrollbar>
             <div className="flex flex-wrap items-center justify-between gap-4 mt-2">
                {

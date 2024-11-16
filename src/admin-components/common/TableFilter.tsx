@@ -80,10 +80,10 @@ export function TableFilter({
                               .filter((option) =>
                                  selectedValues.has(option.value)
                               )
-                              .map((option) => (
+                              .map((option,index) => (
                                  <Badge
                                     variant="secondary"
-                                    key={option.value}
+                                    key={index}
                                     className="rounded-sm px-1 font-normal"
                                  >
                                     {option.label}
@@ -101,11 +101,11 @@ export function TableFilter({
                <CommandList>
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup>
-                     {options.map((option) => {
+                     {options.map((option,index) => {
                         const isSelected = selectedValues.has(option.value);
                         return (
                            <CommandItem
-                              key={option.value}
+                              key={index}
                               onSelect={() => handleToggleOption(option)}
                            >
                               <div
