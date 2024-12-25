@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { adminInstance } from "@/config/axios";
 import { blobToImage, handleApiError } from "@/utils";
 import { toast } from "sonner";
-import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageUpload from "@/components/thumbnail/ImageUpload";
@@ -111,17 +110,18 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
    }
 
    return (
-      <div className="bg-white rounded p-4">
+      <div className="bg-white rounded p-6">
          <div className="mb-4">
             <div className="flex items-center flex-nowrap gap-2">
-               <span onClick={() => router.back()} className="cursor-pointer"><BsArrowLeft size={20} /></span>
-               <h1 className="text-xl font-medium capitalize">Edit {taxonomyDetails?.type}</h1>
+               {/* <span onClick={() => router.back()} className="cursor-pointer"><BsArrowLeft size={20} /></span> */}
+               <h1 className="text-xl font-redHat font-medium capitalize">Edit {taxonomyDetails?.type}</h1>
             </div>
+            <p className="text-base font-redHat text-gray-400">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis officia nostrum nobis fugit consectetur quisquam reprehenderit illo.</p>
          </div>
          <div className="w-7/12">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                <fieldset>
-                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">Thumbnail</label>
+                  <label htmlFor="thumbnail" className="block text-base font-medium text-gray-500 mb-1">Thumbnail</label>
                   <div className="w-36">
                      <Controller
                         name="thumbnail"
@@ -134,7 +134,7 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
                   </div>
                </fieldset>
                <fieldset>
-                  <label htmlFor="name" className="block text-sm text-gray-500 mb-1">Category Name</label>
+                  <label htmlFor="name" className="block text-base font-medium text-gray-500 mb-1">Category Name</label>
                   <TextareaAutosize
                      {...register("name")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
@@ -143,7 +143,7 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
                   {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
                </fieldset>
                <fieldset>
-                  <label htmlFor="slug" className="block text-sm text-gray-500 mb-1">Category Slug</label>
+                  <label htmlFor="slug" className="block text-base font-medium text-gray-500 mb-1">Category Slug</label>
                   <TextareaAutosize
                      {...register("slug")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
@@ -152,7 +152,7 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
                   {errors.slug && <div className="text-xs text-red-500">{errors.slug.message}</div>}
                </fieldset>
                <fieldset>
-                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">Description</label>
+                  <label htmlFor="description" className="block text-base font-medium text-gray-500 mb-1">Description</label>
                   <TextareaAutosize
                      {...register("description")}
                      className="w-full !bg-transparent text-base border border-slate-400 rounded p-2"
@@ -164,11 +164,18 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
                   <button
                      type="submit"
                      disabled={apiLoading}
-                     className="hover:bg-gray-100 border border-slate-400 rounded py-1 px-4"
+                     className="flex items-center gap-4 text-base text-white bg-blue-button hover:bg-blue-hover-button rounded py-1 px-4"
                   >
+                     {apiLoading && <Spinner />}
                      Save Changes
                   </button>
-                  {apiLoading && <Spinner />}
+                  <button
+                     type="button"
+                     className="text-base bg-gray-200 hover:bg-gray-300 rounded py-1 px-5"
+                     onClick={() => router.back()}
+                  >
+                     Cancel
+                  </button>
                </div>
             </form>
          </div>

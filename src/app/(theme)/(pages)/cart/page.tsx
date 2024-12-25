@@ -6,7 +6,6 @@ import { IoCloseOutline } from "react-icons/io5";
 import Image from 'next/image';
 import { BsPlus } from "react-icons/bs";
 import { AiOutlineMinus } from "react-icons/ai";
-import { v4 as uuidv4 } from 'uuid';
 import { axiosInstance } from '@/config/axios';
 import { useRouter } from 'next/navigation';
 import { sessionContext } from '@/context/Session';
@@ -22,14 +21,12 @@ const CartPage = () => {
 
    async function handleCheckout() {
       try {
-         // if (!login) {
-         //    router.push(`/login?redirect=cart`)
-         // }
+         if (!login) {
+            router.push(`/login?redirect=cart`)
+         }
          setCheckoutLoading(true)
-         const checkoutId = uuidv4()
          const checkoutItems = cartItems?.items?.map((item: { [key: string]: any }) => {
             return {
-               checkoutId,
                dishId: item.id,
                name: item.name,
                quantity: item.quantity,
@@ -39,7 +36,7 @@ const CartPage = () => {
          const res = await axiosInstance.post(`/checkout/create-checkout`, checkoutItems)
          console.log('create checkout ==>', res)
          if (res.data.success) {
-            router.push(`/checkout?checkoutId=${res.data.orderId}`)
+            router.push(`/checkout?checkoutId=${res.data.checkoutId}`)
          }
       } catch (error) {
          console.log(error)
@@ -58,9 +55,7 @@ const CartPage = () => {
          </div>
          {
             cartItems?.items.length === 0 ?
-               <div className="">
-                  No Product here
-               </div>
+               <div className="text-base text-center my-20">No Product here</div>
                :
                <div className="">
                   <div className="flex flex-wrap *:p-2">

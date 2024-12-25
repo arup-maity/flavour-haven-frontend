@@ -61,32 +61,37 @@ const CartModel = () => {
                   <span className="text-xl font-medium">Cart {cartItems.count}</span>
                </div>
             </Offcanvas.Header>
-            <Offcanvas.Body className='overflow-hidden overflow-y-scroll'>
+            <Offcanvas.Body className='overflow-y-auto'>
                <div className="">
-                  {cartItems.items.map((item: { [key: string]: any }, index: number) => (
-                     <div key={index}>
-                        <div className="flex items-center gap-2">
-                           <Image src={process.env.NEXT_PUBLIC_BUCKET_URL + item.image} width={64} height={64} alt='' className='w-16 h-16 aspect-square rounded' />
-                           <div className='flex-grow'>
-                              <div className="text-Base font-medium leading-none line-clamp-2 break-all mb-2">{item.name}</div>
-                              <div className="flex items-center gap-4">
-                                 <div className="flex items-center">
-                                    <button className="w-6 h-6 flex items-center justify-center bg-[#FF9F0D] bg-opacity-40 rounded" onClick={() => handleDecrement(item.id)}><AiOutlineMinus size={14} /></button>
-                                    <span className="w-6 h-6 inline-flex items-center justify-center">{item.quantity}</span>
-                                    <button className="w-6 h-6 flex items-center justify-center bg-[#FF9F0D] bg-opacity-40 rounded" onClick={() => handleIncrement(item.id)}><AiOutlinePlus size={14} /></button>
+                  {
+                     cartItems.items.length === 0 ?
+                        <div className="text-base font-redHat text-center">No Food here</div>
+                        :
+                        cartItems.items.map((item: { [key: string]: any }, index: number) => (
+                           <div key={index}>
+                              <div className="flex items-center gap-2">
+                                 <Image src={process.env.NEXT_PUBLIC_BUCKET_URL + item.image} width={64} height={64} alt='' className='w-16 h-16 aspect-square rounded' />
+                                 <div className='flex-grow'>
+                                    <div className="text-Base font-medium leading-none line-clamp-2 break-all mb-2">{item.name}</div>
+                                    <div className="flex items-center gap-4">
+                                       <div className="flex items-center">
+                                          <button className="w-6 h-6 flex items-center justify-center bg-[#FF9F0D] bg-opacity-40 rounded" onClick={() => handleDecrement(item.id)}><AiOutlineMinus size={14} /></button>
+                                          <span className="w-6 h-6 inline-flex items-center justify-center">{item.quantity}</span>
+                                          <button className="w-6 h-6 flex items-center justify-center bg-[#FF9F0D] bg-opacity-40 rounded" onClick={() => handleIncrement(item.id)}><AiOutlinePlus size={14} /></button>
+                                       </div>
+                                       <span className="flex items-center text-base opacity-70 leading-none"><PiCurrencyInr />{item.price}</span>
+                                    </div>
                                  </div>
-                                 <span className="flex items-center text-base opacity-70 leading-none"><PiCurrencyInr />{item.price}</span>
+                                 <div className="ms-4">
+                                    <button className="text-red-700 opacity-40 hover:opacity-100" onClick={() => removeCartItem(item?.id)}>
+                                       <RiDeleteBinLine size={20} />
+                                    </button>
+                                 </div>
                               </div>
+                              <hr className='my-2' />
                            </div>
-                           <div className="ms-4">
-                              <button className="text-red-700 opacity-40 hover:opacity-100" onClick={() => removeCartItem(item?.id)}>
-                                 <RiDeleteBinLine size={20} />
-                              </button>
-                           </div>
-                        </div>
-                        <hr className='my-2' />
-                     </div>
-                  ))}
+                        ))
+                  }
                </div>
             </Offcanvas.Body>
             <Offcanvas.Footer>

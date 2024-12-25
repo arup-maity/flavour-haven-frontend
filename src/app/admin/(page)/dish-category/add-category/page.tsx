@@ -68,7 +68,7 @@ const AddCategory = () => {
                },
             })
             if (response.data.success) {
-               thumbnailUrl = `/restaurent/taxonomy/${response.data.file.originalname}`
+               thumbnailUrl = `/taxonomy/${response.data.file.originalname}`
             }
          }
          const res = await adminInstance.post(`/taxonomy/create-taxonomy`, {
@@ -89,20 +89,20 @@ const AddCategory = () => {
    };
 
    return (
-      <div className="bg-white rounded p-4">
+      <div className="bg-white rounded p-6">
          <div className="mb-4">
             <div className="flex items-center flex-nowrap gap-2">
-               <span onClick={() => router.back()} className="cursor-pointer"><BsArrowLeft size={20} /></span>
-               <h1 className="text-xl font-medium">Add New Category</h1>
+               {/* <span onClick={() => router.back()} className="cursor-pointer"><BsArrowLeft size={20} /></span> */}
+               <h1 className="text-xl font-redHat font-medium">Add New Category</h1>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-base text-gray-400">
                Add a new category to your restaurant menu. Fill out the form below to create a new category.
             </p>
          </div>
          <div className="w-7/12">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                <fieldset>
-                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">
+                  <label htmlFor="thumbnail" className="block text-base text-gray-500 font-medium mb-1">
                      Thumbnail
                   </label>
                   <div className="w-36">
@@ -114,11 +114,10 @@ const AddCategory = () => {
                            <ImageUpload image={'/placeholder/file_placeholder.png'} onImage={(file) => onChange(file)} aspect={448 / 626} className="aspect-[448/626]" />
                         }
                      />
-
                   </div>
                </fieldset>
                <fieldset>
-                  <label htmlFor="name" className="block text-sm text-gray-500 mb-1">
+                  <label htmlFor="name" className="block text-base text-gray-500 font-medium mb-1">
                      Category Name
                   </label>
                   <input
@@ -128,7 +127,7 @@ const AddCategory = () => {
                   {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
                </fieldset>
                <fieldset>
-                  <label htmlFor="slug" className="block text-sm text-gray-500 mb-1">
+                  <label htmlFor="slug" className="block text-base text-gray-500 font-medium mb-1">
                      Category Slug
                   </label>
                   <input
@@ -138,7 +137,7 @@ const AddCategory = () => {
                   {errors.slug && <p className="text-xs text-red-500 mt-1">{errors.slug.message}</p>}
                </fieldset>
                <fieldset>
-                  <label htmlFor="" className="block text-sm text-gray-500 mb-1">
+                  <label htmlFor="description" className="block text-base text-gray-500 font-medium mb-1">
                      Description
                   </label>
                   <TextareaAutosize
@@ -153,10 +152,17 @@ const AddCategory = () => {
                   <button
                      disabled={apiLoading}
                      type="submit"
-                     className="flex items-center bg-gray-300 hover:bg-gray-300/75 border border-gray-200 rounded py-1 px-4"
+                     className="flex items-center gap-4 text-base text-white bg-blue-button hover:bg-blue-hover-button rounded py-1 px-4"
                   >
                      {apiLoading && <Loader2 className="animate-spin" />}
                      Save Category
+                  </button>
+                  <button
+                     type="button"
+                     className="text-base bg-gray-200 hover:bg-gray-300 rounded py-1 px-5"
+                     onClick={() => router.back()}
+                  >
+                     Cancel
                   </button>
                </div>
             </form>

@@ -32,7 +32,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ slug, order = 1 }) => {
 
    async function getMenu(slug: string) {
       try {
-         const res = await axiosInstance.get(`/taxonomy/read-taxonomy-with-dishes/${slug}`);
+         const res = await axiosInstance.get(`/taxonomy/category-with-dishes/${slug}`, { params: { limit: 6 } });
          if (res.data.success) {
             setMenu(res.data.taxonomy);
          }

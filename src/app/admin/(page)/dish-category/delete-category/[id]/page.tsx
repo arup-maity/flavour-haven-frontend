@@ -4,7 +4,6 @@ import { adminInstance } from "@/config/axios";
 import { handleApiError } from "@/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { BsArrowLeft } from "react-icons/bs";
 import Image from "next/image";
 import Spinner from "@/ui-components/spinner";
 
@@ -47,7 +46,7 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
    return (
       <div className="bg-white rounded p-4">
          <div className="flex flex-nowrap items-center gap-2 mb-4">
-            <span onClick={() => router.back()} className="cursor-pointer"><BsArrowLeft size={20} /></span>
+            {/* <span onClick={() => router.back()} className="cursor-pointer"><BsArrowLeft size={20} /></span> */}
             <h2 className="text-xl font-mediun capitalize">{taxonomyDetails?.type} Details</h2>
          </div>
          <div className="w-full lg:w-8/12">
@@ -84,9 +83,16 @@ const EditCategory = ({ params }: { params: { id: string } }) => {
                   className="hover:bg-gray-100 border border-slate-400 rounded py-1 px-4"
                   onClick={handleDelete}
                >
+                  {apiLoading && <Spinner />}
                   Delete Category
                </button>
-               {apiLoading && <Spinner />}
+               <button
+                  type="button"
+                  className="text-base bg-gray-200 hover:bg-gray-300 rounded py-1 px-5"
+                  onClick={() => router.back()}
+               >
+                  Cancel
+               </button>
             </div>
          </div>
       </div>
