@@ -38,11 +38,11 @@ const AccountPage = ({ searchParams }: { searchParams: { [key: string]: string |
          </div>
          <div className="flex flex-wrap -m-4">
             <div className="w-full lg:w-3/12 p-4">
-               <div className="">
+               <div className="lg:sticky lg:top-4">
                   <ul className='flex lg:block max-lg:gap-4 max-lg:justify-center *:text-base lg:space-y-1'>
-                     <li role='button' className={`${currentTab === 'profile-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('profile-details')}>Account Details</li>
-                     <li role='button' className={`${currentTab === 'order-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('order-details')}>Order Details</li>
-                     <li role='button' className={`${currentTab === 'address-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} rounded py-1.5 px-4`} onClick={() => handleTab('address-details')}>Address</li>
+                     <li role='button' className={`${currentTab === 'profile-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} border border-gray-100 rounded py-1.5 px-4`} onClick={() => handleTab('profile-details')}>Account Details</li>
+                     <li role='button' className={`${currentTab === 'order-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} border border-gray-100 rounded py-1.5 px-4`} onClick={() => handleTab('order-details')}>Order Details</li>
+                     <li role='button' className={`${currentTab === 'address-details' ? 'bg-theme-blue font-medium' : 'bg-gray-100'} border border-gray-100 rounded py-1.5 px-4`} onClick={() => handleTab('address-details')}>Address</li>
                   </ul>
                </div>
             </div>

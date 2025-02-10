@@ -1,4 +1,4 @@
-import { Roboto, Miniver, Red_Hat_Display } from "next/font/google";
+import { Miniver, Red_Hat_Display } from "next/font/google";
 import { Toaster } from 'sonner';
 import "./globals.css";
 import QueryProvider from "@/components/provider/QueryProvider";
@@ -6,11 +6,8 @@ import AuthSessionProvider from "@/authentication/AuthSession";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { ThemeProvider } from "@/ui-components/sidebar";
 import { SessionProvider } from "@/context/Session";
+import QureyProvider from "@/context/react-query";
 
-const roboto = Roboto({
-   weight: "400",
-   subsets: ["latin"]
-});
 const MiniverFont = Miniver({
    subsets: ["latin"],
    display: "swap",
@@ -34,15 +31,17 @@ export default function RootLayout({ children }) {
    return (
       <html lang="en">
          <body className={`${MiniverFont.variable} ${redHatDisplay.variable}`}>
-            <SessionProvider>
-               <ThemeProvider>
-                  {/* <AuthSessionProvider> */}
+            <QureyProvider>
+               <SessionProvider>
+                  <ThemeProvider>
+                     {/* <AuthSessionProvider> */}
                      <QueryProvider>
                         {children}
                      </QueryProvider>
-                  {/* </AuthSessionProvider> */}
-               </ThemeProvider>
-            </SessionProvider>
+                     {/* </AuthSessionProvider> */}
+                  </ThemeProvider>
+               </SessionProvider>
+            </QureyProvider>
             <Toaster richColors />
          </body>
       </html>

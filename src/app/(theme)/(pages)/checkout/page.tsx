@@ -71,7 +71,7 @@ const CheckoutPage = ({ searchParams }: { searchParams: { [key: string]: string 
       zipCode: z.string().min(2),
       country: z.string().min(2),
    });
-   // 
+   // git 
    const subTotal = checkoutItems?.orderItems?.reduce((total: number, item: { [key: string]: any }) => total + (item?.price * item.quantity), 0) || 0;
    const totalAmount = subTotal + shippingCharge + taxCharge
    // place order
