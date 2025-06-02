@@ -45,7 +45,7 @@ const CartModel = () => {
    }
    return (
       <>
-         <div role="button" className="text-base text-[#0c0c0c]">
+         <div role="button" className="text-base">
             <div className="relative" onClick={() => setOpen(prev => !prev)}>
                <IoBagOutline size={25} />
                {

@@ -7,7 +7,7 @@ const Menu = () => {
          <div style={{ backgroundImage: 'url("/banner.png")', }} className="aspect-[6/1] bg-cover bg-no-repeat"></div>
          <div className="theme-container !py-20">
             <MenuCard slug='starters' />
-            <MenuCard slug='main-dishes' order={2} />
+            <MenuCard slug='main-courses' order={2} />
             <MenuCard slug='desserts' />
             <MenuCard slug='drinks' order={2} />
          </div>

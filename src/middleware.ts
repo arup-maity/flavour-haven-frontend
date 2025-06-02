@@ -28,14 +28,8 @@ export async function middleware(request: NextRequest) {
       }
    }
 
-   if (!auth.login && request.nextUrl.pathname.startsWith('/admin/login')) {
-      return
-   }
-   if (!auth.login && request.nextUrl.pathname.startsWith('/login')) {
-      return
-   }
 
-   if (auth.login && auth.role !== "admin" && request.nextUrl.pathname.startsWith('/admin/login')) {
+   if (!auth.login && request.nextUrl.pathname.startsWith('/login')) {
       return
    }
 
@@ -43,6 +37,9 @@ export async function middleware(request: NextRequest) {
       return
    }
 
+   // admin
+   if (!auth.login && request.nextUrl.pathname.startsWith('/admin/login')) return;
+   if (auth.login && auth.role !== "admin" && request.nextUrl.pathname.startsWith('/admin/login')) return;
    if (auth.login && auth.role === "admin" && request.nextUrl.pathname.startsWith('/admin/login')) {
       return Response.redirect(new URL('/admin', request.url));
    }

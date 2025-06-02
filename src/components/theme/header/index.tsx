@@ -32,8 +32,8 @@ const Header = ({ className }: { className?: string }) => {
 
    return (
       <>
-         <div className={`theme-header theme-container bg-transparent w-full z-[999] ${sticky ? 'sticky-header' : ''} transition-[position] duration-500 ease-in-out ${className}`}>
-            <div className="flex flex-nowrap items-center justify-between py-3">
+         <div className={`theme-header theme-container w-full h-[75px] flex items-center z-[999] ${sticky ? 'sticky-header' : 'fixed'} transition-[position] duration-500 ease-in-out ${className}`}>
+            <div className="w-full flex flex-nowrap items-center justify-between py-4">
                <div className="flex items-center gap-4">
                   <div className="block lg:hidden" onClick={() => setMobileMenu(prev => !prev)}>
                      <IoMenuOutline size={30} />
@@ -54,42 +54,34 @@ const Header = ({ className }: { className?: string }) => {
                         className="w-auto h-9 shrink-0"
                      />
                   </Link>
-                  <div className="hidden lg:block ms-24">
-                     <ul className="flex flex-nowrap space-x-8 *:text-[#0c0c0c]">
-                        <li className="">
-                           <Link href="/" className={`text-base ${pathname === '/' && 'font-semibold border-b-2 border-[#195A00]'}`}>Home</Link>
-                        </li>
-                        <li className="">
-                           <Link href="/menu" className={`text-base ${pathname === '/menu' && 'font-semibold border-b-2 border-[#195A00]'}`}>Menu</Link>
-                        </li>
-                        <li className="">
-                           <Link href="/page/about" className={`text-base ${pathname === '/page/about' && 'font-semibold border-b-2 border-[#195A00]'}`}>About</Link>
-                        </li>
-                        <li className="">
-                           <Link href="/page/contact" className={`text-base ${pathname === '/page/contact' && 'font-semibold border-b-2 border-[#195A00]'}`}>contact</Link>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
 
+               </div>
+               <div className="hidden lg:block">
+                  <ul className="flex flex-nowrap space-x-8 ">
+                     <li className="">
+                        <Link href="/" className={`text-base ${pathname === '/' && 'font-semibold text-lg border-b-2 border-[#195A00]'}`}>Home</Link>
+                     </li>
+                     <li className="">
+                        <Link href="/menu" className={`text-base ${pathname === '/menu' && 'font-semibold text-lg border-b-2 border-[#195A00]'}`}>Menu</Link>
+                     </li>
+                     <li className="">
+                        <Link href="/page/about" className={`text-base ${pathname === '/page/about' && 'font-semibold text-lg border-b-2 border-[#195A00]'}`}>About</Link>
+                     </li>
+                     <li className="">
+                        <Link href="/page/contact" className={`text-base ${pathname === '/page/contact' && 'font-semibold text-lg border-b-2 border-[#195A00]'}`}>Contact</Link>
+                     </li>
+                  </ul>
+               </div>
                <div className="flex items-center gap-8">
-                  {/* <div className="">
-                     <Link
-                        href="/page/book-table"
-                        className="text-base text-[#0c0c0c] border border-gray-500 rounded-md py-2 px-5"
-                     >
-                        Book a Table
-                     </Link>
-                  </div> */}
                   <div className="">
-                     <Link href="/search" className="text-base text-[#0c0c0c]">
+                     <Link href="/search" className="text-base">
                         <GoSearch size={25} />
                      </Link>
                   </div>
                   <div className="hidden md:block">
                      {login
                         ? <UserDropdown user={user} />
-                        : <Link href="/login" className="inline-flex items-center h-12 text-base text-[#0c0c0c]">
+                        : <Link href="/login" className="inline-flex items-center h-12 text-base">
                            <div className="">
                               <p className="text-sm font-light leading-none">
                                  Hello, Sign In /

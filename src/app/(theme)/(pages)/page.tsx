@@ -1,8 +1,7 @@
 import Banner from "@/components/theme/home-page/banner/Banner";
-import FoodCategories from "@/components/theme/home-page/food-categories/FoodCategories";
-import FoodMenu from "@/components/theme/home-page/food-menu/FoodMenu";
 import MiniAbout from "@/components/theme/home-page/MiniAbout";
-import OnlineDelivery from "@/components/theme/home-page/online-delivery/OnlineDelivery";
+import OnlineDelivery from "@/components/theme/home-page/OnlineDelivery";
+import FoodMenu from "@/components/theme/home-page/FoodMenu";
 import Table from "@/components/theme/home-page/table-book";
 
 export default function Home() {
@@ -16,15 +15,6 @@ export default function Home() {
          <div className="w-full theme-container !pb-[80px]">
             <MiniAbout />
          </div>
-         {/* food category slider */}
-         {/* <div className="container-webx">
-            <div className="w-full relative">
-               <h4 className=" text-2xl text-[#333333] font-bold mb-3">Our Food Categories</h4>
-            </div>
-            <div className="border-b-[1px] border-gray-300">
-               <FoodCategories />
-            </div>
-         </div> */}
          {/* menu list */}
          <div className="container-webx">
             <div className="w-full text-center relative">

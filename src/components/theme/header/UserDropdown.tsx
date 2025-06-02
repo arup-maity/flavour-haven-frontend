@@ -1,6 +1,5 @@
 "use client";
 import { DropDown } from "@/ui-components";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineLogout, AiOutlineUser } from "react-icons/ai";

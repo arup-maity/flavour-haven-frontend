@@ -6,7 +6,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
    return (
       <>
          <Header />
-         {children}
+         <div className='max-w-[1920px] mx-auto'>
+            {children}
+         </div>
          <Footer />
       </>
    )

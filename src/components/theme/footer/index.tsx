@@ -9,8 +9,8 @@ import { PiMapPin } from "react-icons/pi";
 const Footer = () => {
    return (
       <>
-         <footer className="relative w-full h-full bg-cover bg-center" style={{ backgroundImage: 'url("/footer/footer-bg.png")' }}>
-            <div className="theme-container bg-black/60">
+         <footer className="relative w-full h-full bg-[#222831]">
+            <div className="theme-container">
                <div className="text-white flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0 -m-4">
                   <div className="w-full lg:w-1/3 p-4">
                      <Link href='/' className="flex items-center mb-4">

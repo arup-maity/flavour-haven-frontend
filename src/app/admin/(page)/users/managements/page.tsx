@@ -1,22 +1,31 @@
 'use client'
-import React, { useContext, useLayoutEffect, useState } from 'react'
-import Link from 'next/link'
-import PerfectScrollbar from 'react-perfect-scrollbar'
+import React, { useContext, useState } from 'react'
+
+import { Filter, X } from "lucide-react"
 import { useDebounceValue } from 'usehooks-ts'
-import { adminInstance } from '@/config/axios'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 import { handleApiError } from '@/utils'
-import { MdClose, MdOutlineModeEditOutline } from 'react-icons/md'
-import { RiDeleteBinLine } from 'react-icons/ri'
 import { IoIosSearch } from 'react-icons/io'
-import Pagination from '@/components/common/Pagination'
-import { Ability } from '@/authentication/AccessControl'
-import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
+import { adminInstance } from '@/config/axios'
 import { Button } from '@/components/ui/button'
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import { DataTable } from '@/admin-components/common/DataTable'
-import { TableFilter } from '@/admin-components/common/TableFilter'
-import { X, Filter } from "lucide-react"
+import { AiOutlinePlus } from "react-icons/ai";
+import { RiDeleteBinLine } from 'react-icons/ri'
 import { sessionContext } from '@/context/Session'
+import { useQueries } from '@tanstack/react-query'
+import { Checkbox } from '@/components/ui/checkbox'
+import Pagination from '@/components/common/Pagination'
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import { Ability } from '@/authentication/AccessControl'
+import EditUser from '@/admin-components/users/edit-user'
+import { Input, SearchInput } from '@/components/ui/input'
+import { DataTable } from '@/admin-components/common/DataTable'
+import { MdClose, MdOutlineModeEditOutline } from 'react-icons/md'
+import { TableFilter } from '@/admin-components/common/TableFilter'
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
 
 const userRole = [
    {
@@ -43,6 +52,10 @@ const userRole = [
 
 const Managements = () => {
    const session = useContext(sessionContext)
+   // 
+   const [editUserForm, setEditUserForm] = useState(false)
+   const [selectedAll, setSelectedAll] = useState(false)
+   const [selectedRow, setSelectedRow] = useState<number[]>([]);
    // state
    const [usersList, setUsersList] = useState([])
    const [userCount, setUsersCount] = useState(0)
@@ -65,80 +78,67 @@ const Managements = () => {
       setRoleFilter([])
    }
 
-   useLayoutEffect(() => {
-      setFilter({ search: debouncedValue, page: currentPage, limit: itemsPerPage, role: roleBy, ...sort })
-      getUsers({ search: debouncedValue, page: currentPage, limit: itemsPerPage, role: roleBy, ...sort })
-   }, [debouncedValue, currentPage, itemsPerPage, roleBy, sort])
-
-   async function getUsers(params: any) {
-      try {
-         setLoading(true)
-         const res = await adminInstance.get(`/user/managements-list`, { params })
-         console.log(res)
-         if (res.data.success) {
-            setUsersList(res.data.users)
-            setTotalItems(res.data.filterCount)
-            setUsersCount(res.data.totalCount)
+   const [userList] = useQueries({
+      queries: [
+         {
+            queryKey: ['user-list', debouncedValue, currentPage, itemsPerPage, sort],
+            queryFn: async () => await adminInstance.get(`/user/user-list`, {
+               params: {
+                  search: debouncedValue, page: currentPage, limit: itemsPerPage, ...sort
+               }
+            }).then(res => res.data),
          }
-      } catch (error) {
-         handleApiError(error)
-      } finally {
-         setLoading(false)
-      }
+      ]
+   })
+
+   function handleSelectedRows(id: number, status: boolean) {
+      setSelectedRow((prevData) => {
+         const updatedSelectedRows = status
+            ? [...prevData, id] // Add if checked
+            : prevData.filter((item) => item !== id); // Remove if unchecked
+
+         // Compute selected all state based on updatedSelectedRows
+         const ids = userList.data?.users?.map((item) => item.id) || [];
+         setSelectedAll(ids.length === updatedSelectedRows.length &&
+            ids.sort().toString() === updatedSelectedRows.sort().toString());
+
+         return updatedSelectedRows;
+      });
    }
-   function handleSearch(data: string) {
-      setValue(data)
-      setSearchValue(data)
-      data === '' ? setClearSearch(false) : setClearSearch(true)
-   }
-   function handleClearSearch() {
-      setValue('')
-      setSearchValue('')
-      setClearSearch(false)
+
+   function handleSelectedAll(status: boolean) {
+      setSelectedRow(status ? userList.data?.users?.map((item) => item.id) : [])
+      setSelectedAll(status)
    }
    const columns = [
       {
-         id: 'firstName',
-         name: 'Full Name',
-         header: 'Full Name',
-         sortable: true,
-         className: 'w-[20%] min-w-[250px]',
+         index: "name",
+         title: "Name",
+         className: "w-64",
          render: (row) => (
-            <div className="flex space-x-1">
-               <span>{row?.firstName}</span>
-               <span>{row?.lastName}</span>
-            </div>
+            <div className="">{row?.firstName + ' ' + row.lastName}</div>
          )
       },
       {
-         id: 'email',
-         name: 'Email',
-         header: 'Email',
-         sortable: true,
-         className: 'w-[20%] min-w-[250px]',
+         index: "email",
+         title: "Email",
+         className: "w-auto",
          render: (row) => (
-            <div className="">
-               {row?.email}
-            </div>
+            <div className="">{row?.email}</div>
          )
       },
       {
-         id: 'role',
-         name: 'Role',
-         header: 'Role',
-         sortable: true,
-         className: 'w-auto',
+         index: "role",
+         title: "Role",
+         className: "w-44",
          render: (row) => (
-            <div className="">
-               {row?.role}
-            </div>
+            <div className="">{row?.role}</div>
          )
       },
       {
-         id: '',
-         name: 'Options',
-         header: <p>Options</p>,
-         className: 'min-w-[100px] w-28',
+         index: "option",
+         title: "Option",
+         className: "w-20",
          render: (row: any) => (
             <Popover>
                <PopoverTrigger asChild>
@@ -177,50 +177,113 @@ const Managements = () => {
       },
    ];
 
-   // if (sessionLoading && !session?.login) {
-   //    return <div>Loading...</div>
-   // }
+
    return (
-      <div className='w-full bg-white rounded p-4'>
+      <div className='w-full bg-white border border-gray-200 rounded-xl p-6'>
          <div className="mb-10">
-            <div className="flex flex-wrap md:flex-nowrap items-center justify-between -m-2">
-               <div className="w-full md:w-full p-2">
-                  <div className="w-full flex items-center border-b-2 border-slate-200">
+            <div className="flex flex-wrap md:flex-nowrap items-center justify-between">
+               <div className="">
+                  <div className="text-2xl font-semibold">User List</div>
+               </div>
+               <div className="flex items-center gap-4">
+                  {/* <div className="w-full flex items-center border-b-2 border-slate-200">
                      <IoIosSearch size={25} />
                      <input type="text" className='w-full h-9 focus:outline-none px-4' placeholder='Search ...' onChange={event => handleSearch(event.target.value)} value={searchValue} />
                      {
                         clearSearch ? <div className='cursor-pointer' onClick={handleClearSearch}><MdClose color='#9a9b9c' /></div> : ''
                      }
-                  </div>
-               </div>
-               <div className="w-full md:w-auto flex justify-end gap-2 p-2">
-
+                  </div> */}
                   {/* {
                   deleteRows?.length > 0 && <button className=' text-base text-white font-montserrat font-medium whitespace-nowrap bg-red-500 border border-red-500 rounded py-1 px-4' onClick={() => { multipleDelete(deleteRows) }}>Delete Users</button>
                } */}
-                  {
+                  {/* {
                      Ability('create', 'user', session?.user) &&
                      <Link href='/admin/users/managements/add-user' className=' text-base whitespace-nowrap border border-slate-400 rounded py-1 px-4'>Add New User</Link>
-                  }
+                  } */}
+                  <Button
+                     onClick={() => setEditUserForm(prev => !prev)}
+                  >
+                     <AiOutlinePlus />
+                     Add User
+                  </Button>
                </div>
             </div>
          </div>
-         <div className="flex items-center mb-4">
-            <div className="flex items-center gap-1 me-4">
-               <span className='text-base'>Filter</span>
-               <Filter size={16} strokeWidth={1} />
+         <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+               <div className="flex items-center gap-1 me-4">
+                  <span className='text-base'>Filter</span>
+                  <Filter size={16} strokeWidth={1} />
+               </div>
+               <TableFilter title='Role' options={userRole} value={roleFilter} setFilter={setRoleFilter} />
+               {isFiltered && (
+                  <Button variant="ghost" className="h-8 px-2 lg:px-3" onClick={handleReset}>
+                     Reset <X />
+                  </Button>
+               )}
             </div>
-            <TableFilter title='Role' options={userRole} value={roleFilter} setFilter={setRoleFilter} />
-            {isFiltered && (
-               <Button variant="ghost" className="h-8 px-2 lg:px-3" onClick={handleReset}>
-                  Reset <X />
-               </Button>
-            )}
+            <SearchInput placeholder='Search ...' className='w-80' />
          </div>
          <div className="w-full">
-            <PerfectScrollbar>
-               <DataTable columns={columns} data={usersList} sort={(sort) => setSort(sort)} loading={loading} deleteRows={(data) => setDeleteRows(data)} />
-            </PerfectScrollbar>
+            <div className="">
+               <table className='w-full'>
+                  <thead className='bg-gray-100'>
+                     <tr>
+                        <th className='w-14 text-left border text-lg font-normal px-3 py-1'>
+                           <Checkbox
+                              checked={selectedAll}
+                              onCheckedChange={handleSelectedAll}
+                           />
+                        </th>
+                        {columns.map((column) => (
+                           <th key={column.title} className={cn(`text-left border text-base font-normal px-3 py-1`, column.className)}>{column.title}</th>
+                        ))}
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {
+                        userList.isLoading ?
+                           [...Array(8)].map((_, index) => (
+                              <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#FBFBFB]'}`}>
+                                 <td className="border px-3 py-2">
+                                    <div className="h-5 w-5 bg-gray-200 rounded animate-pulse"></div>
+                                 </td>
+                                 {columns.map((column) => (
+                                    <td key={column.index} className='text-sm border py-1 px-3'>
+                                       <div className="h-6 w-full bg-gray-200 rounded animate-pulse"></div>
+                                    </td>
+                                 ))}
+                              </tr>
+                           ))
+                           :
+                           userList.data.users?.length === 0 ?
+                              <tr>
+                                 <td colSpan={3}>
+                                    <div className="flex justify-center p-3">
+                                       No data available
+                                    </div>
+                                 </td>
+                              </tr>
+                              :
+                              userList.data.users?.map((row, index) => (
+                                 <tr key={row?.id} className={`border ${index % 2 === 0 ? 'bg-white' : 'bg-[#FBFBFB]'}`}>
+                                    <td className='border py-1 px-3'>
+                                       <Checkbox
+                                          checked={selectedRow.includes(row.id)}
+                                          onCheckedChange={(e: boolean) => handleSelectedRows(row.id, e)}
+                                       />
+                                    </td>
+                                    {columns.map((column) => (
+                                       <td key={column.index} className='text-sm border py-1 px-3'>
+                                          {column.render(row)}
+                                       </td>
+                                    ))}
+                                 </tr>
+                              ))
+                     }
+                  </tbody>
+               </table>
+            </div>
             <div className="flex flex-wrap items-center justify-between gap-4 mt-2">
                {
                   totalItems !== 0 && <div className="flex items-center gap-4">
@@ -240,6 +303,11 @@ const Managements = () => {
                </div>
             </div>
          </div>
+         <EditUser
+            open={editUserForm}
+            close={() => setEditUserForm(prev => !prev)}
+            userDetails={{}}
+         />
       </div>
    )
 }
