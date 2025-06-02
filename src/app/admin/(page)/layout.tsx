@@ -1,11 +1,18 @@
 import AdminLayout from '@/components/admin/layout/AdminLayout'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const layout = ({ children }: { children: React.ReactNode }) => {
+   function SearchBarFallback() {
+      return <></>
+   }
    return (
-      <AdminLayout>
-         {children}
-      </AdminLayout>
+      <>
+         <Suspense fallback={<SearchBarFallback />}>
+            <AdminLayout>
+               {children}
+            </AdminLayout>
+         </Suspense>
+      </>
    )
 }
 
