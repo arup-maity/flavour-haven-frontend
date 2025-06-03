@@ -10,7 +10,7 @@ const MiniAbout = () => {
       <div className='flex flex-wrap items-center -m-6'>
          <div className="w-full lg:w-6/12 max-lg:order-2 p-6">
             <div className="w-full aspect-[670/735]">
-               <Image src='/group-img-1.png' width={670} height={735} alt='' className='w-full h-auto' />
+               <Image src='/banner/group-img-1.png' width={670} height={735} alt='' className='w-full h-auto' />
             </div>
          </div>
          <div className="w-full lg:w-6/12 max-lg:order-1 p-6">
