@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { axiosInstance } from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
-
+import { PiCurrencyInrLight } from "react-icons/pi";
 
 let tabs = [
    { id: "starters", label: "Starters" },
@@ -57,7 +57,7 @@ const FoodMenu = () => {
                               <div className="w-full">
                                  <div className="flex flex-nowrap justify-between">
                                     <h2 className="text-xl font-medium">{item?.title}</h2>
-                                    <p className="text-2xl text-[#195A00] font-medium">$ {item?.price}</p>
+                                    <p className="flex items-center text-2xl text-[#195A00] font-medium"><PiCurrencyInrLight /> {item?.price}</p>
                                  </div>
                                  <p className="text-sm text-gray-400">Toasted French bread topped with romano, cheddar</p>
                                  <span className="text-xs text-gray-400">560 CAL</span>

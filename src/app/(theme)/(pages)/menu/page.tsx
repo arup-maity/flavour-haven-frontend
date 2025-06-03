@@ -4,7 +4,8 @@ import MenuCard from '@/components/theme/menu/MenuCard';
 const Menu = () => {
    return (
       <div className='w-full'>
-         <div style={{ backgroundImage: 'url("/banner.png")', }} className="aspect-[6/1] bg-cover bg-no-repeat"></div>
+         <div className="aspect-[6/1] bg-cover bg-no-repeat"></div>
+         {/* <div style={{ backgroundImage: 'url("/banner.png")', }} className="aspect-[6/1] bg-cover bg-no-repeat"></div> */}
          <div className="theme-container !py-20">
             <MenuCard slug='starters' />
             <MenuCard slug='main-courses' order={2} />

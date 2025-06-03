@@ -7,11 +7,12 @@ import { IoStarHalfOutline } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import { IoOptionsOutline } from "react-icons/io5";
 import { useQuery } from "@tanstack/react-query";
+import { PiCurrencyInrLight } from "react-icons/pi";
 
 const OnlineDelivery = () => {
    const [filter, setFilter] = useState<{ [key: string]: any }>({ sortColumn: '', sortOrder: "", delivery: '', veg: 'all' })
    const appliedFilters = Object.entries(filter)
-      .filter(([key, value]) => value !== false && value !== '')
+      .filter(([key, value]) => value !== false && value !== '' && value !== 'all')
       .length;
 
    const { data, isLoading } = useQuery({
@@ -36,21 +37,21 @@ const OnlineDelivery = () => {
                }
                <span>Filter</span>
             </li>
-            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sort === 'lth' ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, sort: prev.sortOrder === 'lth' ? '' : 'lth' }))}>
+            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sortOrder === 'lth' ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, sortOrder: prev.sortOrder === 'lth' ? '' : 'lth' }))}>
                <span>Low to High</span>
-               {filter?.sort === 'lth' && <IoCloseOutline />}
+               {filter?.sortOrder === 'lth' && <IoCloseOutline />}
             </li>
-            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sort === 'gth' ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, sort: prev.sortOrder === 'gth' ? '' : 'gth' }))}>
+            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.sortOrder === 'gth' ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, sortOrder: prev.sortOrder === 'gth' ? '' : 'gth' }))}>
                <span>High to Low</span>
-               {filter?.sort === 'gth' && <IoCloseOutline />}
+               {filter?.sortOrder === 'gth' && <IoCloseOutline />}
             </li>
-            <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.delivery ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, delivery: !prev.delivery }))}>
+            {/* <li role="button" className={`w-auto border text-base font-normal flex items-center gap-2 ${filter?.delivery ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, delivery: !prev.delivery }))}>
                <span>Fast Delivery</span>
                {filter?.delivery && <IoCloseOutline />}
-            </li>
-            <li role="button" className={`border text-base font-normal flex items-center gap-2 ${filter?.veg !== "veg" ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, veg: prev.veg === "veg" ? "all" : "veg" }))}>
+            </li> */}
+            <li role="button" className={`border text-base font-normal flex items-center gap-2 ${filter?.veg === "veg" ? 'text-white bg-[#FF9F0D] border-[#FF9F0D]' : 'text-gray-400 border-gray-300'} transition-[width] duration-1000 rounded-3xl py-1 px-4`} onClick={() => setFilter(prev => ({ ...prev, veg: prev.veg === "veg" ? "all" : "veg" }))}>
                <span>Pure Vag</span>
-               {filter?.veg && <IoCloseOutline />}
+               {filter?.veg === 'veg' && <IoCloseOutline />}
             </li>
          </ul>
          <div className="flex flex-wrap -mx-3">
@@ -82,13 +83,14 @@ const OnlineDelivery = () => {
                         </div>
                         <div className="">
                            <h3 className="text-lg text-[#0c0c0c] font-medium line-clamp-1">{card?.title}</h3>
-                           <ul className="flex items-center gap-1">
-                              <li className="flex items-center gap-1 text-base"><IoStarHalfOutline color="#FF9F0D" /><span>4.2</span></li>
-                              <li>&bull;</li>
-                              <li className="text-base">20-30mins</li>
-                              <li>&bull;</li>
-                              <li className="text-base">{card?.price}</li>
-                           </ul>
+                           <div className="flex items-center justify-between">
+                              <ul className="flex items-center gap-1">
+                                 <li className="flex items-center gap-1 text-base"><IoStarHalfOutline color="#FF9F0D" /><span>4.2</span></li>
+                                 <li>&bull;</li>
+                                 <li className="text-base">20-30mins</li>
+                              </ul>
+                              <div className="flex items-center text-xl font-semibold"><PiCurrencyInrLight />{card?.price}</div>
+                           </div>
                            <p className="text-sm text-gray-400 line-clamp-1">{card?.shortDescription}</p>
                         </div>
                      </Link>

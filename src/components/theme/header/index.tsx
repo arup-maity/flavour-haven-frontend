@@ -32,7 +32,7 @@ const Header = ({ className }: { className?: string }) => {
 
    return (
       <>
-         <div className={`theme-header theme-container w-full h-[75px] flex items-center z-[999] ${sticky ? 'sticky-header' : 'fixed'} transition-[position] duration-500 ease-in-out ${className}`}>
+         <div className={`theme-header theme-container w-full h-[75px] bg-white flex items-center z-[999] ${sticky ? 'sticky-header' : 'fixed'} transition-[position] duration-500 ease-in-out ${className}`}>
             <div className="w-full flex flex-nowrap items-center justify-between py-4">
                <div className="flex items-center gap-4">
                   <div className="block lg:hidden" onClick={() => setMobileMenu(prev => !prev)}>
