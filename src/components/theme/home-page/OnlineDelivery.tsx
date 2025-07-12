@@ -75,14 +75,14 @@ const OnlineDelivery = () => {
                data?.dishes?.map((card: { [key: string]: any }, index: number) =>
                   <div key={index} className="w-full md:w-6/12 lg:w-4/12 p-3">
                      <Link href={`/${card?.slug}`}>
-                        <div className="relative w-full aspect-[250/150] rounded-lg overflow-hidden">
+                        <div className="relative w-full aspect-[250/150] rounded-lg overflow-hidden mb-2">
                            <Image unoptimized src={`${card?.thumbnail ? process.env.NEXT_PUBLIC_BUCKET_URL + card?.thumbnail : ''}`} width={250} height={150} alt="" className="w-full h-full object-cover" />
                            {/* <div className="absolute bottom-0 right-0 left-0 h-20 grid content-end bg-gradient-to-b  from-[#1b1e2411] to-[#0c0c0cf0] z-10 p-3">
                               <p className="text-[22px] font-bold text-white uppercase">60% off upto $120</p>
                            </div> */}
                         </div>
                         <div className="">
-                           <h3 className="text-lg text-[#0c0c0c] font-medium line-clamp-1">{card?.title}</h3>
+                           <h3 className="text-xl text-[#0c0c0c] font-medium line-clamp-1">{card?.title}</h3>
                            <div className="flex items-center justify-between">
                               <ul className="flex items-center gap-1">
                                  <li className="flex items-center gap-1 text-base"><IoStarHalfOutline color="#FF9F0D" /><span>4.2</span></li>
@@ -96,7 +96,6 @@ const OnlineDelivery = () => {
                      </Link>
                   </div>
                )
-
             }
          </div>
          <div className="w-full text-center mt-5">

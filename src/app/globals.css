@@ -30,6 +30,22 @@ body {
    }
 }
 
+
+@font-face {
+   font-family: 'postbook';
+   src: url('../lib/fonts/postbook/Postbook.ttf') format('truetype');
+   font-weight: 400;
+   font-style: normal;
+   font-display: swap;
+}
+
+.postbook {
+   font-family: 'postbook';
+   font-weight: 400;
+   font-style: normal;
+   font-display: swap;
+}
+
 .container-webx {
    padding: 0 calc(12px + (160 - 12) * ((100vw - 320px) / (1920 - 320)));
 }

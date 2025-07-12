@@ -16,8 +16,8 @@ const MiniAbout = () => {
          <div className="w-full lg:w-6/12 max-lg:order-1 p-6">
             <div className="">
                <div className="relative text-xl text-[#195A00] font-miniver font-normal after:absolute after:top-[18px] after:left-20 after:z-20 after:w-11 after:h-[1px] after:bg-[#195A00] mb-2">About us</div>
-               <div className="text-2xl md:text-4xl text-[#0c0c0c] font-bold mb-6">Food is an important <br /> part Of a balanced Diet</div>
-               <p className='text-base text-[#4F4F4F] opacity-80 mb-8'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam pellentesque bibendum non dui volutpat fringilla bibendum. Urna, elit augue urna, vitae feugiat pretium donec id elementum. Ultrices mattis  vitae mus risus. Lacus nisi, et ac dapibus sit eu velit in consequat.</p>
+               <div className="text-2xl md:text-3xl text-[#0c0c0c] font-semibold font-raleway mb-6">Food is an important <br /> part Of a balanced Diet</div>
+               <p className='text-[15px] font-raleway text-black opacity-60 mb-8'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam pellentesque bibendum non dui volutpat fringilla bibendum. Urna, elit augue urna, vitae feugiat pretium donec id elementum. Ultrices mattis  vitae mus risus. Lacus nisi, et ac dapibus sit eu velit in consequat.</p>
                <div className="flex items-center gap-5">
                   <button className="text-base text-white bg-[#195A00] border border-[#195A00] rounded-md py-2.5 px-5">
                      Show More

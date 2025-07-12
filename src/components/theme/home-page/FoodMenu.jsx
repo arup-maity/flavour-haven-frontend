@@ -26,13 +26,13 @@ const FoodMenu = () => {
    })
 
    return (
-      <div className="w-full py-11">
+      <div className="w-full">
          <div className="flex justify-center space-x-1 border-b-2 border-gray-200">
             {tabs.map((tab) => (
                <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`${activeTab === tab.id ? "text-[#195A00]" : "hover:text-[#195A00]"} relative whitespace-nowrap px-2.5 md:px-5 py-2 text-base font-medium text-gray-500 transition`}
+                  className={`${activeTab === tab.id ? "text-[#195A00]" : "hover:text-[#195A00]"} relative whitespace-nowrap px-2.5 md:px-5 py-2 text-lg font-medium text-gray-500 transition`}
                   style={{
                      WebkitTapHighlightColor: "transparent"
                   }}>

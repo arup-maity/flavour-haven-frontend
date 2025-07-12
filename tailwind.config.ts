@@ -12,7 +12,8 @@ const config: Config = {
       extend: {
          fontFamily: {
             miniver: ['var(--miniver-font)'],
-            redHat: ['var(--red-hat-display-font)']
+            redHat: ['var(--red-hat-display-font)'],
+            raleway: ['var(--raleway-font)']
          },
          borderRadius: {
             lg: 'var(--radius)',
