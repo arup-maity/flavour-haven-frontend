@@ -31,16 +31,21 @@ const FoodListPage = () => {
    }
 
    return (
-      <div className='theme-container'>
-         <div className="">
+      <div className='w-full'>
+         <div className="bg-[#195A00] bg-opacity-20 aspect-[3/2] md:aspect-[3/1] lg:aspect-[9/2] bg-cover bg-no-repeat pt-20">
+            <div className="theme-container flex flex-col justify-center items-center h-full">
+               <p className='postbook text-4xl md:text-5xl text-[#195A00] font-bold'>Online Delivery Menu</p>
+            </div>
+         </div>
+         <div className="theme-container !py-10">
             <div className="flex flex-wrap -m-2">
-               <div className="w-full lg:w-9/12 p-2">
+               <div className="w-full p-2">
                   <div className="flex flex-wrap -mx-3">
                      {dishList.length > 0 ?
                         dishList?.map((card: { [key: string]: any }, index: number) =>
                            <div key={index} className="w-full md:w-6/12 lg:w-4/12 p-3">
                               <Link href={`/${card?.slug}`}>
-                                 <div className="relative w-full aspect-[250/150] rounded-lg overflow-hidden">
+                                 <div className="relative w-full aspect-[250/150] rounded-lg overflow-hidden mb-2">
                                     <Image src={`${card?.thumbnail ? process.env.NEXT_PUBLIC_BUCKET_URL + card?.thumbnail : ''}`} width={250} height={150} alt="" className="w-full h-full object-cover" />
                                     <div className="absolute bottom-0 right-0 left-0 h-20 grid content-end bg-gradient-to-b  from-[#1b1e2411] to-[#0c0c0cf0] z-10 p-3">
                                        <p className="text-[22px] font-bold text-white uppercase">60% off upto $120</p>
@@ -75,9 +80,7 @@ const FoodListPage = () => {
                            </div>
                         )
                      }
-                  </div></div>
-               <div className="w-full lg:w-3/12 p-2">
-                  <div className="bg-gray-200 w-full h-full"></div>
+                  </div>
                </div>
             </div>
          </div>

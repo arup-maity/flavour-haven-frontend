@@ -5,7 +5,7 @@ import Image from 'next/image';
 const Menu = () => {
    return (
       <div className='w-full'>
-         <div className="bg-[#195A00] bg-opacity-20 aspect-[3/2] md:aspect-[3/1] lg:aspect-[9/2] bg-cover bg-no-repeat max-lg:mt-10">
+         <div className="bg-[#195A00] bg-opacity-20 aspect-[3/2] md:aspect-[3/1] lg:aspect-[9/2] bg-cover bg-no-repeat pt-20">
             <div className="theme-container flex flex-col justify-center items-center h-full">
                <p className='postbook text-4xl md:text-5xl text-[#195A00] font-bold'>OUR MENU</p>
             </div>

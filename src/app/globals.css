@@ -17,8 +17,8 @@
 }
 
 body {
-   width: 100%;
    background: #fff;
+   color: #0c0c0c;
    font-size: 16px;
    font-weight: 400;
    font-family: var(--red-hat-display-font);

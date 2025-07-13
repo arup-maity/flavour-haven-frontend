@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { IoMenuOutline } from "react-icons/io5";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { axiosInstance } from '@/config/axios'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCart } from '@/zustand'
 import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
@@ -17,30 +17,50 @@ import { RiDeleteBinLine } from 'react-icons/ri'
 
 
 const Header = () => {
+   const pathname = usePathname();
+   console.log('pathname', pathname)
+   //   
    const [opencart, setOpencart] = React.useState(false)
    const [openmenu, setOpenmenu] = React.useState(false)
+
    return (
       <>
-         <div className='fixed top-0 left-0 right-0 z-50 w-full bg-white shadow-md'>
+         <div className='fixed top-0 left-0 right-0 z-50 w-full bg-white shadow-md me-4'>
             <div className="h-20 flex justify-between items-center px-4 md:px-10">
                <div className="">
-                  <div className="">
+                  <Link href="/">
                      <Image src="/logo/logo-03.png" width={137} height={40} alt="" className="w-auto h-8 md:h-10 shrink-0" />
-                  </div>
+                  </Link>
                </div>
                <div className="hidden lg:block">
                   <ul className='flex items-center gap-10'>
-                     <li className='border-b-2 border-[#195A00]'>
-                        <Link href="/" className="text-lg font-semibold">Home</Link>
+                     <li className=''>
+                        <Link href="/"
+                           className={`text-lg font-semibold leading-none border-b-2 ${pathname === '/' ? 'text-[#195A00] border-[#195A00]' : 'border-transparent'} `}
+                        >
+                           Home
+                        </Link>
                      </li>
-                     <li className='border-b-2 border-transparent'>
-                        <Link href="/menu" className="text-lg font-semibold">Menu</Link>
+                     <li className=''>
+                        <Link href="/menu"
+                           className={`text-lg font-semibold leading-none border-b-2 ${pathname === '/menu' ? 'text-[#195A00] border-[#195A00]' : 'border-transparent'} `}
+                        >
+                           Menu
+                        </Link>
                      </li>
-                     <li className='border-b-2 border-transparent'>
-                        <Link href="/" className="text-lg font-semibold">About</Link>
+                     <li className=''>
+                        <Link href="/page/about"
+                           className={`text-lg font-semibold leading-none border-b-2 ${pathname === '/page/about' ? 'text-[#195A00] border-[#195A00]' : 'border-transparent'} `}
+                        >
+                           About
+                        </Link>
                      </li>
-                     <li className='border-b-2 border-transparent'>
-                        <Link href="/" className="text-lg font-semibold">Contacts</Link>
+                     <li className=''>
+                        <Link href="/page/contacts"
+                           className={`text-lg font-semibold leading-none border-b-2 ${pathname === '/page/contacts' ? 'text-[#195A00] border-[#195A00]' : 'border-transparent'} `}
+                        >
+                           Contacts
+                        </Link>
                      </li>
                   </ul>
                </div>
@@ -83,9 +103,11 @@ const Header = () => {
                      </div>
                   </div>
                   <div className="">
-                     <div className="relative border border-[#195A00] rounded-full p-2.5">
-                        <UserRoundPlus size={20} className='text-[#195A00]' />
-                     </div>
+                     <Link href="/login">
+                        <div className="relative border border-[#195A00] rounded-full p-2.5">
+                           <UserRoundPlus size={20} className='text-[#195A00]' />
+                        </div>
+                     </Link>
                   </div>
                   <div className="hidden lg:block">
                      <div className="relative flex items-center gap-2 border border-[#195A00] rounded-full p-2.5 px-6">
@@ -144,7 +166,7 @@ const CartModel = ({ open, close }: { open: boolean, close: () => void }) => {
 
    return (
       <Sheet open={open} onOpenChange={close}>
-         <SheetContent className='w-80'>
+         <SheetContent className='w-80 lg:w-5/12'>
             <SheetHeader>
                <SheetTitle>
                   <div className="flex items-center gap-2">
@@ -195,7 +217,7 @@ const CartModel = ({ open, close }: { open: boolean, close: () => void }) => {
 const MobileMenu = ({ open, close }: { open: boolean, close: () => void }) => {
    return (
       <Sheet open={open} onOpenChange={close}>
-         <SheetContent className='w-80'>
+         <SheetContent className='w-80 lg:w-5/12'>
             <SheetHeader>
                <SheetTitle>
                   <Image src="/logo/logo-03.png" width={137} height={40} alt="" className="w-auto h-8 md:h-10 shrink-0" />

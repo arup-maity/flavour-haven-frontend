@@ -11,6 +11,7 @@ import { handleApiError } from "@/utils";
 import { TfiEmail } from "react-icons/tfi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { Loader2 } from "lucide-react";
 
 type LoginFormType = {
    email: string;
@@ -52,20 +53,13 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
 
    return (
       <div className="w-full min-h-[90vh] flex flex-wrap items-center justify-center">
-         <div className="w-full md:w-6/12 lg:w-4/12 p-4">
-            <div className=" mb-9">
-               <h6 className="text-[#2F2F2F] text-3xl font-medium">
-                  Welcome to
-               </h6>
-               <h5 className="text-[40px] text-[#6358DC] font-black">
-                  Our Resaurant
-               </h5>
-            </div>
+         <div className="w-full md:w-10/12 lg:w-6/12 rounded-lg md:shadow p-4 md:p-20">
+         <div className="text-3xl mb-8">Sign in</div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-5">
                <fieldset>
                   <label
                      htmlFor="email"
-                     className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500"
+                     className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-[#195A00] focus-within:ring-1 focus-within:ring-[#195A00]"
                   >
                      <TfiEmail size={16} className="text-gray-500 ms-2" />
                      <input
@@ -87,7 +81,7 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                <fieldset>
                   <label
                      htmlFor="email"
-                     className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500"
+                     className="relative flex items-center border border-gray-300 shadow-sm rounded-md focus-within:border-[#195A00] focus-within:ring-1 focus-within:ring-[#195A00]"
                   >
                      <RiLockPasswordLine
                         size={20}
@@ -123,23 +117,22 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                      />
                      <label
                         htmlFor="remember-me"
-                        className="relative text-sm text-gray-400 flex items-center before:absolute before:left-0 before:w-4 before:h-4 before:border before:rounded-sm peer-checked:after:absolute peer-checked:after:w-2 peer-checked:after:h-5 peer-checked:after:left-2 peer-checked:after:top-[-4px] peer-checked:after:rotate-45 peer-checked:after:border-r-2 peer-checked:after:border-b-2 peer-checked:after:border-violet-500 pl-6 cursor-pointer"
+                        className="relative text-sm text-[#195A00] flex items-center before:absolute before:left-0 before:w-4 before:h-4 before:border before:rounded-sm peer-checked:after:absolute peer-checked:after:w-2 peer-checked:after:h-5 peer-checked:after:left-2 peer-checked:after:top-[-4px] peer-checked:after:rotate-45 peer-checked:after:border-r-2 peer-checked:after:border-b-2 peer-checked:after:border-[#195A00] pl-6 cursor-pointer"
                      >
                         Remember Me
                      </label>
                   </div>
-                  <div className="text-sm text-violet-400">
+                  <div className="text-sm text-[#195A00]">
                      <Link href={"/"}>Forgot Password ?</Link>
                   </div>
                </fieldset>
                <button
                   type="submit"
                   disabled={loginLoading}
-                  className="w-full h-10 bg-[#6358DC] text-base text-white rounded-md"
+                  className="w-full h-10 bg-[#195A00] text-base text-white rounded-md"
                >
-                  {
-                     loginLoading ? "Loading..." : "Login"
-                  }
+                  {loginLoading && <Loader2 />}
+                  Sign In
                </button>
             </form>
             <Link
@@ -147,7 +140,7 @@ const LoginPage = ({ searchParams }: { searchParams: { [key: string]: string | u
                className="w-full text-sm text-[#000] justify-center items-center flex space-x-3"
             >
                <span>Don’t have an account?</span>
-               <span className="text-[#6358DC]">Register</span>
+               <span className="text-[#195A00]">Register</span>
             </Link>
          </div>
       </div>
